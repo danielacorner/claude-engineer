@@ -6,14 +6,17 @@ import { PlantData } from "../types";
 import styles from "./PlantSelector.module.css";
 
 interface PlantSelectorProps {
-  addPlant: (plant: PlantData) => void;
+  addPlant: (plant: PlantData | null) => void;
   selectedPlant: PlantData | null;
 }
 
 const ITEMS_PER_PAGE = 12;
 
-const PlantSelector: React.FC<PlantSelectorProps> = ({ addPlant, selectedPlant }) => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+const PlantSelector: React.FC<PlantSelectorProps> = ({
+  addPlant,
+  selectedPlant,
+}) => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [customColor, setCustomColor] = useState<string | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -23,7 +26,9 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({ addPlant, selectedPlant }
   }, [searchTerm]);
 
   const filteredPlants = plantDatabase.filter((plant) => {
-    return (!searchTerm || plant.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    return (
+      !searchTerm || plant.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   });
 
   const pageCount = Math.ceil(filteredPlants.length / ITEMS_PER_PAGE);
@@ -67,7 +72,9 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({ addPlant, selectedPlant }
         {paginatedPlants.map((plant) => (
           <div
             key={plant.id}
-            className={`${styles.plantCard} ${selectedPlant?.id === plant.id ? styles.selected : ''}`}
+            className={`${styles.plantCard} ${
+              selectedPlant?.id === plant.id ? styles.selected : ""
+            }`}
             onClick={() => addPlant(plant)}
           >
             <img
@@ -89,7 +96,7 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({ addPlant, selectedPlant }
           <button
             key={i}
             onClick={() => setCurrentPage(i + 1)}
-            className={currentPage === i + 1 ? styles.activePage : ''}
+            className={currentPage === i + 1 ? styles.activePage : ""}
           >
             {i + 1}
           </button>
