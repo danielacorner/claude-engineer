@@ -1,0 +1,1 @@
+continue building a web app using r3f and ecosystem which allows the user to design a garden or landscape by placing plants along the ground in 3d space. The project has already been started using Vite+r3f and you can find the relevant files in ./native-garden-designer/src folder.
