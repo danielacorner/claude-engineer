@@ -14,6 +14,7 @@ const App: React.FC = () => {
   const [timeOfDay, setTimeOfDay] = useState(12) // Noon by default
   const [season, setSeason] = useState('Summer')
   const [showPlantInfo, setShowPlantInfo] = useState<Plant | null>(null)
+  const [customizingPlant, setCustomizingPlant] = useState<Plant | null>(null)
 
   const addPlant = (plantData: PlantData) => {
     setSelectedPlant(plantData)
@@ -49,10 +50,15 @@ const App: React.FC = () => {
     setPlants(plants.map(plant =>
       plant.id === id ? { ...plant, ...customizations } : plant
     ))
+    setCustomizingPlant(null)
   }
 
   const openPlantInfo = (plant: Plant) => {
     setShowPlantInfo(plant)
+  }
+
+  const startCustomizingPlant = (plant: Plant) => {
+    setCustomizingPlant(plant)
   }
 
   // Calculate sun position based on time of day
@@ -98,6 +104,7 @@ const App: React.FC = () => {
               removePlant={() => removePlant(plant.id)}
               customizePlant={(customizations) => customizePlant(plant.id, customizations)}
               openPlantInfo={() => openPlantInfo(plant)}
+              startCustomizing={() => startCustomizingPlant(plant)}
             />
           ))}
         </Suspense>
@@ -123,11 +130,13 @@ const App: React.FC = () => {
           zIndex: 1000,
         }}>
           <h2>{showPlantInfo.name}</h2>
-          <p>Type: {showPlantInfo.type}</p>
-          <p>Height: {showPlantInfo.height}m</p>
-          <p>Width: {showPlantInfo.width}m</p>
-          <p>Description: {showPlantInfo.description}</p>
-          <p>Seasons: {showPlantInfo.seasons.join(', ')}</p>
+          <p><strong>Scientific Name:</strong> {showPlantInfo.scientificName || 'N/A'}</p>
+          <p><strong>Model URL:</strong> {showPlantInfo.modelUrl}</p>
+          <p><strong>Scale:</strong> {showPlantInfo.scale.join(', ')}</p>
+          <p><strong>Height:</strong> {showPlantInfo.height || 'N/A'}m</p>
+          <p><strong>Spread:</strong> {showPlantInfo.spread || 'N/A'}m</p>
+          <p><strong>Description:</strong> {showPlantInfo.description || 'N/A'}</p>
+          <p><strong>Color:</strong> {showPlantInfo.color || 'Default'}</p>
           <button onClick={() => setShowPlantInfo(null)}>Close</button>
         </div>
       )}
@@ -143,7 +152,12 @@ const App: React.FC = () => {
         <p>1. Select a plant from the list on the left.</p>
         <p>2. Click on the ground to place the selected plant.</p>
         <p>3. Click and drag to move placed plants.</p>
-        <p>4. Right-click on a plant for more options.</p>
+        <p>4. Right-click on a plant for more options:</p>
+        <ul>
+          <li>View plant information</li>
+          <li>Customize plant appearance</li>
+          <li>Remove plant</li>
+        </ul>
         <p>5. Use the environment controls to adjust time and season.</p>
         <p>6. Save and load your garden designs using the controls.</p>
       </div>

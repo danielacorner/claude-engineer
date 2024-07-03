@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useState } from "react";
 import { Plane, useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -7,14 +7,17 @@ interface GroundProps {
   onPlantPlace: (position: [number, number, number]) => void;
 }
 
+const GRID_SIZE = 1; // Size of each grid cell
+
 const Ground: React.FC<GroundProps> = ({ onPlantPlace }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const { camera, raycaster, mouse } = useThree();
+  const [hoverPoint, setHoverPoint] = useState<THREE.Vector3 | null>(null);
 
   // Load a grass texture
   const texture = useTexture("/textures/grass.jpg");
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(100, 100); // Increased repeat for more detailed grass
+  texture.repeat.set(100, 100);
 
   // Create a heightmap for subtle elevation
   const heightmap = useMemo(() => {
@@ -71,9 +74,32 @@ const Ground: React.FC<GroundProps> = ({ onPlantPlace }) => {
       const intersects = raycaster.intersectObject(meshRef.current);
       if (intersects.length > 0) {
         const { point } = intersects[0];
-        onPlantPlace([point.x, point.y, point.z]); // Use actual y-value for elevation
+        const snappedPosition = snapToGrid(point);
+        onPlantPlace([snappedPosition.x, snappedPosition.y, snappedPosition.z]);
       }
     }
+  };
+
+  const handlePointerMove = (event: THREE.Event) => {
+    if (meshRef.current) {
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(meshRef.current);
+      if (intersects.length > 0) {
+        const { point } = intersects[0];
+        const snappedPosition = snapToGrid(point);
+        setHoverPoint(snappedPosition);
+      } else {
+        setHoverPoint(null);
+      }
+    }
+  };
+
+  const snapToGrid = (point: THREE.Vector3): THREE.Vector3 => {
+    return new THREE.Vector3(
+      Math.round(point.x / GRID_SIZE) * GRID_SIZE,
+      point.y,
+      Math.round(point.z / GRID_SIZE) * GRID_SIZE
+    );
   };
 
   return (
@@ -83,19 +109,22 @@ const Ground: React.FC<GroundProps> = ({ onPlantPlace }) => {
         receiveShadow
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, -0.01, 0]}
-        args={[1000, 1000, 200, 200]} // Increased segments for more detailed heightmap
+        args={[1000, 1000, 200, 200]}
         onClick={handleClick}
+        onPointerMove={handlePointerMove}
       >
         <primitive object={groundMaterial} attach="material" />
       </Plane>
       <gridHelper
-        args={[1000, 100, "#888888", "#444444"]}
+        args={[1000, 1000 / GRID_SIZE, "#888888", "#444444"]}
         position={[0, 0.01, 0]}
       />
-      <gridHelper
-        args={[1000, 20, "#aaaaaa", "#666666"]}
-        position={[0, 0.015, 0]}
-      />
+      {hoverPoint && (
+        <mesh position={hoverPoint}>
+          <boxGeometry args={[GRID_SIZE, 0.1, GRID_SIZE]} />
+          <meshBasicMaterial color="yellow" opacity={0.5} transparent />
+        </mesh>
+      )}
     </group>
   );
 };

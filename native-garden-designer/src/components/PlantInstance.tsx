@@ -2,23 +2,35 @@ import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Html, useGLTF } from '@react-three/drei'
 import { Plant } from '../types'
-import { Group, Vector3, InstancedMesh, MeshStandardMaterial, BoxGeometry } from 'three'
+import { Group, Vector3, InstancedMesh, MeshStandardMaterial, BoxGeometry, Raycaster, Plane } from 'three'
 import { useSpring, a } from '@react-spring/three'
 
 interface PlantInstanceProps {
   plant: Plant;
   updatePosition: (newPosition: [number, number, number]) => void;
   removePlant: () => void;
+  customizePlant: (customizations: Partial<Plant>) => void;
+  openPlantInfo: () => void;
+  startCustomizing: () => void;
 }
 
-const PlantInstance: React.FC<PlantInstanceProps> = ({ plant, updatePosition, removePlant }) => {
+const GRID_SIZE = 1; // Size of each grid cell
+
+const PlantInstance: React.FC<PlantInstanceProps> = ({
+  plant,
+  updatePosition,
+  removePlant,
+  customizePlant,
+  openPlantInfo,
+  startCustomizing
+}) => {
   const groupRef = useRef<Group>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [showContextMenu, setShowContextMenu] = useState(false)
   const [position, setPosition] = useState<[number, number, number]>(plant.position)
-  const { scene, animations } = useGLTF(plant.model)
-  const { size, viewport, camera } = useThree()
+  const { scene } = useGLTF(plant.modelUrl)
+  const { size, viewport, camera, gl, raycaster } = useThree()
   const aspect = size.width / viewport.width
 
   // Wind animation
@@ -30,10 +42,11 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({ plant, updatePosition, re
   const lodDistances = [20, 50, 100] // Distances for each LOD level
 
   const lodMeshes = useMemo(() => {
-    const geometry = new BoxGeometry(plant.width, plant.height, plant.width)
-    const material = new MeshStandardMaterial({ color: 0x00ff00 })
+    const highDetailModel = scene.clone()
+    const geometry = new BoxGeometry(1, 1, 1)
+    const material = new MeshStandardMaterial({ color: plant.color || 0x00ff00 })
     return [
-      scene.clone(), // High detail
+      highDetailModel, // High detail
       new InstancedMesh(geometry, material, 1), // Medium detail
       new InstancedMesh(geometry, material, 1), // Low detail
     ]
@@ -41,9 +54,9 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({ plant, updatePosition, re
 
   useEffect(() => {
     if (groupRef.current) {
-      groupRef.current.scale.set(1, plant.height, 1)
+      groupRef.current.scale.set(...(plant.scale || [1, 1, 1]))
     }
-  }, [plant.height])
+  }, [plant.scale])
 
   const [spring, api] = useSpring(() => ({
     scale: 1,
@@ -54,15 +67,23 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({ plant, updatePosition, re
     api.start({ scale: isHovered ? 1.1 : 1 })
   }, [isHovered, api])
 
+  const snapToGrid = (point: Vector3): Vector3 => {
+    return new Vector3(
+      Math.round(point.x / GRID_SIZE) * GRID_SIZE,
+      point.y,
+      Math.round(point.z / GRID_SIZE) * GRID_SIZE
+    );
+  };
+
+  const dragPlane = useMemo(() => new Plane(new Vector3(0, 1, 0), 0), []);
+
   useFrame((state, delta) => {
     if (isDragging && groupRef.current) {
-      const intersection = state.raycaster.intersectObjects(state.scene.children)[0]
-      if (intersection) {
-        const { x, z } = intersection.point
-        const newPosition: [number, number, number] = [x, 0, z]
-        setPosition(newPosition)
-        updatePosition(newPosition)
-      }
+      const intersection = new Vector3();
+      raycaster.ray.intersectPlane(dragPlane, intersection);
+      const snappedPosition = snapToGrid(intersection);
+      setPosition([snappedPosition.x, 0, snappedPosition.z]);
+      updatePosition([snappedPosition.x, 0, snappedPosition.z]);
     }
 
     // Wind animation
@@ -84,6 +105,11 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({ plant, updatePosition, re
     setShowContextMenu(true)
   }
 
+  const handleCustomize = () => {
+    startCustomizing()
+    setShowContextMenu(false)
+  }
+
   return (
     <a.group
       ref={groupRef}
@@ -91,17 +117,31 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({ plant, updatePosition, re
       onPointerDown={(e) => {
         e.stopPropagation()
         setIsDragging(true)
+        gl.domElement.style.cursor = 'grabbing'
       }}
-      onPointerUp={() => setIsDragging(false)}
+      onPointerUp={() => {
+        setIsDragging(false)
+        gl.domElement.style.cursor = 'auto'
+      }}
       onPointerOut={() => {
         setIsDragging(false)
         setIsHovered(false)
+        gl.domElement.style.cursor = 'auto'
       }}
-      onPointerOver={() => setIsHovered(true)}
+      onPointerOver={(e) => {
+        setIsHovered(true)
+        gl.domElement.style.cursor = 'grab'
+      }}
       onContextMenu={handleContextMenu}
       {...spring}
     >
       <primitive object={lodMeshes[lodLevel]} />
+      {isDragging && (
+        <mesh position={[0, 0.01, 0]}>
+          <planeGeometry args={[1, 1]} />
+          <meshBasicMaterial color="yellow" opacity={0.5} transparent />
+        </mesh>
+      )}
       <Html distanceFactor={10}>
         <div style={{
           background: 'rgba(0, 0, 0, 0.7)',
@@ -130,13 +170,12 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({ plant, updatePosition, re
             }}>Remove Plant</button>
             <button onClick={(e) => {
               e.stopPropagation()
-              // TODO: Implement plant info dialog
+              openPlantInfo()
               setShowContextMenu(false)
             }}>Plant Info</button>
             <button onClick={(e) => {
               e.stopPropagation()
-              // TODO: Implement plant customization
-              setShowContextMenu(false)
+              handleCustomize()
             }}>Customize</button>
           </div>
         )}
