@@ -8,6 +8,7 @@ export interface PlantData {
   height?: number;
   spread?: number;
   description?: string;
+  category?: string;
 }
 
 export interface Plant extends PlantData {

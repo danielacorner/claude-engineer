@@ -1,10 +1,19 @@
 import React from 'react';
+import styles from './EnvironmentControls.module.css';
 
 interface EnvironmentControlsProps {
   timeOfDay: number;
   setTimeOfDay: (time: number) => void;
   season: string;
   setSeason: (season: string) => void;
+  timeSpeed: number;
+  setTimeSpeed: (speed: number) => void;
+  rainIntensity: number;
+  setRainIntensity: (intensity: number) => void;
+  windSpeed: number;
+  setWindSpeed: (speed: number) => void;
+  cloudCover: number;
+  setCloudCover: (cover: number) => void;
 }
 
 const seasons = ['Spring', 'Summer', 'Autumn', 'Winter'];
@@ -14,18 +23,19 @@ const EnvironmentControls: React.FC<EnvironmentControlsProps> = ({
   setTimeOfDay,
   season,
   setSeason,
+  timeSpeed,
+  setTimeSpeed,
+  rainIntensity,
+  setRainIntensity,
+  windSpeed,
+  setWindSpeed,
+  cloudCover,
+  setCloudCover,
 }) => {
   return (
-    <div style={{
-      position: 'absolute',
-      top: 20,
-      right: 20,
-      background: 'rgba(255, 255, 255, 0.8)',
-      padding: '10px',
-      borderRadius: '5px',
-    }}>
+    <div className={styles.environmentControls}>
       <h3>Environment Controls</h3>
-      <div>
+      <div className={styles.controlGroup}>
         <label htmlFor="timeOfDay">Time of Day: </label>
         <input
           type="range"
@@ -38,7 +48,7 @@ const EnvironmentControls: React.FC<EnvironmentControlsProps> = ({
         />
         <span>{timeOfDay.toFixed(1)} hours</span>
       </div>
-      <div>
+      <div className={styles.controlGroup}>
         <label htmlFor="season">Season: </label>
         <select
           id="season"
@@ -51,6 +61,58 @@ const EnvironmentControls: React.FC<EnvironmentControlsProps> = ({
             </option>
           ))}
         </select>
+      </div>
+      <div className={styles.controlGroup}>
+        <label htmlFor="timeSpeed">Time Speed: </label>
+        <input
+          type="range"
+          id="timeSpeed"
+          min="1"
+          max="100"
+          step="1"
+          value={timeSpeed}
+          onChange={(e) => setTimeSpeed(parseInt(e.target.value))}
+        />
+        <span>{timeSpeed}x</span>
+      </div>
+      <div className={styles.controlGroup}>
+        <label htmlFor="rainIntensity">Rain Intensity: </label>
+        <input
+          type="range"
+          id="rainIntensity"
+          min="0"
+          max="1"
+          step="0.1"
+          value={rainIntensity}
+          onChange={(e) => setRainIntensity(parseFloat(e.target.value))}
+        />
+        <span>{(rainIntensity * 100).toFixed(0)}%</span>
+      </div>
+      <div className={styles.controlGroup}>
+        <label htmlFor="windSpeed">Wind Speed: </label>
+        <input
+          type="range"
+          id="windSpeed"
+          min="0"
+          max="20"
+          step="1"
+          value={windSpeed}
+          onChange={(e) => setWindSpeed(parseInt(e.target.value))}
+        />
+        <span>{windSpeed} km/h</span>
+      </div>
+      <div className={styles.controlGroup}>
+        <label htmlFor="cloudCover">Cloud Cover: </label>
+        <input
+          type="range"
+          id="cloudCover"
+          min="0"
+          max="1"
+          step="0.1"
+          value={cloudCover}
+          onChange={(e) => setCloudCover(parseFloat(e.target.value))}
+        />
+        <span>{(cloudCover * 100).toFixed(0)}%</span>
       </div>
     </div>
   );

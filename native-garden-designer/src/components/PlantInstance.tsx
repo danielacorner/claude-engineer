@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Html, useGLTF } from '@react-three/drei'
 import { Plant } from '../types'
-import { Group, Vector3, InstancedMesh, MeshStandardMaterial, BoxGeometry, Raycaster, Plane } from 'three'
+import { Group, Vector3, InstancedMesh, MeshStandardMaterial, BoxGeometry, Raycaster, Plane, Object3D } from 'three'
 import { useSpring, a } from '@react-spring/three'
 
 interface PlantInstanceProps {
@@ -12,6 +12,8 @@ interface PlantInstanceProps {
   customizePlant: (customizations: Partial<Plant>) => void;
   openPlantInfo: () => void;
   startCustomizing: () => void;
+  windSpeed: number;
+  rainIntensity: number;
 }
 
 const GRID_SIZE = 1; // Size of each grid cell
@@ -22,7 +24,9 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
   removePlant,
   customizePlant,
   openPlantInfo,
-  startCustomizing
+  startCustomizing,
+  windSpeed,
+  rainIntensity
 }) => {
   const groupRef = useRef<Group>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -35,21 +39,21 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
 
   // Wind animation
   const windFactor = useRef(Math.random() * 0.05 + 0.02).current
-  const windSpeed = useRef(Math.random() * 1.5 + 0.5).current
   
   // LOD system
   const [lodLevel, setLodLevel] = useState(0)
-  const lodDistances = [20, 50, 100] // Distances for each LOD level
+  const lodDistances = [10, 20, 40] // Distances for each LOD level
 
   const lodMeshes = useMemo(() => {
     const highDetailModel = scene.clone()
-    const geometry = new BoxGeometry(1, 1, 1)
-    const material = new MeshStandardMaterial({ color: plant.color || 0x00ff00 })
-    return [
-      highDetailModel, // High detail
-      new InstancedMesh(geometry, material, 1), // Medium detail
-      new InstancedMesh(geometry, material, 1), // Low detail
-    ]
+    const mediumDetailModel = scene.clone()
+    const lowDetailModel = scene.clone()
+
+    // Simplify medium and low detail models
+    simplifyModel(mediumDetailModel, 0.5)
+    simplifyModel(lowDetailModel, 0.2)
+
+    return [highDetailModel, mediumDetailModel, lowDetailModel]
   }, [plant, scene])
 
   useEffect(() => {
@@ -86,10 +90,9 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
       updatePosition([snappedPosition.x, 0, snappedPosition.z]);
     }
 
-    // Wind animation
+    // Enhanced wind and rain animation
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * windSpeed) * windFactor
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * windSpeed * 2) * windFactor * 0.2
+      animatePlant(groupRef.current, state.clock.elapsedTime, windSpeed, rainIntensity)
     }
 
     // LOD system
@@ -182,6 +185,44 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
       </Html>
     </a.group>
   )
+}
+
+function simplifyModel(model: Object3D, factor: number) {
+  model.traverse((child) => {
+    if (child instanceof InstancedMesh) {
+      const geometry = child.geometry;
+      const vertexCount = geometry.getAttribute('position').count;
+      const newVertexCount = Math.max(4, Math.floor(vertexCount * factor));
+      
+      // This is a simple vertex reduction. For production, use a more sophisticated algorithm.
+      geometry.setDrawRange(0, newVertexCount);
+    }
+  });
+}
+
+function animatePlant(plant: Object3D, time: number, windSpeed: number, rainIntensity: number) {
+  plant.traverse((child) => {
+    if (child instanceof Object3D) {
+      // Different parts of the plant react differently to wind and rain
+      const windFactor = Math.random() * 0.05 + 0.02;
+      const rainFactor = Math.random() * 0.02 + 0.01;
+
+      // Wind animation
+      child.rotation.y = Math.sin(time * windSpeed * windFactor) * windSpeed * 0.1;
+      child.position.x = Math.sin(time * windSpeed * windFactor * 2) * windSpeed * 0.05;
+
+      // Rain effect
+      child.rotation.x = Math.sin(time * 2) * rainIntensity * rainFactor;
+      child.position.y = Math.sin(time * 3) * rainIntensity * rainFactor * 0.1;
+
+      // Adjust material properties for wet appearance
+      if (child instanceof InstancedMesh) {
+        const material = child.material as MeshStandardMaterial;
+        material.roughness = Math.max(0.2, 1 - rainIntensity * 0.5);
+        material.metalness = Math.min(0.8, rainIntensity * 0.2);
+      }
+    }
+  });
 }
 
 export default PlantInstance

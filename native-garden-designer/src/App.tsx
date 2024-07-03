@@ -6,8 +6,12 @@ import PlantSelector from "./components/PlantSelector";
 import PlantInstance from "./components/PlantInstance";
 import EnvironmentControls from "./components/EnvironmentControls";
 import SaveLoadControls from "./components/SaveLoadControls";
+import PlantGrowthSimulation from "./components/PlantGrowthSimulation";
+import RainEffect from "./components/RainEffect";
+import WindEffect from "./components/WindEffect";
 import { Plant, PlantData } from "./types";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { Instructions } from "./Instructions";
 
 const App: React.FC = () => {
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -16,6 +20,10 @@ const App: React.FC = () => {
   const [season, setSeason] = useState("Summer");
   const [showPlantInfo, setShowPlantInfo] = useState<Plant | null>(null);
   const [customizingPlant, setCustomizingPlant] = useState<Plant | null>(null);
+  const [timeSpeed, setTimeSpeed] = useState(1);
+  const [rainIntensity, setRainIntensity] = useState(0);
+  const [windSpeed, setWindSpeed] = useState(0);
+  const [cloudCover, setCloudCover] = useState(0);
 
   const addPlant = (plantData: PlantData | null) => {
     setSelectedPlant(plantData);
@@ -25,11 +33,11 @@ const App: React.FC = () => {
     if (selectedPlant) {
       const newPlant: Plant = {
         ...selectedPlant,
-        id: Date.now(), // Use timestamp as a simple unique id
+        id: Date.now(),
         position,
       };
       setPlants([...plants, newPlant]);
-      setSelectedPlant(null); // Reset selected plant after placing
+      setSelectedPlant(null);
     }
   };
 
@@ -69,7 +77,14 @@ const App: React.FC = () => {
     setCustomizingPlant(plant);
   };
 
-  // Calculate sun position based on time of day
+  const updatePlant = (id: number, updates: Partial<Plant>) => {
+    setPlants(
+      plants.map((plant) =>
+        plant.id === id ? { ...plant, ...updates } : plant
+      )
+    );
+  };
+
   const sunPosition: [number, number, number] = useMemo(() => {
     const phi = (timeOfDay / 24) * Math.PI * 2 - Math.PI / 2;
     const x = Math.cos(phi) * 100;
@@ -77,13 +92,11 @@ const App: React.FC = () => {
     return [x, y, 0];
   }, [timeOfDay]);
 
-  // Adjust light intensity based on time of day
   const lightIntensity = useMemo(() => {
     const normalizedTime = timeOfDay / 24;
     return Math.sin(normalizedTime * Math.PI) * 0.5 + 0.5;
   }, [timeOfDay]);
 
-  // Adjust fog color based on season
   const fogColor = useMemo(() => {
     switch (season) {
       case "Spring":
@@ -103,10 +116,12 @@ const App: React.FC = () => {
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
       <Canvas shadows camera={{ position: [0, 5, 10], fov: 50 }}>
         <fog attach="fog" args={[fogColor, 10, 100]} />
-        <ambientLight intensity={lightIntensity * 0.5} />
+        <ambientLight
+          intensity={lightIntensity * 0.5 * (1 - cloudCover * 0.5)}
+        />
         <pointLight
           position={sunPosition}
-          intensity={lightIntensity}
+          intensity={lightIntensity * (1 - cloudCover * 0.5)}
           castShadow
         />
         <Sky sunPosition={sunPosition} />
@@ -126,9 +141,13 @@ const App: React.FC = () => {
               }
               openPlantInfo={() => openPlantInfo(plant)}
               startCustomizing={() => startCustomizingPlant(plant)}
+              rainIntensity={rainIntensity * /* plant.rainResistance || */ 1}
+              windSpeed={windSpeed * /* plant.windResistance || */ 1}
             />
           ))}
         </Suspense>
+        <RainEffect intensity={rainIntensity} />
+        <WindEffect speed={windSpeed} />
       </Canvas>
       <ErrorBoundary>
         <PlantSelector addPlant={addPlant} selectedPlant={selectedPlant} />
@@ -138,8 +157,25 @@ const App: React.FC = () => {
         setTimeOfDay={setTimeOfDay}
         season={season}
         setSeason={setSeason}
+        timeSpeed={timeSpeed}
+        setTimeSpeed={setTimeSpeed}
+        rainIntensity={rainIntensity}
+        setRainIntensity={setRainIntensity}
+        windSpeed={windSpeed}
+        setWindSpeed={setWindSpeed}
+        cloudCover={cloudCover}
+        setCloudCover={setCloudCover}
       />
       <SaveLoadControls plants={plants} loadPlants={loadPlants} />
+      <PlantGrowthSimulation
+        plants={plants}
+        updatePlant={updatePlant}
+        timeSpeed={timeSpeed}
+        season={season}
+        rainIntensity={rainIntensity}
+        windSpeed={windSpeed}
+        cloudCover={cloudCover}
+      />
       {showPlantInfo && (
         <div
           style={{
@@ -180,29 +216,7 @@ const App: React.FC = () => {
           <button onClick={() => setShowPlantInfo(null)}>Close</button>
         </div>
       )}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 20,
-          left: 20,
-          background: "rgba(255, 255, 255, 0.8)",
-          padding: "10px",
-          borderRadius: "5px",
-        }}
-      >
-        <h3>Instructions:</h3>
-        <p>1. Select a plant from the list on the left.</p>
-        <p>2. Click on the ground to place the selected plant.</p>
-        <p>3. Click and drag to move placed plants.</p>
-        <p>4. Right-click on a plant for more options:</p>
-        <ul>
-          <li>View plant information</li>
-          <li>Customize plant appearance</li>
-          <li>Remove plant</li>
-        </ul>
-        <p>5. Use the environment controls to adjust time and season.</p>
-        <p>6. Save and load your garden designs using the controls.</p>
-      </div>
+      <Instructions />
     </div>
   );
 };

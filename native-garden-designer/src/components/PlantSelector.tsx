@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import plantDatabase from "../data/plantDatabase";
@@ -19,17 +19,34 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [customColor, setCustomColor] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, selectedCategory]);
 
-  const filteredPlants = plantDatabase.filter((plant) => {
-    return (
-      !searchTerm || plant.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  const categories = useMemo(() => {
+    const cats = new Set(plantDatabase.map((plant) => plant.category));
+    return ["All", ...Array.from(cats)];
+  }, []);
+
+  const filteredPlants = useMemo(() => {
+    return plantDatabase.filter((plant) => {
+      const matchesSearch =
+        !searchTerm ||
+        plant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        plant.scientificName
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        plant.description?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        selectedCategory === "All" || plant.category === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchTerm, selectedCategory]);
 
   const pageCount = Math.ceil(filteredPlants.length / ITEMS_PER_PAGE);
   const paginatedPlants = filteredPlants.slice(
@@ -67,6 +84,17 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({
           onChange={(e) => setSearchTerm(e.target.value)}
           className={styles.searchInput}
         />
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className={styles.categorySelect}
+        >
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
       </div>
       <div className={styles.plantList}>
         {paginatedPlants.map((plant) => (
@@ -78,15 +106,17 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({
             onClick={() => addPlant(plant)}
           >
             <img
-              src={`/plant_thumbnails/${plant.id}.jpg`} // Assuming thumbnails are stored with ID as filename
+              src={`/plant_thumbnails/${plant.id}.jpg`}
               alt={plant.name}
               className={styles.plantImage}
             />
             <div className={styles.plantInfo}>
               <h4>{plant.name}</h4>
+              <p className={styles.scientificName}>{plant.scientificName}</p>
               <p className={styles.plantDescription}>{plant.description}</p>
               {plant.height && <p>Height: {plant.height}m</p>}
               {plant.spread && <p>Spread: {plant.spread}m</p>}
+              <p className={styles.category}>Category: {plant.category}</p>
             </div>
           </div>
         ))}
