@@ -1,1 +1,17 @@
 continue building a web app using r3f and ecosystem which allows the user to design a garden or landscape by placing plants along the ground in 3d space. The project has already been started using Vite+r3f and you can find the relevant files in ./native-garden-designer/src folder.
+
+features:
+
+- user can place plants on the ground
+- user can adjust the ground height at each point on the ground
+- plant height is different for each plant and sourced from a database (use local mock data for now)
+
+TODOS:
+
+- bug: plants are only placeable in a single row at the moment, even when clicking a different tile they end up in the center column
+- feature: when placing a plant, a semi-transparent preview of the plant should be visible at the hovered tile
+- feature: each plant should have a "sizeMeters" param that scales the plant preview image by that number e.g. 2m = scale by 2x
+- feature: an iconbutton with a compass icon whose compass needle spins as the user rotates the orbit, and which resets the camera and scene position / rotation when clicked
+- bug: "something went wrong" appears below the canvas when placing a plant
+- bug: when I select a plant to place e.g. click on "Oak Tree" then place an oak tree on the ground, the menu for selecting plants is no longer accessible -> expected: the "select a plant" menu should be accessible
+- bug: plant preview images aren't showing up -> use a picsum.photos url to use a random photo related to the plant

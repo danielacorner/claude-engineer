@@ -3,19 +3,34 @@ import { Plant } from '../types';
 
 interface PlantCustomizerProps {
   plant: Plant;
-  customizePlant: (customizations: Partial<Plant>) => void;
-  closePlantCustomizer: () => void;
+  onCustomize: (customizations: Partial<Plant>) => void;
+  onClose: () => void;
 }
 
-const PlantCustomizer: React.FC<PlantCustomizerProps> = ({ plant, customizePlant, closePlantCustomizer }) => {
-  const [height, setHeight] = useState(plant.height);
-  const [width, setWidth] = useState(plant.width);
-  const [color, setColor] = useState(plant.color || '');
+const PlantCustomizer: React.FC<PlantCustomizerProps> = ({ plant, onCustomize, onClose }) => {
+  const [customizations, setCustomizations] = useState<Partial<Plant>>({
+    scale: plant.scale || [1, 1, 1],
+    color: plant.color || '#ffffff',
+    height: plant.height || 1,
+    spread: plant.spread || 1,
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    customizePlant({ height, width, color: color || undefined });
-    closePlantCustomizer();
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (name === 'scale') {
+      const scale = value.split(',').map(Number) as [number, number, number];
+      setCustomizations({ ...customizations, scale });
+    } else if (name === 'height' || name === 'spread') {
+      setCustomizations({ ...customizations, [name]: Number(value) });
+    } else {
+      setCustomizations({ ...customizations, [name]: value });
+    }
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    onCustomize(customizations);
+    onClose();
   };
 
   return (
@@ -33,48 +48,51 @@ const PlantCustomizer: React.FC<PlantCustomizerProps> = ({ plant, customizePlant
       <h2>Customize {plant.name}</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="height">Height (m): </label>
+          <label htmlFor="scale">Scale (x,y,z):</label>
+          <input
+            type="text"
+            id="scale"
+            name="scale"
+            value={customizations.scale?.join(',')}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="color">Color:</label>
+          <input
+            type="color"
+            id="color"
+            name="color"
+            value={customizations.color}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="height">Height (m):</label>
           <input
             type="number"
             id="height"
-            value={height}
-            onChange={(e) => setHeight(Number(e.target.value))}
-            min={0.1}
-            max={10}
-            step={0.1}
+            name="height"
+            value={customizations.height}
+            onChange={handleInputChange}
+            step="0.1"
+            min="0.1"
           />
         </div>
         <div>
-          <label htmlFor="width">Width (m): </label>
+          <label htmlFor="spread">Spread (m):</label>
           <input
             type="number"
-            id="width"
-            value={width}
-            onChange={(e) => setWidth(Number(e.target.value))}
-            min={0.1}
-            max={10}
-            step={0.1}
+            id="spread"
+            name="spread"
+            value={customizations.spread}
+            onChange={handleInputChange}
+            step="0.1"
+            min="0.1"
           />
         </div>
-        <div>
-          <label htmlFor="color">Color: </label>
-          <select
-            id="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          >
-            <option value="">Default</option>
-            <option value="red">Red</option>
-            <option value="green">Green</option>
-            <option value="blue">Blue</option>
-            <option value="yellow">Yellow</option>
-            <option value="purple">Purple</option>
-          </select>
-        </div>
-        <div style={{ marginTop: '10px' }}>
-          <button type="submit">Apply Changes</button>
-          <button type="button" onClick={closePlantCustomizer}>Cancel</button>
-        </div>
+        <button type="submit">Apply Changes</button>
+        <button type="button" onClick={onClose}>Cancel</button>
       </form>
     </div>
   );

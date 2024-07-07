@@ -1,56 +1,66 @@
-import React, { useRef, useMemo, useState } from "react";
+import React, {
+  useRef,
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+} from "react";
 import { Plane, useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 interface GroundProps {
   onPlantPlace: (position: [number, number, number]) => void;
+  onHover: (position: [number, number, number] | null) => void;
 }
 
 const GRID_SIZE = 1; // Size of each grid cell
+const GROUND_SIZE = 100; // Total size of the ground plane
+const HEIGHTMAP_RESOLUTION = 128; // Resolution of the heightmap
 
-const Ground: React.FC<GroundProps> = ({ onPlantPlace }) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const { camera, raycaster, mouse } = useThree();
-  const [hoverPoint, setHoverPoint] = useState<THREE.Vector3 | null>(null);
+const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
+  ({ onPlantPlace, onHover }, ref) => {
+    const meshRef = useRef<THREE.Mesh>(null);
+    const { camera, raycaster, mouse } = useThree();
+    const [hoverPoint, setHoverPoint] = useState<THREE.Vector3 | null>(null);
+    const [heightmap, setHeightmap] = useState(
+      () => new Float32Array(HEIGHTMAP_RESOLUTION * HEIGHTMAP_RESOLUTION)
+    );
 
-  // Load a grass texture
-  const texture = useTexture("/textures/grass.jpg");
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(100, 100);
+    // Load a grass texture
+    const texture = useTexture("/textures/grass.jpg");
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(100, 100);
 
-  // Create a heightmap for subtle elevation
-  const heightmap = useMemo(() => {
-    const size = 1024;
-    const data = new Float32Array(size * size);
-    for (let i = 0; i < size * size; i++) {
-      const x = i % size;
-      const y = Math.floor(i / size);
-      data[i] = (Math.cos(x / 20) + Math.sin(y / 20)) * 0.5;
-    }
-    return data;
-  }, []);
-
-  // Create custom shader material for the ground
-  const groundMaterial = useMemo(() => {
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        grassTexture: { value: texture },
-        heightmap: { value: heightmap },
-        time: { value: 0 },
-      },
-      vertexShader: `
+    // Create custom shader material for the ground
+    const groundMaterial = useMemo(() => {
+      return new THREE.ShaderMaterial({
+        uniforms: {
+          grassTexture: { value: texture },
+          heightmap: {
+            value: new THREE.DataTexture(
+              heightmap,
+              HEIGHTMAP_RESOLUTION,
+              HEIGHTMAP_RESOLUTION,
+              THREE.RedFormat,
+              THREE.FloatType
+            ),
+          },
+          time: { value: 0 },
+        },
+        vertexShader: `
         uniform float time;
         uniform sampler2D heightmap;
         varying vec2 vUv;
         void main() {
           vUv = uv;
           vec4 heightData = texture2D(heightmap, uv);
-          vec3 transformed = vec3(position.x, position.y + heightData.r * 2.0, position.z);
+          vec3 transformed = vec3(position.x, position.y + heightData.r * 5.0, position.z);
           gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
         }
       `,
-      fragmentShader: `
+        fragmentShader: `
         uniform sampler2D grassTexture;
         varying vec2 vUv;
         void main() {
@@ -58,75 +68,130 @@ const Ground: React.FC<GroundProps> = ({ onPlantPlace }) => {
           gl_FragColor = grassColor;
         }
       `,
+      });
+    }, [texture, heightmap]);
+
+    // Animate grass
+    useFrame(({ clock }) => {
+      if (groundMaterial) {
+        groundMaterial.uniforms.time.value = clock.getElapsedTime();
+      }
     });
-  }, [texture, heightmap]);
 
-  // Animate grass
-  useFrame(({ clock }) => {
-    if (groundMaterial) {
-      groundMaterial.uniforms.time.value = clock.getElapsedTime();
-    }
-  });
-
-  const handleClick = (event: THREE.Event) => {
-    if (meshRef.current) {
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObject(meshRef.current);
-      if (intersects.length > 0) {
-        const { point } = intersects[0];
-        const snappedPosition = snapToGrid(point);
-        onPlantPlace([snappedPosition.x, snappedPosition.y, snappedPosition.z]);
+    const handleClick = (event: THREE.Event) => {
+      if (meshRef.current) {
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObject(meshRef.current);
+        if (intersects.length > 0) {
+          const { point } = intersects[0];
+          const snappedPosition = snapToGrid(point);
+          onPlantPlace([
+            snappedPosition.x,
+            snappedPosition.y,
+            snappedPosition.z,
+          ]);
+        }
       }
-    }
-  };
+    };
 
-  const handlePointerMove = (event: THREE.Event) => {
-    if (meshRef.current) {
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObject(meshRef.current);
-      if (intersects.length > 0) {
-        const { point } = intersects[0];
-        const snappedPosition = snapToGrid(point);
-        setHoverPoint(snappedPosition);
-      } else {
-        setHoverPoint(null);
+    const handlePointerMove = (event: THREE.Event) => {
+      if (meshRef.current) {
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObject(meshRef.current);
+        if (intersects.length > 0) {
+          const { point } = intersects[0];
+          const snappedPosition = snapToGrid(point);
+          setHoverPoint(snappedPosition);
+          onHover([snappedPosition.x, snappedPosition.y, snappedPosition.z]);
+        } else {
+          setHoverPoint(null);
+          onHover(null);
+        }
       }
-    }
-  };
+    };
 
-  const snapToGrid = (point: THREE.Vector3): THREE.Vector3 => {
-    return new THREE.Vector3(
-      Math.round(point.x / GRID_SIZE) * GRID_SIZE,
-      point.y,
-      Math.round(point.z / GRID_SIZE) * GRID_SIZE
+    const snapToGrid = (point: THREE.Vector3): THREE.Vector3 => {
+      return new THREE.Vector3(
+        Math.round(point.x / GRID_SIZE) * GRID_SIZE,
+        point.y,
+        Math.round(point.z / GRID_SIZE) * GRID_SIZE
+      );
+    };
+
+    const adjustGroundHeight = useCallback(
+      (x: number, z: number, delta: number) => {
+        const xIndex = Math.floor(
+          ((x + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
+        );
+        const zIndex = Math.floor(
+          ((z + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
+        );
+        const index = zIndex * HEIGHTMAP_RESOLUTION + xIndex;
+
+        setHeightmap((prevHeightmap) => {
+          const newHeightmap = new Float32Array(prevHeightmap);
+          newHeightmap[index] = Math.max(
+            0,
+            Math.min(1, newHeightmap[index] + delta)
+          );
+          groundMaterial.uniforms.heightmap.value.image.data = newHeightmap;
+          groundMaterial.uniforms.heightmap.value.needsUpdate = true;
+          return newHeightmap;
+        });
+      },
+      [groundMaterial]
     );
-  };
 
-  return (
-    <group>
-      <Plane
-        ref={meshRef}
-        receiveShadow
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -0.01, 0]}
-        args={[1000, 1000, 200, 200]}
-        onClick={handleClick}
-        onPointerMove={handlePointerMove}
-      >
-        <primitive object={groundMaterial} attach="material" />
-      </Plane>
-      <gridHelper
-        args={[1000, 1000 / GRID_SIZE, "#888888", "#444444"]}
-        position={[0, 0.01, 0]}
-      />
-      {hoverPoint && (
-        <mesh position={hoverPoint}>
-          <boxGeometry args={[GRID_SIZE, 0.1, GRID_SIZE]} />
-          <meshBasicMaterial color="yellow" opacity={0.5} transparent />
-        </mesh>
-      )}
-    </group>
-  );
-};
+    // Add event listeners for ground height adjustment
+    useEffect(() => {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (hoverPoint) {
+          if (event.key === "q") {
+            adjustGroundHeight(hoverPoint.x, hoverPoint.z, 0.01);
+          } else if (event.key === "e") {
+            adjustGroundHeight(hoverPoint.x, hoverPoint.z, -0.01);
+          }
+        }
+      };
 
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }, [hoverPoint, adjustGroundHeight]);
+
+    useImperativeHandle(ref, () => meshRef.current as any);
+
+    return (
+      <group>
+        <Plane
+          ref={meshRef}
+          receiveShadow
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, -0.01, 0]}
+          args={[
+            GROUND_SIZE,
+            GROUND_SIZE,
+            HEIGHTMAP_RESOLUTION - 1,
+            HEIGHTMAP_RESOLUTION - 1,
+          ]}
+          onClick={handleClick}
+          onPointerMove={handlePointerMove}
+        >
+          <primitive object={groundMaterial} attach="material" />
+        </Plane>
+        <gridHelper
+          args={[GROUND_SIZE, GROUND_SIZE / GRID_SIZE, "#888888", "#444444"]}
+          position={[0, 0.01, 0]}
+        />
+        {hoverPoint && (
+          <mesh position={hoverPoint}>
+            <boxGeometry args={[GRID_SIZE, 0.1, GRID_SIZE]} />
+            <meshBasicMaterial color="yellow" opacity={0.5} transparent />
+          </mesh>
+        )}
+      </group>
+    );
+  }
+);
 export default Ground;

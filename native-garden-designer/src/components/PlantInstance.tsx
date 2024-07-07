@@ -1,9 +1,19 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
-import { Html, useGLTF } from '@react-three/drei'
-import { Plant } from '../types'
-import { Group, Vector3, InstancedMesh, MeshStandardMaterial, BoxGeometry, Raycaster, Plane, Object3D } from 'three'
-import { useSpring, a } from '@react-spring/three'
+import React, { useRef, useState, useEffect, useMemo } from "react";
+import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
+import { Html, useGLTF } from "@react-three/drei";
+import { Plant } from "../types";
+import {
+  Group,
+  Vector3,
+  InstancedMesh,
+  MeshStandardMaterial,
+  BoxGeometry,
+  Raycaster,
+  Plane,
+  Object3D,
+} from "three";
+import { useSpring, a } from "@react-spring/three";
+import PlantGrowthAnimation from "./PlantGrowthAnimation";
 
 interface PlantInstanceProps {
   plant: Plant;
@@ -14,6 +24,7 @@ interface PlantInstanceProps {
   startCustomizing: () => void;
   windSpeed: number;
   rainIntensity: number;
+  groundRef: React.RefObject<Object3D>; // Add this prop
 }
 
 const GRID_SIZE = 1; // Size of each grid cell
@@ -26,50 +37,62 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
   openPlantInfo,
   startCustomizing,
   windSpeed,
-  rainIntensity
+  rainIntensity,
+  groundRef, // Add this prop
 }) => {
-  const groupRef = useRef<Group>(null)
-  const [isDragging, setIsDragging] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
-  const [showContextMenu, setShowContextMenu] = useState(false)
-  const [position, setPosition] = useState<[number, number, number]>(plant.position)
-  const { scene } = useGLTF(plant.modelUrl)
-  const { size, viewport, camera, gl, raycaster } = useThree()
-  const aspect = size.width / viewport.width
+  const groupRef = useRef<Group>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [showContextMenu, setShowContextMenu] = useState(false);
+  const [position, setPosition] = useState<[number, number, number]>(
+    plant.position
+  );
+  console.log("⭐� ~ plant.modelUrl:", plant.modelUrl);
+  let scene;
+  try {
+    ({ scene } = useGLTF(plant.modelUrl));
+  } catch (error) {
+    console.error("Error loading 3D model:", error);
+    // Provide a fallback or return null if the model fails to load
+    return null;
+  }
+  const { size, viewport, camera, gl, raycaster } = useThree();
+  const aspect = size.width / viewport.width;
+  const [isGrowing, setIsGrowing] = useState(true);
 
   // Wind animation
-  const windFactor = useRef(Math.random() * 0.05 + 0.02).current
-  
+  const windFactor = useRef(Math.random() * 0.05 + 0.02).current;
+
   // LOD system
-  const [lodLevel, setLodLevel] = useState(0)
-  const lodDistances = [10, 20, 40] // Distances for each LOD level
+  const [lodLevel, setLodLevel] = useState(0);
+  const lodDistances = [10, 20, 40]; // Distances for each LOD level
 
   const lodMeshes = useMemo(() => {
-    const highDetailModel = scene.clone()
-    const mediumDetailModel = scene.clone()
-    const lowDetailModel = scene.clone()
+    const highDetailModel = scene.clone();
+    const mediumDetailModel = scene.clone();
+    const lowDetailModel = scene.clone();
 
     // Simplify medium and low detail models
-    simplifyModel(mediumDetailModel, 0.5)
-    simplifyModel(lowDetailModel, 0.2)
+    simplifyModel(mediumDetailModel, 0.5);
+    simplifyModel(lowDetailModel, 0.2);
 
-    return [highDetailModel, mediumDetailModel, lowDetailModel]
-  }, [plant, scene])
+    return [highDetailModel, mediumDetailModel, lowDetailModel];
+  }, [plant, scene]);
 
   useEffect(() => {
     if (groupRef.current) {
-      groupRef.current.scale.set(...(plant.scale || [1, 1, 1]))
+      groupRef.current.scale.set(...(plant.scale || [1, 1, 1]));
     }
-  }, [plant.scale])
+  }, [plant.scale]);
 
   const [spring, api] = useSpring(() => ({
     scale: 1,
     config: { tension: 300, friction: 10 },
-  }))
+  }));
 
   useEffect(() => {
-    api.start({ scale: isHovered ? 1.1 : 1 })
-  }, [isHovered, api])
+    api.start({ scale: isHovered ? 1.1 : 1 });
+  }, [isHovered, api]);
 
   const snapToGrid = (point: Vector3): Vector3 => {
     return new Vector3(
@@ -81,64 +104,102 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
 
   const dragPlane = useMemo(() => new Plane(new Vector3(0, 1, 0), 0), []);
 
+  const getGroundHeight = (x: number, z: number): number => {
+    if (groundRef.current) {
+      const raycaster = new Raycaster(
+        new Vector3(x, 100, z),
+        new Vector3(0, -1, 0)
+      );
+      const intersects = raycaster.intersectObject(groundRef.current, true);
+      if (intersects.length > 0) {
+        return intersects[0].point.y;
+      }
+    }
+    return 0;
+  };
+
   useFrame((state, delta) => {
     if (isDragging && groupRef.current) {
       const intersection = new Vector3();
       raycaster.ray.intersectPlane(dragPlane, intersection);
       const snappedPosition = snapToGrid(intersection);
-      setPosition([snappedPosition.x, 0, snappedPosition.z]);
-      updatePosition([snappedPosition.x, 0, snappedPosition.z]);
+      const y = getGroundHeight(snappedPosition.x, snappedPosition.z);
+      setPosition([snappedPosition.x, y, snappedPosition.z]);
+      updatePosition([snappedPosition.x, y, snappedPosition.z]);
     }
 
     // Enhanced wind and rain animation
-    if (groupRef.current) {
-      animatePlant(groupRef.current, state.clock.elapsedTime, windSpeed, rainIntensity)
+    if (groupRef.current && !isGrowing) {
+      animatePlant(
+        groupRef.current,
+        state.clock.elapsedTime,
+        windSpeed,
+        rainIntensity
+      );
     }
 
     // LOD system
-    const distanceToCamera = camera.position.distanceTo(new Vector3(...position))
-    const newLodLevel = lodDistances.findIndex(distance => distanceToCamera < distance)
+    const distanceToCamera = camera.position.distanceTo(
+      new Vector3(...position)
+    );
+    const newLodLevel = lodDistances.findIndex(
+      (distance) => distanceToCamera < distance
+    );
     if (newLodLevel !== lodLevel) {
-      setLodLevel(newLodLevel === -1 ? lodDistances.length - 1 : newLodLevel)
+      setLodLevel(newLodLevel === -1 ? lodDistances.length - 1 : newLodLevel);
     }
-  })
+  });
 
-  const handleContextMenu = (event: React.MouseEvent) => {
-    event.preventDefault()
-    setShowContextMenu(true)
-  }
+  const handleContextMenu = (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation();
+    setShowContextMenu(true);
+  };
 
   const handleCustomize = () => {
-    startCustomizing()
-    setShowContextMenu(false)
-  }
+    startCustomizing();
+    setShowContextMenu(false);
+  };
+
+  const handleGrowthComplete = () => {
+    setIsGrowing(false);
+  };
 
   return (
     <a.group
       ref={groupRef}
       position={position}
       onPointerDown={(e) => {
-        e.stopPropagation()
-        setIsDragging(true)
-        gl.domElement.style.cursor = 'grabbing'
+        e.stopPropagation();
+        setIsDragging(true);
+        gl.domElement.style.cursor = "grabbing";
       }}
       onPointerUp={() => {
-        setIsDragging(false)
-        gl.domElement.style.cursor = 'auto'
+        setIsDragging(false);
+        gl.domElement.style.cursor = "auto";
       }}
       onPointerOut={() => {
-        setIsDragging(false)
-        setIsHovered(false)
-        gl.domElement.style.cursor = 'auto'
+        setIsDragging(false);
+        setIsHovered(false);
+        gl.domElement.style.cursor = "auto";
       }}
       onPointerOver={(e) => {
-        setIsHovered(true)
-        gl.domElement.style.cursor = 'grab'
+        setIsHovered(true);
+        gl.domElement.style.cursor = "grab";
       }}
       onContextMenu={handleContextMenu}
       {...spring}
     >
-      <primitive object={lodMeshes[lodLevel]} />
+      {isGrowing ? (
+        <PlantGrowthAnimation
+          scale={plant.scale || [1, 1, 1]}
+          growthDuration={3}
+          onGrowthComplete={handleGrowthComplete}
+        >
+          <primitive object={lodMeshes[lodLevel]} />
+        </PlantGrowthAnimation>
+      ) : (
+        <primitive object={lodMeshes[lodLevel]} />
+      )}
       {isDragging && (
         <mesh position={[0, 0.01, 0]}>
           <planeGeometry args={[1, 1]} />
@@ -146,61 +207,82 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
         </mesh>
       )}
       <Html distanceFactor={10}>
-        <div style={{
-          background: 'rgba(0, 0, 0, 0.7)',
-          color: 'white',
-          padding: '5px 10px',
-          borderRadius: '5px',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          transform: `scale(${1 / aspect})`,
-        }}>
+        <div
+          style={{
+            background: "rgba(0, 0, 0, 0.7)",
+            color: "white",
+            padding: "5px 10px",
+            borderRadius: "5px",
+            fontSize: "12px",
+            fontWeight: "bold",
+            transform: `scale(${1 / aspect})`,
+          }}
+        >
           {plant.name}
         </div>
         {showContextMenu && (
-          <div style={{
-            position: 'absolute',
-            background: 'white',
-            border: '1px solid #ccc',
-            padding: '5px',
-            borderRadius: '5px',
-            zIndex: 1000,
-          }}>
-            <button onClick={(e) => {
-              e.stopPropagation()
-              removePlant()
-              setShowContextMenu(false)
-            }}>Remove Plant</button>
-            <button onClick={(e) => {
-              e.stopPropagation()
-              openPlantInfo()
-              setShowContextMenu(false)
-            }}>Plant Info</button>
-            <button onClick={(e) => {
-              e.stopPropagation()
-              handleCustomize()
-            }}>Customize</button>
+          <div
+            style={{
+              position: "absolute",
+              background: "white",
+              border: "1px solid #ccc",
+              padding: "5px",
+              borderRadius: "5px",
+              zIndex: 1000,
+            }}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                removePlant();
+                setShowContextMenu(false);
+              }}
+            >
+              Remove Plant
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                openPlantInfo();
+                setShowContextMenu(false);
+              }}
+            >
+              Plant Info
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCustomize();
+              }}
+            >
+              Customize
+            </button>
           </div>
         )}
       </Html>
     </a.group>
-  )
-}
+  );
+};
 
 function simplifyModel(model: Object3D, factor: number) {
   model.traverse((child) => {
     if (child instanceof InstancedMesh) {
       const geometry = child.geometry;
-      const vertexCount = geometry.getAttribute('position').count;
+      const vertexCount = geometry.getAttribute("position").count;
       const newVertexCount = Math.max(4, Math.floor(vertexCount * factor));
-      
+
       // This is a simple vertex reduction. For production, use a more sophisticated algorithm.
       geometry.setDrawRange(0, newVertexCount);
     }
   });
 }
 
-function animatePlant(plant: Object3D, time: number, windSpeed: number, rainIntensity: number) {
+function animatePlant(
+  plant: Object3D,
+  time: number,
+  windSpeed: number,
+  rainIntensity: number
+) {
   plant.traverse((child) => {
     if (child instanceof Object3D) {
       // Different parts of the plant react differently to wind and rain
@@ -208,8 +290,10 @@ function animatePlant(plant: Object3D, time: number, windSpeed: number, rainInte
       const rainFactor = Math.random() * 0.02 + 0.01;
 
       // Wind animation
-      child.rotation.y = Math.sin(time * windSpeed * windFactor) * windSpeed * 0.1;
-      child.position.x = Math.sin(time * windSpeed * windFactor * 2) * windSpeed * 0.05;
+      child.rotation.y =
+        Math.sin(time * windSpeed * windFactor) * windSpeed * 0.1;
+      child.position.x =
+        Math.sin(time * windSpeed * windFactor * 2) * windSpeed * 0.05;
 
       // Rain effect
       child.rotation.x = Math.sin(time * 2) * rainIntensity * rainFactor;
@@ -225,4 +309,4 @@ function animatePlant(plant: Object3D, time: number, windSpeed: number, rainInte
   });
 }
 
-export default PlantInstance
+export default PlantInstance;

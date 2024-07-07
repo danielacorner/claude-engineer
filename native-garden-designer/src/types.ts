@@ -9,6 +9,7 @@ export interface PlantData {
   spread?: number;
   description?: string;
   category?: string;
+  previewImage?: string;
 }
 
 export interface Plant extends PlantData {

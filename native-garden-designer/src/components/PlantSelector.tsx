@@ -8,6 +8,7 @@ import styles from "./PlantSelector.module.css";
 interface PlantSelectorProps {
   addPlant: (plant: PlantData | null) => void;
   selectedPlant: PlantData | null;
+  setSelectedPlant: (plant: PlantData | null) => void;
 }
 
 const ITEMS_PER_PAGE = 12;
@@ -15,7 +16,9 @@ const ITEMS_PER_PAGE = 12;
 const PlantSelector: React.FC<PlantSelectorProps> = ({
   addPlant,
   selectedPlant,
+  setSelectedPlant,
 }) => {
+  console.log("⭐� ~ selectedPlant:", selectedPlant);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [customColor, setCustomColor] = useState<string | null>(null);
@@ -73,6 +76,12 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({
     );
   };
 
+  const handleImageError = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    event.currentTarget.src = "/plant_thumbnails/default.jpg";
+  };
+
   return (
     <div className={styles.plantSelector}>
       <h3>Plant Selector</h3>
@@ -89,26 +98,27 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({
           onChange={(e) => setSelectedCategory(e.target.value)}
           className={styles.categorySelect}
         >
-          {categories.map((category) => (
-            <option key={category} value={category}>
+          {categories.map((category, idx) => (
+            <option key={category ?? idx} value={category}>
               {category}
             </option>
           ))}
         </select>
       </div>
       <div className={styles.plantList}>
-        {paginatedPlants.map((plant) => (
+        {paginatedPlants.map((plant, idx) => (
           <div
-            key={plant.id}
+            key={plant.id ?? idx}
             className={`${styles.plantCard} ${
               selectedPlant?.id === plant.id ? styles.selected : ""
             }`}
-            onClick={() => addPlant(plant)}
+            onClick={() => setSelectedPlant(plant)}
           >
             <img
               src={`/plant_thumbnails/${plant.id}.jpg`}
               alt={plant.name}
               className={styles.plantImage}
+              onError={handleImageError}
             />
             <div className={styles.plantInfo}>
               <h4>{plant.name}</h4>
