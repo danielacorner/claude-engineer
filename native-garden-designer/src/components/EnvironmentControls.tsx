@@ -1,37 +1,25 @@
 import React from 'react';
 import styles from './EnvironmentControls.module.css';
-
-interface EnvironmentControlsProps {
-  timeOfDay: number;
-  setTimeOfDay: (time: number) => void;
-  season: string;
-  setSeason: (season: string) => void;
-  timeSpeed: number;
-  setTimeSpeed: (speed: number) => void;
-  rainIntensity: number;
-  setRainIntensity: (intensity: number) => void;
-  windSpeed: number;
-  setWindSpeed: (speed: number) => void;
-  cloudCover: number;
-  setCloudCover: (cover: number) => void;
-}
+import { useAppStore } from '../store';
 
 const seasons = ['Spring', 'Summer', 'Autumn', 'Winter'];
 
-const EnvironmentControls: React.FC<EnvironmentControlsProps> = ({
-  timeOfDay,
-  setTimeOfDay,
-  season,
-  setSeason,
-  timeSpeed,
-  setTimeSpeed,
-  rainIntensity,
-  setRainIntensity,
-  windSpeed,
-  setWindSpeed,
-  cloudCover,
-  setCloudCover,
-}) => {
+const EnvironmentControls: React.FC = () => {
+  const {
+    timeOfDay,
+    setTimeOfDay,
+    season,
+    setSeason,
+    timeSpeed,
+    setTimeSpeed,
+    rainIntensity,
+    setRainIntensity,
+    windSpeed,
+    setWindSpeed,
+    cloudCover,
+    setCloudCover,
+  } = useAppStore();
+
   return (
     <div className={styles.environmentControls}>
       <h3>Environment Controls</h3>

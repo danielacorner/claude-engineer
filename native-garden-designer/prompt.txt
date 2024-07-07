@@ -8,8 +8,8 @@ features:
 
 TODOS:
 
-- bug: when user places a plant it only goes in the origin [0,0,0] instead of where the user clicked
-- feature: when placing a plant, a semi-transparent preview of the plant should be visible at the hovered tile
+- bug: when user places a plant it grows at the selected position but then moves instantly to the center column when it's finished growing instead of staying where the user clicked
+- lots of state is found in App.tsx, which is causing unnecessary re-renders of subcomponents. Please move as much state as is reasonable into store.tsx global state store, and use that store to grab the state as low as possible in the component tree wherever that state is needed. Refer to PlantSelector.tsx to see how to grab state from the store.
 - feature: each plant should have a "sizeMeters" param that scales the plant preview image by that number e.g. 2m = scale by 2x
 - feature: an iconbutton with a compass icon whose compass needle spins as the user rotates the orbit, and which resets the camera and scene position / rotation when clicked
 - bug: "something went wrong" appears below the canvas when placing a plant

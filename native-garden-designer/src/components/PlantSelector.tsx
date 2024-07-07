@@ -4,14 +4,14 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { plantDatabase } from "../data/plantDatabase";
 import { PlantData } from "../types";
 import styles from "./PlantSelector.module.css";
-import { usePlantStore } from "../store";
+import { useAppStore } from "../store";
 
 const ITEMS_PER_PAGE = 12;
 
 const PlantSelector: React.FC = () => {
-  const selectedPlant = usePlantStore((state) => state.selectedPlant);
-  const addPlant = usePlantStore((state) => state.addPlant);
-  const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
+  const selectedPlant = useAppStore((state) => state.selectedPlant);
+  const addPlant = useAppStore((state) => state.addPlant);
+  const setSelectedPlant = useAppStore((state) => state.setSelectedPlant);
   console.log("⭐� ~ selectedPlant:", selectedPlant);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);

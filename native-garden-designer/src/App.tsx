@@ -1,5 +1,5 @@
-import React, { useState, Suspense, useMemo, useRef, useEffect } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import React, { Suspense, useMemo, useRef, useEffect } from "react";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sky, Html } from "@react-three/drei";
 import Ground from "./components/Ground";
 import PlantSelector from "./components/PlantSelector";
@@ -10,30 +10,35 @@ import SaveLoadControls from "./components/SaveLoadControls";
 import RainEffect from "./components/RainEffect";
 import WindEffect from "./components/WindEffect";
 import GridSystem from "./components/GridSystem";
-import { Plant, PlantData } from "./types";
+import { Plant } from "./types";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { Instructions } from "./Instructions";
-import Tutorial from "./components/Tutorial";
 import * as THREE from "three";
-import { getAllPlants, getPlantById } from "./data/plantDatabase";
+import { getAllPlants } from "./data/plantDatabase";
+import { useAppStore } from "./store";
 
 const App: React.FC = () => {
-  const [plants, setPlants] = useState<Plant[]>([]);
-  const [selectedPlant, setSelectedPlant] = useState<PlantData | null>(null);
-  const [hoveredPosition, setHoveredPosition] = useState<
-    [number, number, number] | null
-  >(null);
-  const [timeOfDay, setTimeOfDay] = useState(12);
-  const [season, setSeason] = useState("Summer");
-  const [showPlantInfo, setShowPlantInfo] = useState<Plant | null>(null);
-  const [customizingPlant, setCustomizingPlant] = useState<Plant | null>(null);
-  const [timeSpeed, setTimeSpeed] = useState(1);
-  const [rainIntensity, setRainIntensity] = useState(0);
-  const [windSpeed, setWindSpeed] = useState(0);
-  const [cloudCover, setCloudCover] = useState(0);
-  const [showGrid, setShowGrid] = useState(true);
-  const [showTutorial, setShowTutorial] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const {
+    plants,
+    selectedPlant,
+    hoveredPosition,
+    timeOfDay,
+    season,
+    showPlantInfo,
+    rainIntensity,
+    windSpeed,
+    cloudCover,
+    showGrid,
+    setSelectedPlant,
+    setPlants,
+    setHoveredPosition,
+    placePlant,
+    updatePlantPosition,
+    removePlant,
+    customizePlant,
+    setShowPlantInfo,
+    setCustomizingPlant,
+  } = useAppStore();
 
   const orbitControlsRef = useRef<any>();
   const groundRef = useRef<any>(null);
@@ -53,49 +58,7 @@ const App: React.FC = () => {
     if (allPlants.length > 0) {
       setSelectedPlant(allPlants[0]);
     }
-  }, []);
-
-  function placePlant(position: [number, number, number]): void {
-    if (selectedPlant) {
-      const newPlant: Plant = {
-        ...selectedPlant,
-        id: plants.length + 1,
-        position,
-      };
-      setPlants([...plants, newPlant]);
-    }
-  }
-
-  function updatePlantPosition(
-    id: number,
-    newPosition: [number, number, number]
-  ): void {
-    setPlants(
-      plants.map((plant) =>
-        plant.id === id ? { ...plant, position: newPosition } : plant
-      )
-    );
-  }
-
-  function removePlant(id: number): void {
-    setPlants(plants.filter((plant) => plant.id !== id));
-  }
-
-  function customizePlant(id: number, customizations: Partial<Plant>): void {
-    setPlants(
-      plants.map((plant) =>
-        plant.id === id ? { ...plant, ...customizations } : plant
-      )
-    );
-  }
-
-  function openPlantInfo(plant: Plant): void {
-    setShowPlantInfo(plant);
-  }
-
-  function startCustomizingPlant(plant: Plant): void {
-    setCustomizingPlant(plant);
-  }
+  }, [setSelectedPlant]);
 
   function resetCamera(): void {
     if (orbitControlsRef.current) {
@@ -142,8 +105,8 @@ const App: React.FC = () => {
                 customizePlant={(customizations) =>
                   customizePlant(plant.id, customizations)
                 }
-                openPlantInfo={() => openPlantInfo(plant)}
-                startCustomizing={() => startCustomizingPlant(plant)}
+                openPlantInfo={() => setShowPlantInfo(plant)}
+                startCustomizing={() => setCustomizingPlant(plant)}
                 rainIntensity={rainIntensity}
                 windSpeed={windSpeed}
                 groundRef={groundRef}
@@ -161,21 +124,8 @@ const App: React.FC = () => {
       <ErrorBoundary>
         <PlantSelector />
       </ErrorBoundary>
-      <EnvironmentControls
-        timeOfDay={timeOfDay}
-        setTimeOfDay={setTimeOfDay}
-        season={season}
-        setSeason={setSeason}
-        timeSpeed={timeSpeed}
-        setTimeSpeed={setTimeSpeed}
-        rainIntensity={rainIntensity}
-        setRainIntensity={setRainIntensity}
-        windSpeed={windSpeed}
-        setWindSpeed={setWindSpeed}
-        cloudCover={cloudCover}
-        setCloudCover={setCloudCover}
-      />
-      <SaveLoadControls plants={plants} loadPlants={loadPlants} />
+      <EnvironmentControls />
+      <SaveLoadControls />
       {showPlantInfo && (
         <PlantInfoModal
           plant={showPlantInfo}
