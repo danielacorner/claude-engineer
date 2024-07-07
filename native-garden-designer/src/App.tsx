@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useMemo, useRef } from "react";
+import React, { useState, Suspense, useMemo, useRef, useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, Sky, Html } from "@react-three/drei";
 import Ground from "./components/Ground";
@@ -7,7 +7,6 @@ import PlantInstance from "./components/PlantInstance";
 import PlantPreview from "./components/PlantPreview";
 import EnvironmentControls from "./components/EnvironmentControls";
 import SaveLoadControls from "./components/SaveLoadControls";
-import PlantGrowthSimulation from "./components/PlantGrowthSimulation";
 import RainEffect from "./components/RainEffect";
 import WindEffect from "./components/WindEffect";
 import GridSystem from "./components/GridSystem";
@@ -16,6 +15,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { Instructions } from "./Instructions";
 import Tutorial from "./components/Tutorial";
 import * as THREE from "three";
+import { getAllPlants, getPlantById } from "./data/plantDatabase";
 
 const App: React.FC = () => {
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -44,84 +44,69 @@ const App: React.FC = () => {
     return color;
   }, []);
 
-  const lightIntensity = 1; // Declare the lightIntensity variable
-  const sunPosition = new THREE.Vector3(0, 10, 0); // Declare and initialize the sunPosition variable as a Vector3 object
+  const lightIntensity = 1;
+  const sunPosition = new THREE.Vector3(0, 10, 0);
+
+  useEffect(() => {
+    // Load initial plant data
+    const allPlants = getAllPlants();
+    if (allPlants.length > 0) {
+      setSelectedPlant(allPlants[0]);
+    }
+  }, []);
 
   function placePlant(position: [number, number, number]): void {
-    const newPlant = {
-      id: plants.length + 1,
-      position,
-      species: selectedPlant,
-      customizations: {},
-    };
-    setPlants([...plants, newPlant] as Plant[]);
+    if (selectedPlant) {
+      const newPlant: Plant = {
+        ...selectedPlant,
+        id: plants.length + 1,
+        position,
+      };
+      setPlants([...plants, newPlant]);
+    }
   }
 
   function updatePlantPosition(
     id: number,
     newPosition: [number, number, number]
   ): void {
-    const plantToUpdate = plants.find((plant) => plant.id === id);
-    if (plantToUpdate) {
-      plantToUpdate.position = newPosition;
-      setPlants([...plants]);
-    }
+    setPlants(
+      plants.map((plant) =>
+        plant.id === id ? { ...plant, position: newPosition } : plant
+      )
+    );
   }
 
   function removePlant(id: number): void {
     setPlants(plants.filter((plant) => plant.id !== id));
   }
+
   function customizePlant(id: number, customizations: Partial<Plant>): void {
-    const updatedPlants = plants.map((plant) => {
-      if (plant.id === id) {
-        return { ...plant, ...customizations };
-      }
-      return plant;
-    });
-    setPlants(updatedPlants);
+    setPlants(
+      plants.map((plant) =>
+        plant.id === id ? { ...plant, ...customizations } : plant
+      )
+    );
   }
 
   function openPlantInfo(plant: Plant): void {
-    setSelectedPlant(plant);
     setShowPlantInfo(plant);
   }
 
   function startCustomizingPlant(plant: Plant): void {
-    setSelectedPlant(plant);
-    setShowCustomizer(true);
+    setCustomizingPlant(plant);
   }
+
   function resetCamera(): void {
     if (orbitControlsRef.current) {
       orbitControlsRef.current.target.set(0, 0, 0);
       orbitControlsRef.current.update();
     }
   }
-  function loadPlants(plants: Plant[]): void {
-    setPlants(plants);
-  }
 
-  function addPlant(plantData: PlantData | null): void {
-    if (plantData) {
-      const newPlant: Plant = {
-        ...plantData,
-        id: plants.length + 1,
-        position: [0, 0, 0],
-      };
-      setPlants(
-        [...plants, newPlant].filter((plant) => plant.id !== plantData.id)
-      );
-    }
+  function loadPlants(loadedPlants: Plant[]): void {
+    setPlants(loadedPlants);
   }
-
-  function updatePlant(id: number, updates: Partial<Plant>): void {
-    setPlants(
-      plants.map((plant) =>
-        plant.id === id ? { ...plant, ...updates } : plant
-      )
-    );
-  }
-
-  // ... (keep all the existing functions as they are)
 
   return (
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
@@ -144,24 +129,26 @@ const App: React.FC = () => {
         />
         {showGrid && <GridSystem size={20} divisions={20} />}
         <Suspense fallback={null}>
-          {plants.map((plant) => (
-            <PlantInstance
-              key={plant.id}
-              plant={plant}
-              updatePosition={(newPosition) =>
-                updatePlantPosition(plant.id, newPosition)
-              }
-              removePlant={() => removePlant(plant.id)}
-              customizePlant={(customizations) =>
-                customizePlant(plant.id, customizations)
-              }
-              openPlantInfo={() => openPlantInfo(plant)}
-              startCustomizing={() => startCustomizingPlant(plant)}
-              rainIntensity={rainIntensity}
-              windSpeed={windSpeed}
-              groundRef={groundRef}
-            />
-          ))}
+          {plants
+            .filter((p) => p.modelUrl)
+            .map((plant) => (
+              <PlantInstance
+                key={plant.id}
+                plant={plant}
+                updatePosition={(newPosition) =>
+                  updatePlantPosition(plant.id, newPosition)
+                }
+                removePlant={() => removePlant(plant.id)}
+                customizePlant={(customizations) =>
+                  customizePlant(plant.id, customizations)
+                }
+                openPlantInfo={() => openPlantInfo(plant)}
+                startCustomizing={() => startCustomizingPlant(plant)}
+                rainIntensity={rainIntensity}
+                windSpeed={windSpeed}
+                groundRef={groundRef}
+              />
+            ))}
           {selectedPlant && hoveredPosition && (
             <PlantPreview plant={selectedPlant} position={hoveredPosition} />
           )}
@@ -172,11 +159,7 @@ const App: React.FC = () => {
       </Canvas>
 
       <ErrorBoundary>
-        <PlantSelector
-          addPlant={addPlant}
-          selectedPlant={selectedPlant}
-          setSelectedPlant={setSelectedPlant}
-        />
+        <PlantSelector />
       </ErrorBoundary>
       <EnvironmentControls
         timeOfDay={timeOfDay}
@@ -193,54 +176,11 @@ const App: React.FC = () => {
         setCloudCover={setCloudCover}
       />
       <SaveLoadControls plants={plants} loadPlants={loadPlants} />
-      <PlantGrowthSimulation
-        plants={plants}
-        updatePlant={updatePlant}
-        timeSpeed={timeSpeed}
-        season={season}
-        rainIntensity={rainIntensity}
-        windSpeed={windSpeed}
-        cloudCover={cloudCover}
-      />
       {showPlantInfo && (
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            background: "white",
-            padding: "20px",
-            borderRadius: "10px",
-            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-            zIndex: 1000,
-          }}
-        >
-          <h2>{showPlantInfo.name}</h2>
-          <p>
-            <strong>Scientific Name:</strong>{" "}
-            {showPlantInfo.scientificName || "N/A"}
-          </p>
-          <p>
-            <strong>Model URL:</strong> {showPlantInfo.modelUrl}
-          </p>
-          <p>
-            <strong>Scale:</strong> {showPlantInfo.scale.join(", ")}
-          </p>
-          <p>
-            <strong>Height:</strong> {showPlantInfo.height || "N/A"}m
-          </p>
-          <p>
-            <strong>Spread:</strong> {showPlantInfo.spread || "N/A"}m
-          </p>
-          <p>
-            <strong>Description:</strong> {showPlantInfo.description || "N/A"}
-          </p>
-          <p>
-            <strong>Color:</strong> {showPlantInfo.color || "Default"}
-          </p>
-          <button onClick={() => setShowPlantInfo(null)}>Close</button>
-        </div>
+        <PlantInfoModal
+          plant={showPlantInfo}
+          onClose={() => setShowPlantInfo(null)}
+        />
       )}
       <Instructions />
     </div>
@@ -267,6 +207,51 @@ function CompassIcon(props: { onClick: () => void }): JSX.Element {
     </Html>
   );
 }
-function setShowCustomizer(arg0: boolean) {
-  throw new Error("Function not implemented.");
+
+function PlantInfoModal({
+  plant,
+  onClose,
+}: {
+  plant: Plant;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "white",
+        padding: "20px",
+        borderRadius: "10px",
+        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+        zIndex: 1000,
+      }}
+    >
+      <h2>{plant.name}</h2>
+      <p>
+        <strong>Scientific Name:</strong> {plant.scientificName || "N/A"}
+      </p>
+      <p>
+        <strong>Model URL:</strong> {plant.modelUrl}
+      </p>
+      <p>
+        <strong>Scale:</strong> {plant.scale.join(", ")}
+      </p>
+      <p>
+        <strong>Height:</strong> {plant.height || "N/A"}m
+      </p>
+      <p>
+        <strong>Spread:</strong> {plant.spread || "N/A"}m
+      </p>
+      <p>
+        <strong>Description:</strong> {plant.description || "N/A"}
+      </p>
+      <p>
+        <strong>Color:</strong> {plant.color || "Default"}
+      </p>
+      <button onClick={onClose}>Close</button>
+    </div>
+  );
 }

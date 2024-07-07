@@ -8,7 +8,9 @@ interface PlantPreviewProps {
 }
 
 const PlantPreview: React.FC<PlantPreviewProps> = ({ plant, position }) => {
-  const texture = useTexture(plant.previewImage || "https://picsum.photos/200");
+  const texture = useTexture(
+    plant.previewImage || "https://picsum.photos/200/200"
+  );
 
   return (
     <sprite position={position} scale={plant.scale}>

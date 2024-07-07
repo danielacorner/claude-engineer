@@ -53,19 +53,24 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         uniform float time;
         uniform sampler2D heightmap;
         varying vec2 vUv;
+        varying float vHeight;
         void main() {
           vUv = uv;
           vec4 heightData = texture2D(heightmap, uv);
-          vec3 transformed = vec3(position.x, position.y + heightData.r * 5.0, position.z);
+          vHeight = heightData.r;
+          vec3 transformed = vec3(position.x, position.y + vHeight * 5.0, position.z);
           gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
         }
       `,
         fragmentShader: `
         uniform sampler2D grassTexture;
         varying vec2 vUv;
+        varying float vHeight;
         void main() {
           vec4 grassColor = texture2D(grassTexture, vUv * 100.0);
-          gl_FragColor = grassColor;
+          // Adjust color based on height
+          vec3 heightColor = mix(vec3(0.2, 0.5, 0.1), vec3(0.8, 0.8, 0.4), vHeight);
+          gl_FragColor = vec4(grassColor.rgb * heightColor, 1.0);
         }
       `,
       });
@@ -78,6 +83,17 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
       }
     });
 
+    const getHeightAtPosition = useCallback((x: number, z: number) => {
+      const xIndex = Math.floor(
+        ((x + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
+      );
+      const zIndex = Math.floor(
+        ((z + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
+      );
+      const index = zIndex * HEIGHTMAP_RESOLUTION + xIndex;
+      return heightmap[index] * 5; // Multiply by 5 to match the shader's height scale
+    }, [heightmap]);
+
     const handleClick = (event: THREE.Event) => {
       if (meshRef.current) {
         raycaster.setFromCamera(mouse, camera);
@@ -85,9 +101,10 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         if (intersects.length > 0) {
           const { point } = intersects[0];
           const snappedPosition = snapToGrid(point);
+          const height = getHeightAtPosition(snappedPosition.x, snappedPosition.z);
           onPlantPlace([
             snappedPosition.x,
-            snappedPosition.y,
+            height,
             snappedPosition.z,
           ]);
         }
@@ -101,8 +118,10 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         if (intersects.length > 0) {
           const { point } = intersects[0];
           const snappedPosition = snapToGrid(point);
-          setHoverPoint(snappedPosition);
-          onHover([snappedPosition.x, snappedPosition.y, snappedPosition.z]);
+          const height = getHeightAtPosition(snappedPosition.x, snappedPosition.z);
+          const hoverPointWithHeight = new THREE.Vector3(snappedPosition.x, height, snappedPosition.z);
+          setHoverPoint(hoverPointWithHeight);
+          onHover([hoverPointWithHeight.x, hoverPointWithHeight.y, hoverPointWithHeight.z]);
         } else {
           setHoverPoint(null);
           onHover(null);
@@ -185,13 +204,20 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
           position={[0, 0.01, 0]}
         />
         {hoverPoint && (
-          <mesh position={hoverPoint}>
-            <boxGeometry args={[GRID_SIZE, 0.1, GRID_SIZE]} />
-            <meshBasicMaterial color="yellow" opacity={0.5} transparent />
-          </mesh>
+          <>
+            <mesh position={hoverPoint}>
+              <boxGeometry args={[GRID_SIZE, 0.1, GRID_SIZE]} />
+              <meshBasicMaterial color="yellow" opacity={0.5} transparent />
+            </mesh>
+            <mesh position={[hoverPoint.x, hoverPoint.y + 0.5, hoverPoint.z]}>
+              <sphereGeometry args={[0.1, 16, 16]} />
+              <meshBasicMaterial color="red" />
+            </mesh>
+          </>
         )}
       </group>
     );
   }
 );
+
 export default Ground;

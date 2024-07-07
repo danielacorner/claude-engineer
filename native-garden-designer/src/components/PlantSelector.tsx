@@ -1,23 +1,17 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
-import plantDatabase from "../data/plantDatabase";
+import { plantDatabase } from "../data/plantDatabase";
 import { PlantData } from "../types";
 import styles from "./PlantSelector.module.css";
-
-interface PlantSelectorProps {
-  addPlant: (plant: PlantData | null) => void;
-  selectedPlant: PlantData | null;
-  setSelectedPlant: (plant: PlantData | null) => void;
-}
+import { usePlantStore } from "../store";
 
 const ITEMS_PER_PAGE = 12;
 
-const PlantSelector: React.FC<PlantSelectorProps> = ({
-  addPlant,
-  selectedPlant,
-  setSelectedPlant,
-}) => {
+const PlantSelector: React.FC = () => {
+  const selectedPlant = usePlantStore((state) => state.selectedPlant);
+  const addPlant = usePlantStore((state) => state.addPlant);
+  const setSelectedPlant = usePlantStore((state) => state.setSelectedPlant);
   console.log("⭐� ~ selectedPlant:", selectedPlant);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -158,7 +152,9 @@ const PlantSelector: React.FC<PlantSelectorProps> = ({
             />
           </div>
           <button onClick={() => addPlant(selectedPlant)}>Place Plant</button>
-          <button onClick={() => addPlant(null)}>Clear Selection</button>
+          <button onClick={() => setSelectedPlant(null)}>
+            Clear Selection
+          </button>
         </div>
       )}
     </div>
