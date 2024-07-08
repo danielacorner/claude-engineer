@@ -61,7 +61,9 @@ const App: React.FC = () => {
 
     // Initialize height map
     const size = 100;
-    const initialHeightMap = Array(size).fill(null).map(() => Array(size).fill(0));
+    const initialHeightMap = Array(size)
+      .fill(null)
+      .map(() => Array(size).fill(0));
     setHeightMap(initialHeightMap);
   }, [setSelectedPlant]);
 
@@ -77,7 +79,7 @@ const App: React.FC = () => {
   }
 
   const handleGroundHeightChange = (x: number, y: number, height: number) => {
-    setHeightMap(prevHeightMap => {
+    setHeightMap((prevHeightMap) => {
       const newHeightMap = [...prevHeightMap];
       newHeightMap[x][y] = height;
       return newHeightMap;
@@ -104,6 +106,7 @@ const App: React.FC = () => {
           onHover={setHoveredPosition}
           heightMap={heightMap}
           onHeightChange={handleGroundHeightChange}
+          setHeightmap={setHeightMap}
         />
         {showGrid && <GridSystem size={20} divisions={20} />}
         <PlantsInstances groundRef={groundRef} />

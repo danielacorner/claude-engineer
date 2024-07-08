@@ -13,6 +13,9 @@ import * as THREE from "three";
 interface GroundProps {
   onPlantPlace: (position: [number, number, number]) => void;
   onHover: (position: [number, number, number] | null) => void;
+  heightMap: number[][];
+  onHeightChange?: (x: number, y: number, height: number) => void;
+  setHeightmap: React.Dispatch<React.SetStateAction<number[][]>>;
 }
 
 const GRID_SIZE = 1; // Size of each grid cell
@@ -20,13 +23,10 @@ const GROUND_SIZE = 100; // Total size of the ground plane
 const HEIGHTMAP_RESOLUTION = 128; // Resolution of the heightmap
 
 const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
-  ({ onPlantPlace, onHover }, ref) => {
+  ({ onPlantPlace, onHover, heightMap, onHeightChange, setHeightmap }, ref) => {
     const meshRef = useRef<THREE.Mesh>(null);
     const { camera, raycaster, mouse } = useThree();
     const [hoverPoint, setHoverPoint] = useState<THREE.Vector3 | null>(null);
-    const [heightmap, setHeightmap] = useState(
-      () => new Float32Array(HEIGHTMAP_RESOLUTION * HEIGHTMAP_RESOLUTION)
-    );
 
     // Load a grass texture
     const texture = useTexture("/textures/grass.jpg");
@@ -40,7 +40,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
           grassTexture: { value: texture },
           heightmap: {
             value: new THREE.DataTexture(
-              heightmap,
+              new Float32Array(heightMap.flat()),
               HEIGHTMAP_RESOLUTION,
               HEIGHTMAP_RESOLUTION,
               THREE.RedFormat,
@@ -74,7 +74,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         }
       `,
       });
-    }, [texture, heightmap]);
+    }, [texture, heightMap]);
 
     // Animate grass
     useFrame(({ clock }) => {
@@ -82,17 +82,18 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         groundMaterial.uniforms.time.value = clock.getElapsedTime();
       }
     });
-
-    const getHeightAtPosition = useCallback((x: number, z: number) => {
-      const xIndex = Math.floor(
-        ((x + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
-      );
-      const zIndex = Math.floor(
-        ((z + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
-      );
-      const index = zIndex * HEIGHTMAP_RESOLUTION + xIndex;
-      return heightmap[index] * 5; // Multiply by 5 to match the shader's height scale
-    }, [heightmap]);
+    const getHeightAtPosition = useCallback(
+      (x: number, z: number) => {
+        const xIndex = Math.floor(
+          ((x + GROUND_SIZE / 2) / GROUND_SIZE) * heightMap[0].length
+        );
+        const zIndex = Math.floor(
+          ((z + GROUND_SIZE / 2) / GROUND_SIZE) * heightMap.length
+        );
+        return heightMap[zIndex][xIndex] * 5; // Multiply by 5 to match the shader's height scale
+      },
+      [heightMap]
+    );
 
     const handleClick = (event: THREE.Event) => {
       if (meshRef.current) {
@@ -101,12 +102,11 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         if (intersects.length > 0) {
           const { point } = intersects[0];
           const snappedPosition = snapToGrid(point);
-          const height = getHeightAtPosition(snappedPosition.x, snappedPosition.z);
-          onPlantPlace([
+          const height = getHeightAtPosition(
             snappedPosition.x,
-            height,
-            snappedPosition.z,
-          ]);
+            snappedPosition.z
+          );
+          onPlantPlace([snappedPosition.x, height, snappedPosition.z]);
         }
       }
     };
@@ -118,10 +118,21 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         if (intersects.length > 0) {
           const { point } = intersects[0];
           const snappedPosition = snapToGrid(point);
-          const height = getHeightAtPosition(snappedPosition.x, snappedPosition.z);
-          const hoverPointWithHeight = new THREE.Vector3(snappedPosition.x, height, snappedPosition.z);
+          const height = getHeightAtPosition(
+            snappedPosition.x,
+            snappedPosition.z
+          );
+          const hoverPointWithHeight = new THREE.Vector3(
+            snappedPosition.x,
+            height,
+            snappedPosition.z
+          );
           setHoverPoint(hoverPointWithHeight);
-          onHover([hoverPointWithHeight.x, hoverPointWithHeight.y, hoverPointWithHeight.z]);
+          onHover([
+            hoverPointWithHeight.x,
+            hoverPointWithHeight.y,
+            hoverPointWithHeight.z,
+          ]);
         } else {
           setHoverPoint(null);
           onHover(null);
@@ -148,12 +159,18 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         const index = zIndex * HEIGHTMAP_RESOLUTION + xIndex;
 
         setHeightmap((prevHeightmap) => {
-          const newHeightmap = new Float32Array(prevHeightmap);
-          newHeightmap[index] = Math.max(
-            0,
-            Math.min(1, newHeightmap[index] + delta)
+          const newHeightmap: number[][] = prevHeightmap.map((row, y) =>
+            row.map((height, x) => {
+              const index = y * HEIGHTMAP_RESOLUTION + x;
+              if (index === index) {
+                return Math.max(0, Math.min(1, height + delta));
+              }
+              return height;
+            })
           );
-          groundMaterial.uniforms.heightmap.value.image.data = newHeightmap;
+          groundMaterial.uniforms.heightmap.value.image.data = new Float32Array(
+            newHeightmap.flat()
+          );
           groundMaterial.uniforms.heightmap.value.needsUpdate = true;
           return newHeightmap;
         });

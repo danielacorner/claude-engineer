@@ -58,6 +58,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 6,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=295",
     name: "Adder's Mouth, Green",
     scientificName: "Malaxis unifolia",
@@ -68,6 +69,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 7,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=216",
     name: "Agrimony",
     scientificName: "Agrimonia gryposepala",
@@ -78,6 +80,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 8,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=217",
     name: "Agrimony, Small-flowered",
     scientificName: "Agrimonia parviflora",
@@ -88,6 +91,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 9,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=833",
     name: "Alumroot",
     scientificName: "Heuchera americana",
@@ -98,6 +102,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 10,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=221",
     name: "Amaranth, Green",
     scientificName: "Amaranthus retroflexus",
@@ -108,6 +113,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 11,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=222",
     name: "Anemone, Canada",
     scientificName: "Anemone canadensis",
@@ -118,6 +124,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 12,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=223",
     name: "Anemone, Long-fruited",
     scientificName: "Anemone cylindrica",
@@ -128,6 +135,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 13,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=224",
     name: "Anemone, Rue",
     scientificName: "Thalictrum thalictroides",
@@ -138,6 +146,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 14,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=225",
     name: "Anemone, Wood",
     scientificName: "Anemone quinquefolia",
@@ -148,6 +157,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 15,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=474",
     name: "Angelica, Great",
     scientificName: "Angelica atropurpurea",
@@ -158,6 +168,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 16,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=195",
     name: "Aniseroot",
     scientificName: "Osmorhiza longistylis",
@@ -168,6 +179,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 17,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=113",
     name: "Arbutus, Trailing",
     scientificName: "Epigaea repens",
@@ -178,6 +190,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 18,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=122",
     name: "Arethusa",
     scientificName: "Arethusa bulbosa",
@@ -188,6 +201,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 19,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=227",
     name: "Arrowgrass, Seaside",
     scientificName: "Triglochin maritima",
@@ -198,6 +212,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 20,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=228",
     name: "Arrowhead, Common",
     scientificName: "Sagittaria latifolia",
@@ -208,6 +223,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 21,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=229",
     name: "Artichoke, Jerusalem",
     scientificName: "Helianthus tuberosus",
@@ -218,6 +234,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 22,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=230",
     name: "Arum, Water",
     scientificName: "Calla palustris",
@@ -228,6 +245,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 23,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2",
     name: "Aster, Amethyst",
     scientificName: "Symphyotrichum x amethystinum",
@@ -238,6 +256,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 24,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=3",
     name: "Aster, Arrow-leaved",
     scientificName: "Symphyotrichum urophyllum",
@@ -248,6 +267,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 25,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=4",
     name: "Aster, Azure",
     scientificName: "Symphyotrichum oolentangiense",
@@ -258,6 +278,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 26,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=5",
     name: "Aster, Bog",
     scientificName: "Oclemena nemoralis",
@@ -268,6 +289,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 27,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=6",
     name: "Aster, Calico",
     scientificName: "Symphyotrichum lateriflorum",
@@ -278,6 +300,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 28,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=7",
     name: "Aster, Flat-topped White",
     scientificName: "Doellingeria umbellata",
@@ -288,6 +311,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 29,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=8",
     name: "Aster, Fringed Blue",
     scientificName: "Symphyotrichum ciliolatum",
@@ -298,6 +322,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 30,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=9",
     name: "Aster, Frost",
     scientificName: "Symphyotrichum pilosum",
@@ -308,6 +333,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 31,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=10",
     name: "Aster, Heart-leaved",
     scientificName: "Symphyotrichum cordifolium",
@@ -318,6 +344,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 32,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=11",
     name: "Aster, Heath",
     scientificName: "Symphyotrichum ericoides",
@@ -328,6 +355,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 33,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=12",
     name: "Aster, Large-leaved",
     scientificName: "Eurybia macrophylla",
@@ -338,6 +366,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 34,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=25",
     name: "Aster, New England",
     scientificName: "Symphyotrichum novae-angliae",
@@ -348,6 +377,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 35,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=322",
     name: "Aster, Ontario",
     scientificName: "Symphyotrichum ontarionis",
@@ -358,6 +388,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 36,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=14",
     name: "Aster, Panicled",
     scientificName: "Symphyotrichum lanceolatum",
@@ -368,6 +399,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 37,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=15",
     name: "Aster, Purple-stemmed",
     scientificName: "Symphyotrichum puniceum",
@@ -378,6 +410,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 38,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=326",
     name: "Aster, Rayless Annual",
     scientificName: "Symphyotrichum ciliatum",
@@ -388,6 +421,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 39,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=24",
     name: "Aster, Rush",
     scientificName: "Symphyotrichum boreale",
@@ -398,6 +432,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 40,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=317",
     name: "Aster, Shreber's",
     scientificName: "Eurybia schreberi",
@@ -408,6 +443,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 41,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=327",
     name: "Aster, Small Salt Marsh",
     scientificName: "Symphyotrichum subulatum",
@@ -418,6 +454,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 42,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=16",
     name: "Aster, Smooth",
     scientificName: "Symphyotrichum laeve",
@@ -428,6 +465,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 43,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=69",
     name: "Aster, Upland White",
     scientificName: "Solidago ptarmicoides",
@@ -438,6 +476,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 44,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=316",
     name: "Aster, White Wood",
     scientificName: "Eurybia divaricata",
@@ -448,6 +487,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 45,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=17",
     name: "Aster, Whorled",
     scientificName: "Oclemena acuminata",
@@ -458,6 +498,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 46,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=321",
     name: "Aster, Willow",
     scientificName: "Symphyotrichum praealtum",
@@ -468,6 +509,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 47,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=203",
     name: "Avens, Catlings",
     scientificName: "Geum X catlingii",
@@ -478,6 +520,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 48,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=207",
     name: "Avens, Water",
     scientificName: "Geum rivale",
@@ -488,6 +531,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 49,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=204",
     name: "Avens, White",
     scientificName: "Geum canadense",
@@ -498,6 +542,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 50,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=206",
     name: "Avens, Yellow",
     scientificName: "Geum aleppicum",
@@ -508,6 +553,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 51,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2137",
     name: "Baked-apple Berry",
     scientificName: "Rubus chamaemorus",
@@ -518,6 +564,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 52,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=18",
     name: "Baneberry, Red",
     scientificName: "Actaea rubra",
@@ -528,6 +575,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 53,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=19",
     name: "Baneberry, White",
     scientificName: "Actaea pachypoda",
@@ -538,6 +586,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 54,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=873",
     name: "Bartonia, Yellow",
     scientificName: "Bartonia virginica",
@@ -548,6 +597,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 55,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=233",
     name: "Basil, Wild",
     scientificName: "Clinopodium vulgare",
@@ -558,6 +608,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 56,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=234",
     name: "Bean, Trailing Wild",
     scientificName: "Strophostyles helvola",
@@ -568,6 +619,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 57,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2138",
     name: "Bearberry",
     scientificName: "Arctostaphylos uva-ursi",
@@ -578,6 +630,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 58,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=22",
     name: "Beardtongue, Foxglove",
     scientificName: "Penstemon digitalis",
@@ -588,6 +641,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 59,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=23",
     name: "Beardtongue, Hairy",
     scientificName: "Penstemon hirsutus",
@@ -598,6 +652,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 60,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=877",
     name: "Bedstraw, Labrador",
     scientificName: "Galium labradoricum",
@@ -608,6 +663,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 61,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=237",
     name: "Bedstraw, Sweet-scented",
     scientificName: "Galium triflorum",
@@ -618,6 +674,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 62,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=238",
     name: "Beechdrops",
     scientificName: "Epifagus virginiana",
@@ -628,6 +685,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 63,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=242",
     name: "Bellflower, Marsh",
     scientificName: "Campanula aparinoides",
@@ -638,6 +696,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 64,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=243",
     name: "Bellflower, Tall",
     scientificName: "Campanula americana",
@@ -648,6 +707,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 65,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=244",
     name: "Bellwort, Large-flowered",
     scientificName: "Uvularia grandiflora",
@@ -658,6 +718,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 66,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=792",
     name: "Bellwort, Perfoliate",
     scientificName: "Uvularia perfoliata",
@@ -668,6 +729,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 67,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=791",
     name: "Bellwort, Sessile-leaved",
     scientificName: "Uvularia sessilifolia",
@@ -678,6 +740,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 68,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=245",
     name: "Bergamot, Wild",
     scientificName: "Monarda fistulosa",
@@ -688,6 +751,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 69,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=761",
     name: "Betony, Wood",
     scientificName: "Pedicularis canadensis",
@@ -698,6 +762,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 70,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=201",
     name: "Bindweed, Hedge",
     scientificName: "Calystegia sepium",
@@ -708,6 +773,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 71,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=199",
     name: "Bindweed, Upright",
     scientificName: "Calystegia spithamaea",
@@ -718,6 +784,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 72,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=864",
     name: "Bird's Nest, Giant",
     scientificName: "Pterospora andromedea",
@@ -728,6 +795,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 73,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=133",
     name: "Bistort, Alpine",
     scientificName: "Bistorta vivipara",
@@ -738,6 +806,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 74,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=248",
     name: "Black-eyed Susan",
     scientificName: "Rudbeckia hirta",
@@ -748,6 +817,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 75,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=27",
     name: "Bladderwort, Common",
     scientificName: "Utricularia vulgaris",
@@ -758,6 +828,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 76,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=28",
     name: "Bladderwort, Flat-leaved",
     scientificName: "Utricularia intermedia",
@@ -768,6 +839,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 77,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=29",
     name: "Bladderwort, Horned",
     scientificName: "Utricularia cornuta",
@@ -778,6 +850,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 78,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=250",
     name: "Blazing Star, Cylindric",
     scientificName: "Liatris cylindracea",
@@ -788,6 +861,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 79,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=252",
     name: "Blazing Star, Spiked",
     scientificName: "Liatris spicata",
@@ -798,6 +872,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 80,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=30",
     name: "Bloodroot",
     scientificName: "Sanguinaria canadensis",
@@ -808,6 +883,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 81,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=343",
     name: "Blue Curls",
     scientificName: "Trichostema dichotomum",
@@ -818,6 +894,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 82,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=32",
     name: "Blue-eyed Grass, Common",
     scientificName: "Sisyrinchium montanum",
@@ -828,6 +905,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 83,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=33",
     name: "Blue-eyed Grass, Slender",
     scientificName: "Sisyrinchium mucronatum",
@@ -838,6 +916,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 84,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=344",
     name: "Blue-eyed Grass, Stout",
     scientificName: "Sisyrinchium angustifolium",
@@ -848,6 +927,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 85,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=34",
     name: "Blue-eyed Grass, White",
     scientificName: "Sisyrinchium albidum",
@@ -858,6 +938,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 86,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=254",
     name: "Bluebells, Northern",
     scientificName: "Mertensia paniculata",
@@ -868,6 +949,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 87,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=775",
     name: "Bluehearts",
     scientificName: "Buchnera americana",
@@ -878,6 +960,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 88,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=129",
     name: "Boneset",
     scientificName: "Eupatorium perfoliatum",
@@ -888,6 +971,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 89,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2086",
     name: "Bower, Virgin's",
     scientificName: "Clematis virginiana",
@@ -898,6 +982,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 90,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=258",
     name: "Buckbean",
     scientificName: "Menyanthes trifoliata",
@@ -908,6 +993,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 91,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=35",
     name: "Bunchberry",
     scientificName: "Cornus canadensis",
@@ -918,6 +1004,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 92,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=862",
     name: "Bur Reed, Floating",
     scientificName: "Sparganium fluctuans",
@@ -928,6 +1015,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 93,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=165",
     name: "Burdock, Common",
     scientificName: "Arctium minus",
@@ -938,6 +1026,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 94,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=349",
     name: "Bush Clover, Round-headed",
     scientificName: "Lespedeza capitata",
@@ -948,6 +1037,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 95,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=268",
     name: "Buttercup, Hispid",
     scientificName: "Ranunculus hispidus",
@@ -958,6 +1048,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 96,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=409",
     name: "Buttercup, White Water",
     scientificName: "Ranunculus aquatilis",
@@ -968,6 +1059,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 97,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=271",
     name: "Butterwort",
     scientificName: "Pinguicula vulgaris",
@@ -978,6 +1070,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 98,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=102",
     name: "Cactus, Prickly Pear",
     scientificName: "Opuntia humifusa",
@@ -988,6 +1081,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 99,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=855",
     name: "Calamint, Low",
     scientificName: "Clinopodium arkansanum",
@@ -998,6 +1092,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 100,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=283",
     name: "Calypso",
     scientificName: "Calypso bulbosa",
@@ -1008,6 +1103,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 101,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=581",
     name: "Cancerroot, One-flowered",
     scientificName: "Orobanche uniflora",
@@ -1018,6 +1114,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 102,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=278",
     name: "Cardinal Flower",
     scientificName: "Lobelia cardinalis",
@@ -1028,6 +1125,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 103,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=279",
     name: "Carpenter's Square",
     scientificName: "Scrophularia marilandica",
@@ -1038,6 +1136,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 104,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=124",
     name: "Carrion Flower",
     scientificName: "Smilax herbacea",
@@ -1048,6 +1147,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 105,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=274",
     name: "Carrion Flower",
     scientificName: "Smilax lasioneura",
@@ -1058,6 +1158,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 106,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=806",
     name: "Carrion Flower, Illinois",
     scientificName: "Smilax illinoensis",
@@ -1068,6 +1169,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 107,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=276",
     name: "Cattail, Common",
     scientificName: "Typha latifolia",
@@ -1078,6 +1180,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 108,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=277",
     name: "Cattail, Narrow-leaved",
     scientificName: "Typha angustifolia",
@@ -1088,6 +1191,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 109,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=884",
     name: "Centaury, Branching",
     scientificName: "Centaurium pulchellum",
@@ -1098,6 +1202,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 110,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=363",
     name: "Chickweed, Field",
     scientificName: "Cerastium arvense",
@@ -1108,6 +1213,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 111,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=159",
     name: "Cicely, Sweet",
     scientificName: "Osmorhiza claytonii",
@@ -1118,6 +1224,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 112,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=37",
     name: "Cinquefoil, Common",
     scientificName: "Potentilla simplex",
@@ -1128,6 +1235,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 113,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=367",
     name: "Cinquefoil, Tall",
     scientificName: "Drymocallis arguta",
@@ -1138,6 +1246,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 114,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=39",
     name: "Cinquefoil, Three-toothed",
     scientificName: "Sibbaldia tridentata",
@@ -1148,6 +1257,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 115,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=371",
     name: "Clammyweed",
     scientificName: "Polanisia dodecandra",
@@ -1158,6 +1268,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 116,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=372",
     name: "Clearweed",
     scientificName: "Pilea pumila",
@@ -1168,6 +1279,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 117,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=153",
     name: "Clintonia, Yellow",
     scientificName: "Clintonia borealis",
@@ -1178,6 +1290,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 118,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=827",
     name: "Clover, Purple Prairie",
     scientificName: "Dalea purpurea",
@@ -1188,6 +1301,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 119,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=156",
     name: "Coffee, Wild",
     scientificName: "Triosteum perfoliatum",
@@ -1198,6 +1312,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 120,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=341",
     name: "Cohosh, Blue",
     scientificName: "Caulophyllum giganteum",
@@ -1208,6 +1323,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 121,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=342",
     name: "Cohosh, Blue",
     scientificName: "Caulophyllum thalictroides",
@@ -1218,6 +1334,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 122,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=382",
     name: "Colicroot",
     scientificName: "Aletris farinosa",
@@ -1228,6 +1345,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 123,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=112",
     name: "Coltsfoot, Sweet",
     scientificName: "Petasites frigidus",
@@ -1238,6 +1356,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 124,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=384",
     name: "Columbine, Wild",
     scientificName: "Aquilegia canadensis",
@@ -1248,6 +1367,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 125,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=155",
     name: "Columbo, American",
     scientificName: "Frasera caroliniensis",
@@ -1258,6 +1378,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 126,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=388",
     name: "Compass Plant",
     scientificName: "Silphium laciniatum",
@@ -1268,6 +1389,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 127,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=390",
     name: "Coneflower, Gray-headed",
     scientificName: "Ratibida pinnata",
@@ -1278,6 +1400,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 128,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=389",
     name: "Coneflower, Green-headed",
     scientificName: "Rudbeckia laciniata",
@@ -1288,6 +1411,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 129,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=391",
     name: "Coneflower, Purple",
     scientificName: "Echinacea purpurea",
@@ -1298,6 +1422,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 130,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=842",
     name: "Coontail, Common",
     scientificName: "Ceratophyllum demersum",
@@ -1308,6 +1433,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 131,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=287",
     name: "Coralroot, Early",
     scientificName: "Corallorhiza trifida",
@@ -1318,6 +1444,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 132,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=285",
     name: "Coralroot, Spotted",
     scientificName: "Corallorhiza maculata",
@@ -1328,6 +1455,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 133,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=100",
     name: "Coralroot, Striped",
     scientificName: "Corallorhiza striata",
@@ -1338,6 +1466,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 134,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=394",
     name: "Coreopsis, Tall",
     scientificName: "Coreopsis tripteris",
@@ -1348,6 +1477,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 135,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=666",
     name: "Corn, Squirrel",
     scientificName: "Dicentra canadensis",
@@ -1358,6 +1488,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 136,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=820",
     name: "Corydalis, Golden",
     scientificName: "Corydalis aurea",
@@ -1368,6 +1499,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 137,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=395",
     name: "Corydalis, Yellow",
     scientificName: "Corydalis flavula",
@@ -1378,6 +1510,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 138,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=40",
     name: "Cowwheat",
     scientificName: "Melampyrum lineare",
@@ -1388,6 +1521,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 139,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2032",
     name: "Cranberry, Large",
     scientificName: "Vaccinium macrocarpon",
@@ -1398,6 +1532,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 140,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2033",
     name: "Cranberry, Small",
     scientificName: "Vaccinium oxycoccos",
@@ -1408,6 +1543,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 141,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=149",
     name: "Cranesbill, Bicknell's",
     scientificName: "Geranium bicknellii",
@@ -1418,6 +1554,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 142,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2085",
     name: "Creeper, Trumpet",
     scientificName: "Campsis radicans",
@@ -1428,6 +1565,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 143,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=168",
     name: "Creeper, Virginia",
     scientificName: "Parthenocissus quinquefolia",
@@ -1438,6 +1576,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 144,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=821",
     name: "Cress, Hairy Rock",
     scientificName: "Arabis hirsuta",
@@ -1448,6 +1587,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 145,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=615",
     name: "Cress, Lyre-leaved Rock",
     scientificName: "Arabidopsis lyrata",
@@ -1458,6 +1598,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 146,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=402",
     name: "Cress, Purple",
     scientificName: "Cardamine douglassii",
@@ -1468,6 +1609,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 147,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=616",
     name: "Cress, Smooth Rock",
     scientificName: "Borodinia laevigata",
@@ -1478,6 +1620,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 148,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=405",
     name: "Crowfoot, Bristly",
     scientificName: "Ranunculus pensylvanicus",
@@ -1488,6 +1631,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 149,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=180",
     name: "Crowfoot, Cursed",
     scientificName: "Ranunculus sceleratus",
@@ -1498,6 +1642,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 150,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=406",
     name: "Crowfoot, Hooked",
     scientificName: "Ranunculus recurvatus",
@@ -1508,6 +1653,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 151,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=408",
     name: "Crowfoot, Small-flowered",
     scientificName: "Ranunculus abortivus",
@@ -1518,6 +1664,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 152,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=410",
     name: "Cuckooflower",
     scientificName: "Cardamine pratensis",
@@ -1528,6 +1675,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 153,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=73",
     name: "Cucumber Root, Indian",
     scientificName: "Medeola virginiana",
@@ -1538,6 +1686,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 154,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=139",
     name: "Cucumber, One-seeded Bur",
     scientificName: "Sicyos angulatus",
@@ -1548,6 +1697,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 155,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=1",
     name: "Cucumber, Wild",
     scientificName: "Echinocystis lobata",
@@ -1558,6 +1708,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 156,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=411",
     name: "Culver's Root",
     scientificName: "Veronicastrum virginicum",
@@ -1568,6 +1719,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 157,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=415",
     name: "Daisy, Lakeside",
     scientificName: "Tetraneuris herbacea",
@@ -1578,6 +1730,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 158,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=425",
     name: "Devil's Bit",
     scientificName: "Chamaelirium luteum",
@@ -1588,6 +1741,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 159,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=42",
     name: "Dock, Greater Water",
     scientificName: "Rumex britannica",
@@ -1598,6 +1752,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 160,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=330",
     name: "Dock, Prairie",
     scientificName: "Silphium terebinthinaceum",
@@ -1608,6 +1763,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 161,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=433",
     name: "Duckweed, Lesser",
     scientificName: "Lemna minor",
@@ -1618,6 +1774,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 162,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=434",
     name: "Dutchman's Breeches",
     scientificName: "Dicentra cucullaria",
@@ -1628,6 +1785,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 163,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=799",
     name: "Dutchman's Pipe",
     scientificName: "Isotrema macrophyllum",
@@ -1638,6 +1796,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 164,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=452",
     name: "Foamflower",
     scientificName: "Tiarella cordifolia",
@@ -1648,6 +1807,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 165,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=46",
     name: "Gentian, Narrow-leaved",
     scientificName: "Gentiana linearis",
@@ -1658,6 +1818,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 166,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=91",
     name: "Gentian, Orange-fruited Horse",
     scientificName: "Triosteum aurantiacum",
@@ -1668,6 +1829,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 167,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=47",
     name: "Gentian, Smaller Fringed",
     scientificName: "Gentianopsis virgata",
@@ -1678,6 +1840,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 168,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=48",
     name: "Gentian, Spurred",
     scientificName: "Halenia deflexa",
@@ -1688,6 +1851,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 169,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=747",
     name: "Geranium, Wild",
     scientificName: "Geranium maculatum",
@@ -1698,6 +1862,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 170,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=748",
     name: "Ginger, Wild",
     scientificName: "Asarum canadense",
@@ -1708,6 +1873,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 171,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=464",
     name: "Ginseng",
     scientificName: "Panax quinquefolius",
@@ -1718,6 +1884,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 172,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=463",
     name: "Ginseng, Dwarf",
     scientificName: "Panax trifolius",
@@ -1728,6 +1895,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 173,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=49",
     name: "Goldenrod, Blue-stemmed",
     scientificName: "Solidago caesia",
@@ -1738,6 +1906,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 174,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=50",
     name: "Goldenrod, Bog",
     scientificName: "Solidago uliginosa",
@@ -1748,6 +1917,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 175,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=51",
     name: "Goldenrod, Canada",
     scientificName: "Solidago canadensis",
@@ -1758,6 +1928,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 176,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=52",
     name: "Goldenrod, Early",
     scientificName: "Solidago juncea",
@@ -1768,6 +1939,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 177,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=53",
     name: "Goldenrod, Grass-leaved",
     scientificName: "Euthamia graminifolia",
@@ -1778,6 +1950,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 178,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=54",
     name: "Goldenrod, Gray",
     scientificName: "Solidago nemoralis",
@@ -1788,6 +1961,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 179,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=55",
     name: "Goldenrod, Hairy",
     scientificName: "Solidago hispida",
@@ -1798,6 +1972,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 180,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=56",
     name: "Goldenrod, Houghton's",
     scientificName: "Solidago houghtonii",
@@ -1808,6 +1983,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 181,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=57",
     name: "Goldenrod, Late",
     scientificName: "Solidago gigantea",
@@ -1818,6 +1994,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 182,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=59",
     name: "Goldenrod, Ohio",
     scientificName: "Solidago ohioensis",
@@ -1828,6 +2005,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 183,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=60",
     name: "Goldenrod, Rough-leaved",
     scientificName: "Solidago patula",
@@ -1838,6 +2016,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 184,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=61",
     name: "Goldenrod, Rough-stemmed",
     scientificName: "Solidago rugosa",
@@ -1848,6 +2027,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 185,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=62",
     name: "Goldenrod, Seaside",
     scientificName: "Solidago sempervirens",
@@ -1858,6 +2038,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 186,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=63",
     name: "Goldenrod, Sharp-leaved",
     scientificName: "Solidago arguta",
@@ -1868,6 +2049,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 187,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=64",
     name: "Goldenrod, Showy",
     scientificName: "Solidago speciosa",
@@ -1878,6 +2060,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 188,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=66",
     name: "Goldenrod, Stiff-leaved",
     scientificName: "Solidago rigida",
@@ -1888,6 +2071,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 189,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=67",
     name: "Goldenrod, Stout",
     scientificName: "Solidago squarrosa",
@@ -1898,6 +2082,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 190,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=68",
     name: "Goldenrod, Tall",
     scientificName: "Solidago altissima",
@@ -1908,6 +2093,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 191,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=70",
     name: "Goldenrod, Zigzag",
     scientificName: "Solidago flexicaulis",
@@ -1918,6 +2104,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 192,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=471",
     name: "Goldenseal",
     scientificName: "Hydrastis canadensis",
@@ -1928,6 +2115,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 193,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=472",
     name: "Goldthread",
     scientificName: "Coptis trifolia",
@@ -1938,6 +2126,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 194,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=282",
     name: "Grass Pink",
     scientificName: "Calopogon tuberosus",
@@ -1948,6 +2137,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 195,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=136",
     name: "Grass-of-Parnassus",
     scientificName: "Parnassia glauca",
@@ -1958,6 +2148,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 196,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=475",
     name: "Green Dragon",
     scientificName: "Arisaema dracontium",
@@ -1968,6 +2159,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 197,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=125",
     name: "Ground Cherry, Clammy",
     scientificName: "Physalis heterophylla",
@@ -1978,6 +2170,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 198,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=127",
     name: "Ground Cherry, Smooth",
     scientificName: "Physalis longifolia",
@@ -1988,6 +2181,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 199,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=802",
     name: "Harbinger-of-Spring",
     scientificName: "Erigenia bulbosa",
@@ -1998,6 +2192,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 200,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=135",
     name: "Harebell",
     scientificName: "Campanula rotundifolia",
@@ -2008,6 +2203,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 201,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=116",
     name: "Hemlock, Bulb-bearing Water",
     scientificName: "Cicuta bulbifera",
@@ -2018,6 +2214,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 202,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=117",
     name: "Hemlock, Water",
     scientificName: "Cicuta maculata",
@@ -2028,6 +2225,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 203,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=176",
     name: "Hepatica, Round-lobed",
     scientificName: "Anemone americana",
@@ -2038,6 +2236,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 204,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=175",
     name: "Hepatica, Sharp-lobed",
     scientificName: "Anemone acutiloba",
@@ -2048,6 +2247,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 205,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=140",
     name: "Herb Robert",
     scientificName: "Geranium robertianum",
@@ -2058,6 +2258,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 206,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=71",
     name: "Honewort",
     scientificName: "Cryptotaenia canadensis",
@@ -2068,6 +2269,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 207,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2134",
     name: "Honeysuckle, Bush",
     scientificName: "Diervilla lonicera",
@@ -2078,6 +2280,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 208,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=499",
     name: "Horsemint",
     scientificName: "Monarda punctata",
@@ -2088,6 +2291,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 209,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=817",
     name: "Hound's Tongue",
     scientificName: "Cynoglossum officinale",
@@ -2098,6 +2302,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 210,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=504",
     name: "Hyssop, Yellow Giant",
     scientificName: "Agastache nepetoides",
@@ -2108,6 +2313,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 211,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=505",
     name: "Indian Paintbrush",
     scientificName: "Castilleja coccinea",
@@ -2118,6 +2324,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 212,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=197",
     name: "Indian Pipe",
     scientificName: "Monotropa uniflora",
@@ -2128,6 +2335,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 213,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=43",
     name: "Indigo, False",
     scientificName: "Amorpha fruticosa",
@@ -2138,6 +2346,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 214,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=508",
     name: "Iris, Blue Flag",
     scientificName: "Iris versicolor",
@@ -2148,6 +2357,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 215,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=509",
     name: "Iris, Dwarf Lake",
     scientificName: "Iris lacustris",
@@ -2158,6 +2368,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 216,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=773",
     name: "Ironweed, Tall",
     scientificName: "Vernonia gigantea",
@@ -2168,6 +2379,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 217,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2069",
     name: "Ivy, Poison",
     scientificName: "Toxicodendron rydbergii",
@@ -2178,6 +2390,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 218,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=511",
     name: "Jack-in-the-Pulpit",
     scientificName: "Arisaema triphyllum",
@@ -2188,6 +2401,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 219,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=174",
     name: "Joe Pye Weed, Spotted",
     scientificName: "Eutrochium maculatum",
@@ -2198,6 +2412,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 220,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=515",
     name: "Joe Pye Weed, Sweet-scented",
     scientificName: "Eutrochium purpureum",
@@ -2208,6 +2423,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 221,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=621",
     name: "Jointweed, Northern",
     scientificName: "Polygonum articulatum",
@@ -2218,6 +2434,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 222,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=516",
     name: "Jumpseed",
     scientificName: "Persicaria virginiana",
@@ -2228,6 +2445,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 223,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=312",
     name: "Ladies' Tresses, Great Plains",
     scientificName: "Spiranthes magnicamporum",
@@ -2238,6 +2456,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 224,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=313",
     name: "Ladies' Tresses, Hooded",
     scientificName: "Spiranthes romanzoffiana",
@@ -2248,6 +2467,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 225,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=308",
     name: "Ladies' Tresses, Nodding",
     scientificName: "Spiranthes cernua",
@@ -2258,6 +2478,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 226,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=310",
     name: "Ladies' Tresses, Northern Slender",
     scientificName: "Spiranthes lacera",
@@ -2268,6 +2489,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 227,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=311",
     name: "Ladies' Tresses, Wide-leaved",
     scientificName: "Spiranthes lucida",
@@ -2278,6 +2500,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 228,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=211",
     name: "Lady's Slipper, Hybrid",
     scientificName: "Cypripedium parviflorum X C. candidum",
@@ -2288,6 +2511,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 229,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=96",
     name: "Lady's Slipper, Large Yellow",
     scientificName: "Cypripedium parviflorum var pubescens",
@@ -2298,6 +2522,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 230,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=94",
     name: "Lady's Slipper, Pink",
     scientificName: "Cypripedium acaule",
@@ -2308,6 +2533,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 231,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=288",
     name: "Lady's Slipper, Ram's Head",
     scientificName: "Cypripedium arietinum",
@@ -2318,6 +2544,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 232,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=95",
     name: "Lady's Slipper, Showy",
     scientificName: "Cypripedium reginae",
@@ -2328,6 +2555,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 233,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=210",
     name: "Lady's Slipper, Small White",
     scientificName: "Cypripedium candidum",
@@ -2338,6 +2566,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 234,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=161",
     name: "Lady's Slipper, Small Yellow",
     scientificName: "Cypripedium parviflorum var makasin",
@@ -2348,6 +2577,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 235,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2055",
     name: "Leatherleaf",
     scientificName: "Chamaedaphne calyculata",
@@ -2358,6 +2588,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 236,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=119",
     name: "Leek, Wild",
     scientificName: "Allium tricoccum",
@@ -2368,6 +2599,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 237,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=527",
     name: "Lettuce, White",
     scientificName: "Nabalus albus",
@@ -2378,6 +2610,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 238,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=532",
     name: "Lily, Michigan",
     scientificName: "Lilium michiganense",
@@ -2388,6 +2621,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 239,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=115",
     name: "Lily, Trout",
     scientificName: "Erythronium americanum",
@@ -2398,6 +2632,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 240,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=114",
     name: "Lily, White Trout",
     scientificName: "Erythronium albidum",
@@ -2408,6 +2643,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 241,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=533",
     name: "Lily, Wood",
     scientificName: "Lilium philadelphicum",
@@ -2418,6 +2654,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 242,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=536",
     name: "Lizard's Tail",
     scientificName: "Saururus cernuus",
@@ -2428,6 +2665,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 243,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=537",
     name: "Lobelia, Great",
     scientificName: "Lobelia siphilitica",
@@ -2438,6 +2676,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 244,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=719",
     name: "Looking-glass, Venus's",
     scientificName: "Triodanis perfoliata",
@@ -2448,6 +2687,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 245,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=74",
     name: "Loosestrife, Fringed",
     scientificName: "Lysimachia ciliata",
@@ -2458,6 +2698,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 246,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=75",
     name: "Loosestrife, Prairie",
     scientificName: "Lysimachia quadriflora",
@@ -2468,6 +2709,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 247,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=77",
     name: "Loosestrife, Swamp",
     scientificName: "Decodon verticillatus",
@@ -2478,6 +2720,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 248,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=78",
     name: "Loosestrife, Tufted",
     scientificName: "Lysimachia thyrsiflora",
@@ -2488,6 +2731,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 249,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=79",
     name: "Loosestrife, Whorled",
     scientificName: "Lysimachia quadrifolia",
@@ -2498,6 +2742,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 250,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=80",
     name: "Loosestrife, Yellow",
     scientificName: "Lysimachia terrestris",
@@ -2508,6 +2753,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 251,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=541",
     name: "Lopseed",
     scientificName: "Phryma leptostachya",
@@ -2518,6 +2764,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 252,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=627",
     name: "Lungwort, Sea",
     scientificName: "Mertensia maritima",
@@ -2528,6 +2775,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 253,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=812",
     name: "Lupine, Wild",
     scientificName: "Lupinus perennis",
@@ -2538,6 +2786,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 254,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=767",
     name: "Mandarin, Yellow",
     scientificName: "Prosartes lanuginosa",
@@ -2548,6 +2797,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 255,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=160",
     name: "Marigold, Marsh",
     scientificName: "Caltha palustris",
@@ -2558,6 +2808,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 256,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=861",
     name: "Marigold, Water",
     scientificName: "Bidens beckii",
@@ -2568,6 +2819,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 257,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=81",
     name: "Mayapple",
     scientificName: "Podophyllum peltatum",
@@ -2578,6 +2830,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 258,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=355",
     name: "Mayflower, Canada",
     scientificName: "Maianthemum canadense",
@@ -2588,6 +2841,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 259,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=839",
     name: "Meadow Beauty",
     scientificName: "Rhexia virginica",
@@ -2598,6 +2852,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 260,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=547",
     name: "Meadow Rue, Early",
     scientificName: "Thalictrum dioicum",
@@ -2608,6 +2863,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 261,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=44",
     name: "Mermaid, False",
     scientificName: "Floerkea proserpinacoides",
@@ -2618,6 +2874,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 262,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=845",
     name: "Milkvetch, Canada",
     scientificName: "Astragalus canadensis",
@@ -2628,6 +2885,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 263,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=83",
     name: "Milkweed, Butterfly",
     scientificName: "Asclepias tuberosa",
@@ -2638,6 +2896,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 264,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=84",
     name: "Milkweed, Common",
     scientificName: "Asclepias syriaca",
@@ -2648,6 +2907,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 265,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=85",
     name: "Milkweed, Poke",
     scientificName: "Asclepias exaltata",
@@ -2658,6 +2918,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 266,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=844",
     name: "Milkweed, Purple",
     scientificName: "Asclepias purpurascens",
@@ -2668,6 +2929,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 267,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=86",
     name: "Milkweed, Swamp",
     scientificName: "Asclepias incarnata",
@@ -2678,6 +2940,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 268,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=87",
     name: "Milkweed, Whorled",
     scientificName: "Asclepias verticillata",
@@ -2688,6 +2951,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 269,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=819",
     name: "Mint, Downy Wood",
     scientificName: "Blephilia ciliata",
@@ -2698,6 +2962,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 270,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=556",
     name: "Miterwort",
     scientificName: "Mitella diphylla",
@@ -2708,6 +2973,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 271,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=557",
     name: "Miterwort, Naked",
     scientificName: "Mitella nuda",
@@ -2718,6 +2984,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 272,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=560",
     name: "Monkey Flower, Square-stemmed",
     scientificName: "Mimulus ringens",
@@ -2728,6 +2995,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 273,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=138",
     name: "Moonseed, Canada",
     scientificName: "Menispermum canadense",
@@ -2738,6 +3006,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 274,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=848",
     name: "Mountain Mint, Hairy",
     scientificName: "Pycnanthemum verticillatum",
@@ -2748,6 +3017,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 275,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=565",
     name: "Mountain Mint, Virginia",
     scientificName: "Pycnanthemum virginianum",
@@ -2758,6 +3028,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 276,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=212",
     name: "Nightshade, Enchanter's",
     scientificName: "Circaea canadensis",
@@ -2768,6 +3039,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 277,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=754",
     name: "Onion, Nodding Wild",
     scientificName: "Allium cernuum",
@@ -2778,6 +3050,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 278,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=813",
     name: "Orchid, Alaska",
     scientificName: "Platanthera unalascensis",
@@ -2788,6 +3061,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 279,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=814",
     name: "Orchid, Blunt Leaf Rein",
     scientificName: "Platanthera obtusata",
@@ -2798,6 +3072,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 280,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=297",
     name: "Orchid, Club Spur",
     scientificName: "Platanthera clavellata",
@@ -2808,6 +3083,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 281,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=301",
     name: "Orchid, Hooker's",
     scientificName: "Platanthera hookeri",
@@ -2818,6 +3094,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 282,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=305",
     name: "Orchid, Large Round Leaf",
     scientificName: "Platanthera macrophylla",
@@ -2828,6 +3105,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 283,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=284",
     name: "Orchid, Long-bracted Green",
     scientificName: "Dactylorhiza viridis",
@@ -2838,6 +3116,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 284,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=302",
     name: "Orchid, Northern Green",
     scientificName: "Platanthera hyperborea",
@@ -2848,6 +3127,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 285,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=303",
     name: "Orchid, Prairie White Fringed",
     scientificName: "Platanthera leucophaea",
@@ -2858,6 +3138,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 286,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=121",
     name: "Orchid, Ragged Fringed",
     scientificName: "Platanthera lacera",
@@ -2868,6 +3149,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 287,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=816",
     name: "Orchid, Round Leaf",
     scientificName: "Platanthera orbiculata",
@@ -2878,6 +3160,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 288,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=280",
     name: "Orchid, Small Round-leaved",
     scientificName: "Galearis rotundifolia",
@@ -2888,6 +3171,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 289,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=99",
     name: "Orchid, Smaller Purple Fringed",
     scientificName: "Platanthera psycodes",
@@ -2898,6 +3182,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 290,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=298",
     name: "Orchid, White Bog",
     scientificName: "Platanthera dilatata",
@@ -2908,6 +3193,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 291,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=101",
     name: "Orchid, White Fringed",
     scientificName: "Platanthera blephariglottis",
@@ -2918,6 +3204,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 292,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=289",
     name: "Orchis, Showy",
     scientificName: "Galearis spectabilis",
@@ -2928,6 +3215,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 293,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=584",
     name: "Oxeye",
     scientificName: "Heliopsis helianthoides",
@@ -2938,6 +3226,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 294,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=148",
     name: "Parsnip, Water",
     scientificName: "Sium suave",
@@ -2948,6 +3237,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 295,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2015",
     name: "Partridgeberry",
     scientificName: "Mitchella repens",
@@ -2958,6 +3248,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 296,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=585",
     name: "Pea, Beach",
     scientificName: "Lathyrus japonicus",
@@ -2968,6 +3259,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 297,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=130",
     name: "Pennyroyal, False",
     scientificName: "Trichostema brachiatum",
@@ -2978,6 +3270,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 298,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=591",
     name: "Pickerelweed",
     scientificName: "Pontederia cordata",
@@ -2988,6 +3281,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 299,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=768",
     name: "Pimpernel, Yellow",
     scientificName: "Taenidia integerrima",
@@ -2998,6 +3292,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 300,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=198",
     name: "Pinesap",
     scientificName: "Hypopitys monotropa",
@@ -3008,6 +3303,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 301,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=483",
     name: "Pinweed, Hairy",
     scientificName: "Lechea mucronata",
@@ -3018,6 +3314,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 302,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2020",
     name: "Pipsissewa",
     scientificName: "Chimaphila umbellata",
@@ -3028,6 +3325,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 303,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=614",
     name: "Plantain, Robin's",
     scientificName: "Erigeron pulchellus",
@@ -3038,6 +3336,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 304,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=215",
     name: "Pogonia, Rose",
     scientificName: "Pogonia ophioglossoides",
@@ -3048,6 +3347,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 305,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=137",
     name: "Pokeweed",
     scientificName: "Phytolacca americana",
@@ -3058,6 +3358,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 306,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=45",
     name: "Polygala, Fringed",
     scientificName: "Polygaloides paucifolia",
@@ -3068,6 +3369,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 307,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=359",
     name: "Poppy, Celandine",
     scientificName: "Stylophorum diphyllum",
@@ -3078,6 +3380,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 308,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=601",
     name: "Prairie Smoke",
     scientificName: "Geum triflorum",
@@ -3088,6 +3391,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 309,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=602",
     name: "Primrose, Dwarf Canadian",
     scientificName: "Primula mistassinica",
@@ -3098,6 +3402,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 310,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=805",
     name: "Puccoon, Fringed",
     scientificName: "Lithospermum incisum",
@@ -3108,6 +3413,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 311,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=804",
     name: "Puccoon, Hairy",
     scientificName: "Lithospermum caroliniense",
@@ -3118,6 +3424,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 312,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=606",
     name: "Pussytoes, Field",
     scientificName: "Antennaria neglecta",
@@ -3128,6 +3435,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 313,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=607",
     name: "Pussytoes, Parlin's",
     scientificName: "Antennaria parlinii",
@@ -3138,6 +3446,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 314,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=103",
     name: "Pyrola, One-Flowered",
     scientificName: "Moneses uniflora",
@@ -3148,6 +3457,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 315,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=146",
     name: "Pyrola, One-sided",
     scientificName: "Orthilia secunda",
@@ -3158,6 +3468,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 316,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=811",
     name: "Ragwort, Prairie",
     scientificName: "Packera plattensis",
@@ -3168,6 +3479,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 317,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=793",
     name: "Rattlesnake Plantain, Downy",
     scientificName: "Goodyera pubescens",
@@ -3178,6 +3490,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 318,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=97",
     name: "Rattlesnake Plantain, Dwarf",
     scientificName: "Goodyera repens",
@@ -3188,6 +3501,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 319,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=98",
     name: "Rattlesnake Plantain, Green-leaved",
     scientificName: "Goodyera oblongifolia",
@@ -3198,6 +3512,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 320,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=611",
     name: "Rattlesnakeroot, Glaucous",
     scientificName: "Nabalus racemosus",
@@ -3208,6 +3523,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 321,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=528",
     name: "Rattlesnakeroot, Tall",
     scientificName: "Nabalus altissimus",
@@ -3218,6 +3534,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 322,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2168",
     name: "Rosemary, Bog",
     scientificName: "Andromeda polifolia",
@@ -3228,6 +3545,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 323,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=622",
     name: "Sandwort, Rock",
     scientificName: "Sabulina michauxii",
@@ -3238,6 +3556,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 324,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=809",
     name: "Sandwort, Thyme-leaved",
     scientificName: "Arenaria serpyllifolia",
@@ -3248,6 +3567,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 325,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=624",
     name: "Saxifrage, Early",
     scientificName: "Micranthes virginiensis",
@@ -3258,6 +3578,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 326,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=104",
     name: "Saxifrage, Golden",
     scientificName: "Chrysosplenium americanum",
@@ -3268,6 +3589,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 327,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=876",
     name: "Scheuchzeria",
     scientificName: "Scheuchzeria palustris",
@@ -3278,6 +3600,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 328,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=629",
     name: "Shinleaf",
     scientificName: "Pyrola elliptica",
@@ -3288,6 +3611,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 329,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=65",
     name: "Silverrod",
     scientificName: "Solidago bicolor",
@@ -3298,6 +3622,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 330,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=631",
     name: "Silverweed",
     scientificName: "Potentilla anserina",
@@ -3308,6 +3633,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 331,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=105",
     name: "Skunk Cabbage",
     scientificName: "Symplocarpus foetidus",
@@ -3318,6 +3644,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 332,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=106",
     name: "Snakeroot, Seneca",
     scientificName: "Polygala senega",
@@ -3328,6 +3655,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 333,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=636",
     name: "Sneezeweed",
     scientificName: "Helenium autumnale",
@@ -3338,6 +3666,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 334,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2174",
     name: "Snowberry, Creeping",
     scientificName: "Gaultheria hispidula",
@@ -3348,6 +3677,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 335,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=637",
     name: "Solomon's Seal, False",
     scientificName: "Maianthemum racemosum",
@@ -3358,6 +3688,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 336,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=638",
     name: "Solomon's Seal, Great",
     scientificName: "Polygonatum canaliculatum",
@@ -3368,6 +3699,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 337,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=639",
     name: "Solomon's Seal, Hairy",
     scientificName: "Polygonatum pubescens",
@@ -3378,6 +3710,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 338,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=641",
     name: "Solomon's Seal, Star-flowered",
     scientificName: "Maianthemum stellatum",
@@ -3388,6 +3721,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 339,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=643",
     name: "Sorrel, Common Wood",
     scientificName: "Oxalis montana",
@@ -3398,6 +3732,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 340,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=652",
     name: "Speedwell, Common",
     scientificName: "Veronica officinalis",
@@ -3408,6 +3743,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 341,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=653",
     name: "Speedwell, Marsh",
     scientificName: "Veronica scutellata",
@@ -3418,6 +3754,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 342,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=655",
     name: "Speedwell, Slender",
     scientificName: "Veronica filiformis",
@@ -3428,6 +3765,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 343,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=657",
     name: "Speedwell, Water",
     scientificName: "Veronica anagallis-aquatica",
@@ -3438,6 +3776,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 344,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=177",
     name: "Spring Beauty, Carolina",
     scientificName: "Claytonia caroliniana",
@@ -3448,6 +3787,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 345,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=178",
     name: "Spring Beauty, Narrow-leaved",
     scientificName: "Claytonia virginica",
@@ -3458,6 +3798,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 346,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=660",
     name: "Spurge, Flowering",
     scientificName: "Euphorbia corollata",
@@ -3468,6 +3809,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 347,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=196",
     name: "Squawroot",
     scientificName: "Conopholis americana",
@@ -3478,6 +3820,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 348,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=143",
     name: "Starflower",
     scientificName: "Lysimachia borealis",
@@ -3488,6 +3831,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 349,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=769",
     name: "Stargrass, Yellow",
     scientificName: "Hypoxis hirsuta",
@@ -3498,6 +3842,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 350,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=863",
     name: "Starwort, Hermaphrodite Water",
     scientificName: "Callitriche hermaphroditica",
@@ -3508,6 +3853,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 351,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=179",
     name: "Strawberry, Barren",
     scientificName: "Geum fragarioides",
@@ -3518,6 +3864,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 352,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=679",
     name: "Strawberry, Wild",
     scientificName: "Fragaria virginiana",
@@ -3528,6 +3875,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 353,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=680",
     name: "Strawberry, Woodland",
     scientificName: "Fragaria vesca",
@@ -3538,6 +3886,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 354,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=147",
     name: "Sundew, Linear-leaved",
     scientificName: "Drosera linearis",
@@ -3548,6 +3897,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 355,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=107",
     name: "Sundew, Round-leaved",
     scientificName: "Drosera rotundifolia",
@@ -3558,6 +3908,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 356,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=108",
     name: "Sundew, Spatulate-leaved",
     scientificName: "Drosera intermedia",
@@ -3568,6 +3919,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 357,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=157",
     name: "Sunflower, Tall",
     scientificName: "Helianthus giganteus",
@@ -3578,6 +3930,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 358,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=685",
     name: "Sunflower, Woodland",
     scientificName: "Helianthus divaricatus",
@@ -3588,6 +3941,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 359,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=818",
     name: "Sweetflag",
     scientificName: "Acorus calamus",
@@ -3598,6 +3952,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 360,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2252",
     name: "Tea, Narrow-leaved New Jersey",
     scientificName: "Ceanothus herbaceus",
@@ -3608,6 +3963,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 361,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=583",
     name: "Tea, Oswego",
     scientificName: "Monarda didyma",
@@ -3618,6 +3974,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 362,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=689",
     name: "Tearthumb, Arrow-leaved",
     scientificName: "Persicaria sagittata",
@@ -3628,6 +3985,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 363,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=690",
     name: "Tearthumb, Halberd-leaved",
     scientificName: "Persicaria arifolia",
@@ -3638,6 +3996,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 364,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=692",
     name: "Thimbleweed",
     scientificName: "Anemone virginiana",
@@ -3648,6 +4007,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 365,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=695",
     name: "Thistle, Field",
     scientificName: "Cirsium discolor",
@@ -3658,6 +4018,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 366,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=697",
     name: "Thistle, Hill's",
     scientificName: "Cirsium pumilum",
@@ -3668,6 +4029,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 367,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=699",
     name: "Thistle, Pitcher's",
     scientificName: "Cirsium pitcheri",
@@ -3678,6 +4040,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 368,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=708",
     name: "Tick Trefoil, Showy",
     scientificName: "Desmodium canadense",
@@ -3688,6 +4051,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 369,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=507",
     name: "Tobacco, Indian",
     scientificName: "Lobelia inflata",
@@ -3698,6 +4062,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 370,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=674",
     name: "Tofieldia, Sticky",
     scientificName: "Triantha glutinosa",
@@ -3708,6 +4073,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 371,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=512",
     name: "Touch-me-not, Pale",
     scientificName: "Impatiens pallida",
@@ -3718,6 +4084,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 372,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=194",
     name: "Trillium, Nodding",
     scientificName: "Trillium cernuum",
@@ -3728,6 +4095,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 373,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=712",
     name: "Trillium, Painted",
     scientificName: "Trillium undulatum",
@@ -3738,6 +4106,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 374,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=713",
     name: "Trillium, Red",
     scientificName: "Trillium erectum",
@@ -3748,6 +4117,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 375,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=714",
     name: "Trillium, White",
     scientificName: "Trillium grandiflorum",
@@ -3758,6 +4128,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 376,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=715",
     name: "Trillium, Yellow",
     scientificName: "Trillium luteum",
@@ -3768,6 +4139,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 377,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=142",
     name: "Turtlehead",
     scientificName: "Chelone glabra",
@@ -3778,6 +4150,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 378,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=815",
     name: "Twayblade, Heart-leaved",
     scientificName: "Neottia cordata",
@@ -3788,6 +4161,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 379,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=214",
     name: "Twayblade, Loesel's",
     scientificName: "Liparis loeselii",
@@ -3798,6 +4172,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 380,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=2226",
     name: "Twinflower",
     scientificName: "Linnaea borealis",
@@ -3808,6 +4183,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 381,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=716",
     name: "Twinleaf",
     scientificName: "Jeffersonia diphylla",
@@ -3818,6 +4194,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 382,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=620",
     name: "Twisted Stalk, Rose",
     scientificName: "Streptopus lanceolatus",
@@ -3828,6 +4205,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 383,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=720",
     name: "Vervain, Blue",
     scientificName: "Verbena hastata",
@@ -3838,6 +4216,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 384,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=721",
     name: "Vervain, Hoary",
     scientificName: "Verbena stricta",
@@ -3848,6 +4227,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 385,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=730",
     name: "Vetchling, Marsh",
     scientificName: "Lathyrus palustris",
@@ -3858,6 +4238,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 386,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=731",
     name: "Vetchling, Tuberous",
     scientificName: "Lathyrus tuberosus",
@@ -3868,6 +4249,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 387,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=732",
     name: "Violet, Arrow-leaved",
     scientificName: "Viola sagittata",
@@ -3878,6 +4260,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 388,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=788",
     name: "Violet, Birdfoot",
     scientificName: "Viola pedata",
@@ -3888,6 +4271,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 389,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=182",
     name: "Violet, Canada",
     scientificName: "Viola canadensis",
@@ -3898,6 +4282,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 390,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=733",
     name: "Violet, Common Blue",
     scientificName: "Viola papilionacea",
@@ -3908,6 +4293,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 391,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=181",
     name: "Violet, Dog",
     scientificName: "Viola conspersa",
@@ -3918,6 +4304,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 392,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=186",
     name: "Violet, Downy Yellow",
     scientificName: "Viola pubescens",
@@ -3928,6 +4315,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 393,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=189",
     name: "Violet, Green",
     scientificName: "Hybanthus concolor",
@@ -3938,6 +4326,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 394,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=187",
     name: "Violet, Kidney-leaved",
     scientificName: "Viola renifolia",
@@ -3948,6 +4337,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 395,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=188",
     name: "Violet, Labrador",
     scientificName: "Viola labradorica",
@@ -3958,6 +4348,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 396,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=184",
     name: "Violet, Long-spurred",
     scientificName: "Viola rostrata",
@@ -3968,6 +4359,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 397,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=191",
     name: "Violet, Marsh Blue",
     scientificName: "Viola cucullata",
@@ -3978,6 +4370,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 398,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=192",
     name: "Violet, Northern Bog",
     scientificName: "Viola nephrophylla",
@@ -3988,6 +4381,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 399,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=193",
     name: "Violet, Northern White",
     scientificName: "Viola macloskeyi",
@@ -3998,6 +4392,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 400,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=183",
     name: "Violet, Pale",
     scientificName: "Viola striata",
@@ -4008,6 +4403,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 401,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=786",
     name: "Violet, Palmate",
     scientificName: "Viola palmata",
@@ -4018,6 +4414,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 402,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=787",
     name: "Violet, Round-leaved",
     scientificName: "Viola rotundifolia",
@@ -4028,6 +4425,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 403,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=185",
     name: "Violet, Sand",
     scientificName: "Viola adunca",
@@ -4038,6 +4436,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 404,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=785",
     name: "Violet, Sweet White",
     scientificName: "Viola blanda",
@@ -4048,6 +4447,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 405,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=734",
     name: "Violet, Woolly Blue",
     scientificName: "Viola sororia",
@@ -4058,6 +4458,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 406,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=740",
     name: "Water Shield",
     scientificName: "Brasenia schreberi",
@@ -4068,6 +4469,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 407,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=742",
     name: "Waterleaf, Broad-leaved",
     scientificName: "Hydrophyllum canadense",
@@ -4078,6 +4480,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 408,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=743",
     name: "Waterleaf, Virginia",
     scientificName: "Hydrophyllum virginianum",
@@ -4088,6 +4491,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 409,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=807",
     name: "Whitlow Grass, Carolina",
     scientificName: "Draba reptans",
@@ -4098,6 +4502,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 410,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=120",
     name: "Wintergreen",
     scientificName: "Gaultheria procumbens",
@@ -4108,6 +4513,7 @@ export const plantDatabase: PlantData[] = [
   },
   {
     id: 411,
+    description: "--",
     href: "http://ontariowildflowers.com/main/species.php?id=797",
     name: "Wintergreen, Striped",
     scientificName: "Chimaphila maculata",
