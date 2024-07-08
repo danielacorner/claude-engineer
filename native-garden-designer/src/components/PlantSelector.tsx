@@ -58,11 +58,14 @@ const PlantSelector: React.FC = () => {
     }
   };
 
-  const handleImageError = (
-    event: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    event.currentTarget.src = "/plant_thumbnails/default.jpg";
-  };
+  // const handleImageError = (
+  //   event: React.SyntheticEvent<HTMLImageElement, Event>
+  // ) => {
+  //   event.currentTarget.src = "/plant_thumbnails/default.jpg";
+  // };
+
+  const imgWidth = 128;
+  const imgHeight = 128;
 
   return (
     <PlantSelectorStyles className={"plantSelector"}>
@@ -97,11 +100,14 @@ const PlantSelector: React.FC = () => {
             onClick={() => setSelectedPlant(plant)}
           >
             <img
-              src={`/plant_thumbnails/${plant.id}.jpg`}
+              // src={`/plant_thumbnails/${plant.id}.jpg`}
+              src={`https://source.unsplash.com/${imgWidth}x${imgHeight}/${plant.name}`}
+              className="plantImage"
               alt={plant.name}
-              className={"plantImage"}
-              onError={handleImageError}
+              style={{ width: imgWidth, height: imgHeight }}
+              // onError={handleImageError}
             />
+            <RelatedWikiLinks />
             <div className={"plantInfo"}>
               <h4>{plant.name}</h4>
               <p className={"scientificName"}>{plant.scientificName}</p>
@@ -153,14 +159,60 @@ const PlantSelector: React.FC = () => {
   );
 };
 
+const RelatedWikiLinks = () => {
+  const [wikiResponse, setWikiResponse] = useState<
+    {
+      pageid: number;
+      ns: number;
+      title: string;
+      imagerepository: string;
+      thumbnail: string;
+      imageinfo: {
+        url: string;
+      }[];
+    }[]
+  >([]);
+
+  useEffect(() => {
+    fetch(
+      `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=canada%20lily&prop=imageinfo&iiprop=url&format=json&origin=*`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.query && data.query.pages) {
+          setWikiResponse(Object.values(data.query.pages));
+        } else {
+          setWikiResponse([]);
+        }
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  return (
+    <>
+      {/* for each result in the wiki api response, render a link to that wiki page */}
+      {wikiResponse.map((result) => (
+        <a
+          href={`https://en.wikipedia.org/wiki/${result.title.replace(
+            / /g,
+            "_"
+          )}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {result.title}
+        </a>
+      ))}
+    </>
+  );
+};
+
 const PlantPreview: React.FC<{ plant: PlantData }> = ({ plant }) => {
-  let scene = null;
-  try {
-    const { scene: plantScene } = useGLTF(plant.modelUrl);
-    scene = plantScene;
-  } catch (error) {
-    console.error("Error loading plant model:", error);
-  }
+  const { scene } = useGLTF(plant.modelUrl);
+
   return scene ? (
     <Canvas>
       <ambientLight intensity={0.5} />
