@@ -1,10 +1,8 @@
-import React, { Suspense, useMemo, useRef, useEffect } from "react";
+import React, { useMemo, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sky, Html } from "@react-three/drei";
 import Ground from "./components/Ground";
 import PlantSelector from "./components/PlantSelector";
-import PlantInstance from "./components/PlantInstance";
-import PlantPreview from "./components/PlantPreview";
 import EnvironmentControls from "./components/EnvironmentControls";
 import SaveLoadControls from "./components/SaveLoadControls";
 import RainEffect from "./components/RainEffect";
@@ -16,6 +14,7 @@ import { Instructions } from "./Instructions";
 import * as THREE from "three";
 import { getAllPlants } from "./data/plantDatabase";
 import { useAppStore } from "./store";
+import { PlantsInstances } from "./components/PlantsInstances";
 
 const App: React.FC = () => {
   const {
@@ -91,31 +90,7 @@ const App: React.FC = () => {
           onHover={setHoveredPosition}
         />
         {showGrid && <GridSystem size={20} divisions={20} />}
-        <Suspense fallback={null}>
-          {plants
-            .filter((p) => p.modelUrl)
-            .map((plant) => (
-              <PlantInstance
-                key={plant.id}
-                plant={plant}
-                updatePosition={(newPosition) =>
-                  updatePlantPosition(plant.id, newPosition)
-                }
-                removePlant={() => removePlant(plant.id)}
-                customizePlant={(customizations) =>
-                  customizePlant(plant.id, customizations)
-                }
-                openPlantInfo={() => setShowPlantInfo(plant)}
-                startCustomizing={() => setCustomizingPlant(plant)}
-                rainIntensity={rainIntensity}
-                windSpeed={windSpeed}
-                groundRef={groundRef}
-              />
-            ))}
-          {selectedPlant && hoveredPosition && (
-            <PlantPreview plant={selectedPlant} position={hoveredPosition} />
-          )}
-        </Suspense>
+        <PlantsInstances groundRef={groundRef} />
         <RainEffect intensity={rainIntensity} />
         <WindEffect speed={windSpeed} />
         <CompassIcon onClick={resetCamera} />

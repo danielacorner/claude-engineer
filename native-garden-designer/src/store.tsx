@@ -35,9 +35,13 @@ interface AppState {
   setErrorMessage: (message: string | null) => void;
 
   placePlant: (position: [number, number, number]) => void;
-  updatePlantPosition: (id: number, newPosition: [number, number, number]) => void;
+  updatePlantPosition: (
+    id: number,
+    newPosition: [number, number, number]
+  ) => void;
   removePlant: (id: number) => void;
   customizePlant: (id: number, customizations: Partial<Plant>) => void;
+  openPlantInfo: (plant: Plant) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -58,7 +62,11 @@ export const useAppStore = create<AppState>((set) => ({
   errorMessage: null,
 
   setSelectedPlant: (plant) => set({ selectedPlant: plant }),
-  addPlant: (plant) => set((state) => ({ allPlants: [...state.allPlants, plant], selectedPlant: plant })),
+  addPlant: (plant) =>
+    set((state) => ({
+      allPlants: [...state.allPlants, plant],
+      selectedPlant: { ...plant, position: state.hoveredPosition || [0, 0, 0] },
+    })),
   setPlants: (plants) => set({ plants }),
   setHoveredPosition: (position) => set({ hoveredPosition: position }),
   setTimeOfDay: (time) => set({ timeOfDay: time }),
@@ -73,31 +81,41 @@ export const useAppStore = create<AppState>((set) => ({
   setShowTutorial: (show) => set({ showTutorial: show }),
   setErrorMessage: (message) => set({ errorMessage: message }),
 
-  placePlant: (position) => set((state) => {
-    if (state.selectedPlant) {
-      const newPlant: Plant = {
-        ...state.selectedPlant,
-        id: state.plants.length + 1,
-        position,
-      };
-      return { plants: [...state.plants, newPlant] };
-    }
-    return state;
-  }),
+  placePlant: (position) =>
+    set((state) => {
+      if (state.selectedPlant) {
+        const newPlant: Plant = {
+          ...state.selectedPlant,
+          id: state.plants.length + 1,
+          position,
+        };
+        return { plants: [...state.plants, newPlant] };
+      }
+      return state;
+    }),
 
-  updatePlantPosition: (id, newPosition) => set((state) => ({
-    plants: state.plants.map((plant) =>
-      plant.id === id ? { ...plant, position: newPosition } : plant
-    ),
-  })),
+  updatePlantPosition: (id, newPosition) =>
+    set((state) => ({
+      plants: state.plants.map((plant) =>
+        plant.id === id ? { ...plant, position: newPosition } : plant
+      ),
+    })),
 
-  removePlant: (id) => set((state) => ({
-    plants: state.plants.filter((plant) => plant.id !== id),
-  })),
+  removePlant: (id) =>
+    set((state) => ({
+      plants: state.plants.filter((plant) => plant.id !== id),
+    })),
 
-  customizePlant: (id, customizations) => set((state) => ({
-    plants: state.plants.map((plant) =>
-      plant.id === id ? { ...plant, ...customizations } : plant
-    ),
-  })),
+  customizePlant: (id, customizations) =>
+    set((state) => ({
+      plants: state.plants.map((plant) =>
+        plant.id === id ? { ...plant, ...customizations } : plant
+      ),
+    })),
+
+  openPlantInfo: (plant) =>
+    set((state) => ({
+      showPlantInfo: plant,
+      customizingPlant: null,
+    })),
 }));

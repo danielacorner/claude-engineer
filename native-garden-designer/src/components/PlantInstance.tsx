@@ -7,39 +7,34 @@ import {
   Vector3,
   InstancedMesh,
   MeshStandardMaterial,
-  BoxGeometry,
   Raycaster,
   Plane,
   Object3D,
 } from "three";
 import { useSpring, a } from "@react-spring/three";
 import PlantGrowthAnimation from "./PlantGrowthAnimation";
-
-interface PlantInstanceProps {
-  plant: Plant;
-  updatePosition: (newPosition: [number, number, number]) => void;
-  removePlant: () => void;
-  customizePlant: (customizations: Partial<Plant>) => void;
-  openPlantInfo: () => void;
-  startCustomizing: () => void;
-  windSpeed: number;
-  rainIntensity: number;
-  groundRef: React.RefObject<Object3D>; // Add this prop
-}
+import { useAppStore } from "../store";
 
 const GRID_SIZE = 1; // Size of each grid cell
 
-const PlantInstance: React.FC<PlantInstanceProps> = ({
+const PlantInstance = ({
   plant,
-  updatePosition,
-  removePlant,
-  customizePlant,
-  openPlantInfo,
-  startCustomizing,
-  windSpeed,
-  rainIntensity,
+  id,
   groundRef, // Add this prop
+}: {
+  plant: Plant;
+  id: number;
+  groundRef: React.RefObject<Object3D>; // Add this prop
 }) => {
+  const {
+    windSpeed,
+    rainIntensity,
+    updatePlantPosition,
+    removePlant,
+    customizePlant,
+    openPlantInfo,
+  } = useAppStore();
+
   const groupRef = useRef<Group>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -47,7 +42,6 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
   const [position, setPosition] = useState<[number, number, number]>(
     plant.position
   );
-  console.log("⭐� ~ plant.modelUrl:", plant.modelUrl);
   let scene;
   try {
     ({ scene } = useGLTF(plant.modelUrl));
@@ -117,7 +111,6 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
     }
     return 0;
   };
-
   useFrame((state, delta) => {
     if (isDragging && groupRef.current) {
       const intersection = new Vector3();
@@ -125,7 +118,7 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
       const snappedPosition = snapToGrid(intersection);
       const y = getGroundHeight(snappedPosition.x, snappedPosition.z);
       setPosition([snappedPosition.x, y, snappedPosition.z]);
-      updatePosition([snappedPosition.x, y, snappedPosition.z]);
+      updatePlantPosition(id, [snappedPosition.x, y, snappedPosition.z]);
     }
 
     // Enhanced wind and rain animation
@@ -156,7 +149,10 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
   };
 
   const handleCustomize = () => {
-    startCustomizing();
+    customizePlant(id, {
+      color: "red",
+      description: "TODO customize - A beautiful red rose bush",
+    });
     setShowContextMenu(false);
   };
 
@@ -189,17 +185,14 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
       onContextMenu={handleContextMenu}
       {...spring}
     >
-      {isGrowing ? (
-        <PlantGrowthAnimation
-          scale={plant.scale || [1, 1, 1]}
-          growthDuration={3}
-          onGrowthComplete={handleGrowthComplete}
-        >
-          <primitive object={lodMeshes[lodLevel]} />
-        </PlantGrowthAnimation>
-      ) : (
+      <PlantGrowthAnimation
+        scale={plant.scale || [1, 1, 1]}
+        growthDuration={3}
+        onGrowthComplete={handleGrowthComplete}
+      >
         <primitive object={lodMeshes[lodLevel]} />
-      )}
+      </PlantGrowthAnimation>
+
       {isDragging && (
         <mesh position={[0, 0.01, 0]}>
           <planeGeometry args={[1, 1]} />
@@ -234,7 +227,7 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                removePlant();
+                removePlant(id);
                 setShowContextMenu(false);
               }}
             >
@@ -243,7 +236,7 @@ const PlantInstance: React.FC<PlantInstanceProps> = ({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                openPlantInfo();
+                openPlantInfo(plant);
                 setShowContextMenu(false);
               }}
             >
@@ -292,12 +285,14 @@ function animatePlant(
       // Wind animation
       child.rotation.y =
         Math.sin(time * windSpeed * windFactor) * windSpeed * 0.1;
-      child.position.x =
+      const windX =
         Math.sin(time * windSpeed * windFactor * 2) * windSpeed * 0.05;
+      child.position.x = child.position.x + windX;
 
       // Rain effect
       child.rotation.x = Math.sin(time * 2) * rainIntensity * rainFactor;
-      child.position.y = Math.sin(time * 3) * rainIntensity * rainFactor * 0.1;
+      const rainY = Math.sin(time * 3) * rainIntensity * rainFactor * 0.1;
+      child.position.y = child.position.y + rainY;
 
       // Adjust material properties for wet appearance
       if (child instanceof InstancedMesh) {
