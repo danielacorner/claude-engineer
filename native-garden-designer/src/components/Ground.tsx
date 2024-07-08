@@ -23,7 +23,7 @@ const GROUND_SIZE = 100; // Total size of the ground plane
 const HEIGHTMAP_RESOLUTION = 128; // Resolution of the heightmap
 
 const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
-  ({ onPlantPlace, onHover, heightMap, onHeightChange, setHeightmap }, ref) => {
+  ({ onPlantPlace, onHover, heightMap, setHeightmap }, ref) => {
     const meshRef = useRef<THREE.Mesh>(null);
     const { camera, raycaster, mouse } = useThree();
     const [hoverPoint, setHoverPoint] = useState<THREE.Vector3 | null>(null);
@@ -95,7 +95,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
       [heightMap]
     );
 
-    const handleClick = (event: THREE.Event) => {
+    const handleClick = () => {
       if (meshRef.current) {
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObject(meshRef.current);
@@ -111,7 +111,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
       }
     };
 
-    const handlePointerMove = (event: THREE.Event) => {
+    const handlePointerMove = () => {
       if (meshRef.current) {
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObject(meshRef.current);
@@ -149,14 +149,14 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
     };
 
     const adjustGroundHeight = useCallback(
-      (x: number, z: number, delta: number) => {
-        const xIndex = Math.floor(
-          ((x + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
-        );
-        const zIndex = Math.floor(
-          ((z + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
-        );
-        const index = zIndex * HEIGHTMAP_RESOLUTION + xIndex;
+      (_x: number, _z: number, delta: number) => {
+        // const xIndex = Math.floor(
+        //   ((x + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
+        // );
+        // const zIndex = Math.floor(
+        //   ((z + GROUND_SIZE / 2) / GROUND_SIZE) * HEIGHTMAP_RESOLUTION
+        // );
+        // const index = zIndex * HEIGHTMAP_RESOLUTION + xIndex;
 
         setHeightmap((prevHeightmap) => {
           const newHeightmap: number[][] = prevHeightmap.map((row, y) =>
@@ -175,7 +175,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
           return newHeightmap;
         });
       },
-      [groundMaterial]
+      [groundMaterial.uniforms.heightmap.value, setHeightmap]
     );
 
     // Add event listeners for ground height adjustment

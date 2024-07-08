@@ -42,20 +42,14 @@ const PlantInstance = ({
   const [position, setPosition] = useState<[number, number, number]>(
     plant.position
   );
-  let scene;
-  try {
-    ({ scene } = useGLTF(plant.modelUrl));
-  } catch (error) {
-    console.error("Error loading 3D model:", error);
-    // Provide a fallback or return null if the model fails to load
-    return null;
-  }
+  const { scene } = useGLTF(plant.modelUrl);
+
   const { size, viewport, camera, gl, raycaster } = useThree();
   const aspect = size.width / viewport.width;
   const [isGrowing, setIsGrowing] = useState(true);
 
   // Wind animation
-  const windFactor = useRef(Math.random() * 0.05 + 0.02).current;
+  // const windFactor = useRef(Math.random() * 0.05 + 0.02).current;
 
   // LOD system
   const [lodLevel, setLodLevel] = useState(0);
@@ -71,7 +65,7 @@ const PlantInstance = ({
     simplifyModel(lowDetailModel, 0.2);
 
     return [highDetailModel, mediumDetailModel, lowDetailModel];
-  }, [plant, scene]);
+  }, [scene]);
 
   useEffect(() => {
     if (groupRef.current) {
@@ -111,7 +105,7 @@ const PlantInstance = ({
     }
     return 0;
   };
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (isDragging && groupRef.current) {
       const intersection = new Vector3();
       raycaster.ray.intersectPlane(dragPlane, intersection);
@@ -178,7 +172,7 @@ const PlantInstance = ({
         setIsHovered(false);
         gl.domElement.style.cursor = "auto";
       }}
-      onPointerOver={(e) => {
+      onPointerOver={() => {
         setIsHovered(true);
         gl.domElement.style.cursor = "grab";
       }}
