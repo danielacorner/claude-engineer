@@ -10,6 +10,7 @@ export interface PlantData {
   description?: string;
   category?: string;
   previewImage?: string;
+  href?: string;
 }
 
 export interface Plant extends PlantData {

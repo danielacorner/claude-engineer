@@ -1,5 +1,5 @@
-import React, { useMemo, useRef, useEffect } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { useMemo, useRef, useEffect, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Sky, Html } from "@react-three/drei";
 import Ground from "./components/Ground";
 import PlantSelector from "./components/PlantSelector";
@@ -41,6 +41,7 @@ const App: React.FC = () => {
 
   const orbitControlsRef = useRef<any>();
   const groundRef = useRef<any>(null);
+  const [heightMap, setHeightMap] = useState<number[][]>([]);
 
   const fogColor = useMemo(() => {
     const color = new THREE.Color();
@@ -57,6 +58,11 @@ const App: React.FC = () => {
     if (allPlants.length > 0) {
       setSelectedPlant(allPlants[0]);
     }
+
+    // Initialize height map
+    const size = 100;
+    const initialHeightMap = Array(size).fill(null).map(() => Array(size).fill(0));
+    setHeightMap(initialHeightMap);
   }, [setSelectedPlant]);
 
   function resetCamera(): void {
@@ -69,6 +75,14 @@ const App: React.FC = () => {
   function loadPlants(loadedPlants: Plant[]): void {
     setPlants(loadedPlants);
   }
+
+  const handleGroundHeightChange = (x: number, y: number, height: number) => {
+    setHeightMap(prevHeightMap => {
+      const newHeightMap = [...prevHeightMap];
+      newHeightMap[x][y] = height;
+      return newHeightMap;
+    });
+  };
 
   return (
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
@@ -88,6 +102,8 @@ const App: React.FC = () => {
           ref={groundRef}
           onPlantPlace={placePlant}
           onHover={setHoveredPosition}
+          heightMap={heightMap}
+          onHeightChange={handleGroundHeightChange}
         />
         {showGrid && <GridSystem size={20} divisions={20} />}
         <PlantsInstances groundRef={groundRef} />

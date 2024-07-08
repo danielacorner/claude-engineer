@@ -8,10 +8,4 @@ features:
 
 TODOS:
 
-- bug: when user places a plant it grows at the selected position but then moves instantly to the center column when it's finished growing instead of staying where the user clicked
-- lots of state is found in App.tsx, which is causing unnecessary re-renders of subcomponents. Please move as much state as is reasonable into store.tsx global state store, and use that store to grab the state as low as possible in the component tree wherever that state is needed. Refer to PlantSelector.tsx to see how to grab state from the store.
-- feature: each plant should have a "sizeMeters" param that scales the plant preview image by that number e.g. 2m = scale by 2x
-- feature: an iconbutton with a compass icon whose compass needle spins as the user rotates the orbit, and which resets the camera and scene position / rotation when clicked
-- bug: "something went wrong" appears below the canvas when placing a plant
-- bug: when I select a plant to place e.g. click on "Oak Tree" then place an oak tree on the ground, the menu for selecting plants is no longer accessible -> expected: the "select a plant" menu should be accessible
-- bug: plant preview images aren't showing up -> use a picsum.photos url to use a random photo related to the plant
+- src/data/plantDatabase.ts -> read the database file and then fix up the items in the plant list that have missing fields -> use your best judgment to guess the missing values, note that scale is in meters. Keep the current modelUrl for each plant.
