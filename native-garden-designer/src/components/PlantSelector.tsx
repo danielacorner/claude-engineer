@@ -6,6 +6,8 @@ import { PlantData } from "../types";
 import styled from "@emotion/styled";
 import { useAppStore } from "../store";
 import ErrorBoundary from "./ErrorBoundary";
+import { RelatedWikiLinks } from "./RelatedWikiLinks";
+import { PlantSelectorItem } from "./PlantSelectorItem";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -92,31 +94,7 @@ const PlantSelector: React.FC = () => {
       </div>
       <div className={"plantList"}>
         {paginatedPlants.map((plant, idx) => (
-          <div
-            key={plant.id ?? idx}
-            className={`${"plantCard"} ${
-              selectedPlant?.id === plant.id ? "selected" : ""
-            }`}
-            onClick={() => setSelectedPlant(plant)}
-          >
-            <img
-              // src={`/plant_thumbnails/${plant.id}.jpg`}
-              src={`https://source.unsplash.com/${imgWidth}x${imgHeight}/${plant.name}`}
-              className="plantImage"
-              alt={plant.name}
-              style={{ width: imgWidth, height: imgHeight }}
-              // onError={handleImageError}
-            />
-            <RelatedWikiLinks />
-            <div className={"plantInfo"}>
-              <h4>{plant.name}</h4>
-              <p className={"scientificName"}>{plant.scientificName}</p>
-              <p className={"plantDescription"}>{plant.description}</p>
-              {plant.height && <p>Height: {plant.height}m</p>}
-              {plant.spread && <p>Spread: {plant.spread}m</p>}
-              <p className={"category"}>Category: {plant.category}</p>
-            </div>
-          </div>
+          <PlantSelectorItem {...{ plant, idx, imgHeight, imgWidth }} />
         ))}
       </div>
       <div className={"pagination"}>
@@ -156,57 +134,6 @@ const PlantSelector: React.FC = () => {
         </div>
       )}
     </PlantSelectorStyles>
-  );
-};
-
-const RelatedWikiLinks = () => {
-  const [wikiResponse, setWikiResponse] = useState<
-    {
-      pageid: number;
-      ns: number;
-      title: string;
-      imagerepository: string;
-      thumbnail: string;
-      imageinfo: {
-        url: string;
-      }[];
-    }[]
-  >([]);
-
-  useEffect(() => {
-    fetch(
-      `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=canada%20lily&prop=imageinfo&iiprop=url&format=json&origin=*`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.query && data.query.pages) {
-          setWikiResponse(Object.values(data.query.pages));
-        } else {
-          setWikiResponse([]);
-        }
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-
-  return (
-    <>
-      {/* for each result in the wiki api response, render a link to that wiki page */}
-      {wikiResponse.map((result) => (
-        <a
-          href={`https://en.wikipedia.org/wiki/${result.title.replace(
-            / /g,
-            "_"
-          )}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {result.title}
-        </a>
-      ))}
-    </>
   );
 };
 
