@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { PlantData } from "../types";
+import styled from "@emotion/styled";
 
 export const RelatedWikiLinks = ({ plant }: { plant: PlantData }) => {
   const [wikiResponse, setWikiResponse] = useState<
@@ -34,7 +35,7 @@ export const RelatedWikiLinks = ({ plant }: { plant: PlantData }) => {
   }, [plant.name]);
 
   return (
-    <>
+    <Styles>
       {/* for each result in the wiki api response, render a link to that wiki page */}
       {wikiResponse.map((result) => (
         <a
@@ -49,6 +50,11 @@ export const RelatedWikiLinks = ({ plant }: { plant: PlantData }) => {
           {result.title}
         </a>
       ))}
-    </>
+    </Styles>
   );
 };
+const Styles = styled.div`
+  display: flex;
+  gap: 0.2em 1em;
+  flex-wrap: wrap;
+`;

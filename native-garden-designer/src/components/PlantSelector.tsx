@@ -67,8 +67,8 @@ const PlantSelector: React.FC = () => {
   // };
 
   return (
-    <PlantSelectorStyles>
-      <div className="tooltip-wrapper">
+    <PlantSelectorStyles onClick={(e) => e.stopPropagation()}>
+      <div className="tooltip-wrapper" onClick={(e) => e.stopPropagation()}>
         <HtmlTooltip />
       </div>
       <div className={"plantSelector"}>
@@ -157,8 +157,9 @@ export default PlantSelector;
 const PlantSelectorStyles = styled.div`
   position: fixed;
   inset: 0;
+  pointer-events: none;
   .tooltip-wrapper {
-    pointer-events: none;
+    pointer-events: auto;
     position: relative;
     top: 20px;
     width: 420px;
@@ -170,6 +171,7 @@ const PlantSelectorStyles = styled.div`
     align-items: center;
   }
   .plantSelector {
+    pointer-events: auto;
     position: absolute;
     top: 20px;
     left: 20px;

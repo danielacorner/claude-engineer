@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Sky, Html } from "@react-three/drei";
+import { OrbitControls, Sky } from "@react-three/drei";
 import Ground from "./components/Ground";
 import PlantSelector from "./components/PlantSelector";
 import EnvironmentControls from "./components/EnvironmentControls";
@@ -59,12 +59,12 @@ const App: React.FC = () => {
     setHeightMap(initialHeightMap);
   }, [setSelectedPlant]);
 
-  function resetCamera(): void {
-    if (orbitControlsRef.current) {
-      orbitControlsRef.current.target.set(0, 0, 0);
-      orbitControlsRef.current.update();
-    }
-  }
+  // function resetCamera(): void {
+  //   if (orbitControlsRef.current) {
+  //     orbitControlsRef.current.target.set(0, 0, 0);
+  //     orbitControlsRef.current.update();
+  //   }
+  // }
 
   // function loadPlants(loadedPlants: Plant[]): void {
   //   setPlants(loadedPlants);
@@ -80,7 +80,12 @@ const App: React.FC = () => {
 
   return (
     <div
-      style={{ width: "100vw", height: "100vh", position: "relative" }}
+      style={{
+        width: "100vw",
+        height: "100vh",
+        position: "relative",
+        zIndex: 1,
+      }}
       onClick={() => {
         setTooltipPlant(null);
       }}
@@ -109,7 +114,7 @@ const App: React.FC = () => {
         <PlantsInstances groundRef={groundRef} />
         <RainEffect intensity={rainIntensity} />
         <WindEffect speed={windSpeed} />
-        <CompassIcon onClick={resetCamera} />
+        {/* <CompassIcon onClick={resetCamera} /> */}
       </Canvas>
 
       <ErrorBoundary>
@@ -130,24 +135,24 @@ const App: React.FC = () => {
 
 export default App;
 
-function CompassIcon(props: { onClick: () => void }): JSX.Element {
-  return (
-    <Html>
-      <div
-        style={{
-          position: "absolute",
-          top: 20,
-          right: 20,
-          cursor: "pointer",
-          zIndex: 1000,
-        }}
-        onClick={props.onClick}
-      >
-        <img src="https://picsum.photos/50/50" alt="Compass" />
-      </div>
-    </Html>
-  );
-}
+// function CompassIcon(props: { onClick: () => void }): JSX.Element {
+//   return (
+//     <Html>
+//       <div
+//         style={{
+//           position: "absolute",
+//           top: 20,
+//           right: 20,
+//           cursor: "pointer",
+//           zIndex: 1000,
+//         }}
+//         onClick={props.onClick}
+//       >
+//         <img src="https://picsum.photos/50/50" alt="Compass" />
+//       </div>
+//     </Html>
+//   );
+// }
 
 function PlantInfoModal({
   plant,
