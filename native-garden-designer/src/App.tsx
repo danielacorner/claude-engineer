@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useEffect, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sky, Html } from "@react-three/drei";
 import Ground from "./components/Ground";
 import PlantSelector from "./components/PlantSelector";
@@ -18,25 +18,17 @@ import { PlantsInstances } from "./components/PlantsInstances";
 
 const App: React.FC = () => {
   const {
-    plants,
-    selectedPlant,
-    hoveredPosition,
-    timeOfDay,
-    season,
+    setTooltipPlant,
     showPlantInfo,
     rainIntensity,
     windSpeed,
     cloudCover,
     showGrid,
     setSelectedPlant,
-    setPlants,
+    // setPlants,
     setHoveredPosition,
     placePlant,
-    updatePlantPosition,
-    removePlant,
-    customizePlant,
     setShowPlantInfo,
-    setCustomizingPlant,
   } = useAppStore();
 
   const orbitControlsRef = useRef<any>();
@@ -74,9 +66,9 @@ const App: React.FC = () => {
     }
   }
 
-  function loadPlants(loadedPlants: Plant[]): void {
-    setPlants(loadedPlants);
-  }
+  // function loadPlants(loadedPlants: Plant[]): void {
+  //   setPlants(loadedPlants);
+  // }
 
   const handleGroundHeightChange = (x: number, y: number, height: number) => {
     setHeightMap((prevHeightMap) => {
@@ -87,7 +79,12 @@ const App: React.FC = () => {
   };
 
   return (
-    <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
+    <div
+      style={{ width: "100vw", height: "100vh", position: "relative" }}
+      onClick={() => {
+        setTooltipPlant(null);
+      }}
+    >
       <Canvas id="canvas" shadows camera={{ position: [0, 5, 10], fov: 50 }}>
         <fog attach="fog" args={[fogColor, 10, 100]} />
         <ambientLight

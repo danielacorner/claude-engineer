@@ -27,7 +27,7 @@ function WikiImage({
         setImageUrl(baseUrl + encodeURIComponent(imageFileName));
       })
       .catch((error) => console.error("Error:", error));
-  }, []);
+  }, [imageTitle]);
 
   return (
     <div>

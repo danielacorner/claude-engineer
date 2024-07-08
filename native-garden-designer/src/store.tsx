@@ -17,7 +17,8 @@ interface AppState {
   showGrid: boolean;
   showTutorial: boolean;
   errorMessage: string | null;
-
+  tooltipPlant: PlantData | null;
+  setTooltipPlant: (plant: PlantData | null) => void;
   setSelectedPlant: (plant: PlantData | null) => void;
   addPlant: (plant: PlantData) => void;
   setPlants: (plants: Plant[]) => void;
@@ -60,7 +61,8 @@ export const useAppStore = create<AppState>((set) => ({
   showGrid: true,
   showTutorial: true,
   errorMessage: null,
-
+  tooltipPlant: null,
+  setTooltipPlant: (plant) => set({ tooltipPlant: plant }),
   setSelectedPlant: (plant) => set({ selectedPlant: plant }),
   addPlant: (plant) =>
     set((state) => ({
@@ -114,7 +116,7 @@ export const useAppStore = create<AppState>((set) => ({
     })),
 
   openPlantInfo: (plant) =>
-    set((state) => ({
+    set(() => ({
       showPlantInfo: plant,
       customizingPlant: null,
     })),

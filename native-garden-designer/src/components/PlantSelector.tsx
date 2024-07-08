@@ -6,8 +6,8 @@ import { PlantData } from "../types";
 import styled from "@emotion/styled";
 import { useAppStore } from "../store";
 import ErrorBoundary from "./ErrorBoundary";
-import { RelatedWikiLinks } from "./RelatedWikiLinks";
 import { PlantSelectorItem } from "./PlantSelectorItem";
+import { HtmlTooltip } from "./HtmlTooltip";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -66,73 +66,75 @@ const PlantSelector: React.FC = () => {
   //   event.currentTarget.src = "/plant_thumbnails/default.jpg";
   // };
 
-  const imgWidth = 128;
-  const imgHeight = 128;
-
   return (
-    <PlantSelectorStyles className={"plantSelector"}>
-      <h3>Plant Selector</h3>
-      <div className={"filters"}>
-        <input
-          type="text"
-          placeholder="Search plants..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className={"searchInput"}
-        />
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className={"categorySelect"}
-        >
-          {categories.map((category, idx) => (
-            <option key={category ?? idx} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+    <PlantSelectorStyles>
+      <div className="tooltip-wrapper">
+        <HtmlTooltip />
       </div>
-      <div className={"plantList"}>
-        {paginatedPlants.map((plant, idx) => (
-          <PlantSelectorItem {...{ plant, idx, imgHeight, imgWidth }} />
-        ))}
-      </div>
-      <div className={"pagination"}>
-        {Array.from({ length: pageCount }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            className={currentPage === i + 1 ? "activePage" : ""}
+      <div className={"plantSelector"}>
+        <h3>Plant Selector</h3>
+        <div className={"filters"}>
+          <input
+            type="text"
+            placeholder="Search plants..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={"searchInput"}
+          />
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className={"categorySelect"}
           >
-            {i + 1}
-          </button>
-        ))}
-      </div>
-      {selectedPlant && (
-        <div className={"selectedPlant"}>
-          <h4>Selected: {selectedPlant.name}</h4>
-          <div ref={previewRef} className={"preview"}>
-            <ErrorBoundary>
-              {selectedPlant.modelUrl ? (
-                <PlantPreview plant={selectedPlant} />
-              ) : null}
-            </ErrorBoundary>
-          </div>
-          <div className={"colorCustomization"}>
-            <label htmlFor="colorPicker">Customize Color:</label>
-            <input
-              type="color"
-              id="colorPicker"
-              value={customColor || selectedPlant.color || "#ffffff"}
-              onChange={(e) => handleColorChange(e.target.value)}
-            />
-          </div>
-          <button onClick={() => addPlant(selectedPlant)}>Place Plant</button>
-          <button onClick={() => setSelectedPlant(null)}>
-            Clear Selection
-          </button>
+            {categories.map((category, idx) => (
+              <option key={category ?? idx} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
+        <div className={"plantList"}>
+          {paginatedPlants.map((plant, idx) => (
+            <PlantSelectorItem {...{ plant, idx }} />
+          ))}
+        </div>
+        <div className={"pagination"}>
+          {Array.from({ length: pageCount }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={currentPage === i + 1 ? "activePage" : ""}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+        {selectedPlant && (
+          <div className={"selectedPlant"}>
+            <h4>Selected: {selectedPlant.name}</h4>
+            <div ref={previewRef} className={"preview"}>
+              <ErrorBoundary>
+                {selectedPlant.modelUrl ? (
+                  <PlantPreview plant={selectedPlant} />
+                ) : null}
+              </ErrorBoundary>
+            </div>
+            <div className={"colorCustomization"}>
+              <label htmlFor="colorPicker">Customize Color:</label>
+              <input
+                type="color"
+                id="colorPicker"
+                value={customColor || selectedPlant.color || "#ffffff"}
+                onChange={(e) => handleColorChange(e.target.value)}
+              />
+            </div>
+            <button onClick={() => addPlant(selectedPlant)}>Place Plant</button>
+            <button onClick={() => setSelectedPlant(null)}>
+              Clear Selection
+            </button>
+          </div>
+        )}
+      </div>
     </PlantSelectorStyles>
   );
 };
@@ -151,19 +153,36 @@ const PlantPreview: React.FC<{ plant: PlantData }> = ({ plant }) => {
 };
 
 export default PlantSelector;
+
 const PlantSelectorStyles = styled.div`
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 350px;
-  max-height: calc(100vh - 40px);
-  background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 10px;
-  padding: 20px;
-  overflow-y: auto;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
+  position: fixed;
+  inset: 0;
+  .tooltip-wrapper {
+    pointer-events: none;
+    position: relative;
+    top: 20px;
+    width: 420px;
+    left: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .plantSelector {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 350px;
+    max-height: calc(100vh - 40px);
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+  }
 
   .filters {
     display: flex;
@@ -193,62 +212,6 @@ const PlantSelectorStyles = styled.div`
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 15px;
     margin-bottom: 20px;
-  }
-
-  .plantCard {
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .plantCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  }
-
-  .plantCard.selected {
-    border: 2px solid #4caf50;
-    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-  }
-
-  .plantImage {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-  }
-
-  .plantInfo {
-    padding: 12px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .plantInfo h4 {
-    margin: 0 0 8px 0;
-    font-size: 16px;
-    font-weight: 600;
-  }
-
-  .plantType {
-    font-size: 12px;
-    color: #666;
-    margin: 0 0 8px 0;
-  }
-
-  .plantDescription {
-    font-size: 12px;
-    margin: 0 0 8px 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    flex-grow: 1;
   }
 
   .pagination {
