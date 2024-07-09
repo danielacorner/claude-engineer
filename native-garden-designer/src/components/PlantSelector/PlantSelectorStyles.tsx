@@ -6,25 +6,20 @@ export const PlantSelectorStyles = styled.div`
   pointer-events: none;
   .tooltip-wrapper {
     pointer-events: auto;
-    position: relative;
-    top: 20px;
-    width: 420px;
-    left: 0;
-    box-sizing: border-box;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
   .plantSelector {
     pointer-events: auto;
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 0px;
+    bottom: 0;
+    left: 0px;
     width: 350px;
-    max-height: calc(100vh - 40px);
+    @media (min-width: 768px) {
+      width: 450px;
+    }
+    height: 100vh;
     background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 10px;
+    border-radius: 0 10px 10px;
     padding: 20px;
     overflow-y: auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -57,13 +52,14 @@ export const PlantSelectorStyles = styled.div`
 
   .plantList {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 15px;
     margin-bottom: 20px;
   }
 
   .pagination {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
     margin-top: 20px;

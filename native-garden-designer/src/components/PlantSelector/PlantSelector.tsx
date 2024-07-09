@@ -115,7 +115,7 @@ const PlantSelector: React.FC = () => {
             <div ref={previewRef} className={"preview"}>
               <ErrorBoundary>
                 {selectedPlant.modelUrl ? (
-                  <PlantPreview plant={selectedPlant} />
+                  <PlantSelectionPreview plant={selectedPlant} />
                 ) : null}
               </ErrorBoundary>
             </div>
@@ -139,7 +139,7 @@ const PlantSelector: React.FC = () => {
   );
 };
 
-const PlantPreview: React.FC<{ plant: PlantData }> = ({ plant }) => {
+const PlantSelectionPreview: React.FC<{ plant: PlantData }> = ({ plant }) => {
   const { scene } = useGLTF(plant.modelUrl);
 
   return scene ? (

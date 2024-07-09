@@ -41,14 +41,15 @@ const TooltipStyles = styled.div<{
 }>`
   pointer-events: auto;
   background: white;
-  position: absolute;
-  top: 0;
-  left: 100%;
-  bottom: 0;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
   width: max(360px, 40vw);
-  height: calc(100vh - 64px);
+  height: 100vh;
   padding: ${PADDING}px;
-  border-radius: 10px;
+  box-sizing: border-box;
+  border-radius: 10px 0 0 10px;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease-in-out;
   transform: translateX(-100%);
