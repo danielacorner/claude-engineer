@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sky } from "@react-three/drei";
 import Ground from "./components/Ground";
-import PlantSelector from "./components/PlantSelector";
+import PlantSelector from "./components/PlantSelector/PlantSelector";
 import EnvironmentControls from "./components/EnvironmentControls";
 import SaveLoadControls from "./components/SaveLoadControls";
 import RainEffect from "./components/RainEffect";

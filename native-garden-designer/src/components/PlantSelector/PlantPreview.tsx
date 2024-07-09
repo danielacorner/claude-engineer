@@ -1,6 +1,6 @@
 import React from "react";
 import { useTexture } from "@react-three/drei";
-import { PlantData } from "../types";
+import { PlantData } from "../../types";
 
 interface PlantPreviewProps {
   plant: PlantData;

@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { PlantData } from "../types";
-import { RelatedWikiLinks } from "./RelatedWikiLinks";
-import { useAppStore } from "../store";
-import WikiImage from "./WikiImage";
+import { PlantData } from "../../types";
+import { RelatedWikiLinks } from "../RelatedWikiLinks";
+import { useAppStore } from "../../store";
+import WikiImage from "../WikiImage";
 
 const PADDING = 20;
 export function HtmlTooltip() {

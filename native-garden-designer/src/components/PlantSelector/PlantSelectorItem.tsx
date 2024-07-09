@@ -1,7 +1,7 @@
-import { imgHeight, imgWidth } from "../constants";
-import { useAppStore } from "../store";
-import { PlantData } from "../types";
-import WikiImage from "./WikiImage";
+import { imgHeight, imgWidth } from "../../constants";
+import { useAppStore } from "../../store";
+import { PlantData } from "../../types";
+import WikiImage from "../WikiImage";
 import styled from "@emotion/styled";
 
 export function PlantSelectorItem({

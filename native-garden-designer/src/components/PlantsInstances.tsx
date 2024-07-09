@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import PlantInstance from "./PlantInstance";
-import PlantPreview from "./PlantPreview";
+import PlantPreview from "./PlantSelector/PlantPreview";
 import { useAppStore } from "../store";
 
 export function PlantsInstances({
