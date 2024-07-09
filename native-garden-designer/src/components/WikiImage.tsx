@@ -17,9 +17,9 @@ function WikiImage({
     )
       .then((response) => response.json())
       .then((data) => {
-        const pages = data.query.pages;
-        const pageId = Object.keys(pages)[0];
-        const imageFileName = pages[pageId].images[0].title.replace(
+        const pages = data?.query?.pages ?? {};
+        const pageId = Object.keys(pages)?.[0];
+        const imageFileName = pages[pageId]?.images?.[0]?.title?.replace(
           "File:",
           ""
         );

@@ -4,6 +4,7 @@ import { PlantData, Plant } from "./types";
 interface AppState {
   allPlants: PlantData[];
   selectedPlant: PlantData | null;
+  hoveredPlant: PlantData | null;
   plants: Plant[];
   hoveredPosition: [number, number, number] | null;
   timeOfDay: number;
@@ -20,6 +21,7 @@ interface AppState {
   tooltipPlant: PlantData | null;
   setTooltipPlant: (plant: PlantData | null) => void;
   setSelectedPlant: (plant: PlantData | null) => void;
+  setHoveredPlant: (plant: PlantData | null) => void;
   addPlant: (plant: PlantData) => void;
   setPlants: (plants: Plant[]) => void;
   setHoveredPosition: (position: [number, number, number] | null) => void;
@@ -48,6 +50,7 @@ interface AppState {
 export const useAppStore = create<AppState>((set) => ({
   allPlants: [],
   selectedPlant: null,
+  hoveredPlant: null,
   plants: [],
   hoveredPosition: null,
   timeOfDay: 12,
@@ -64,6 +67,7 @@ export const useAppStore = create<AppState>((set) => ({
   tooltipPlant: null,
   setTooltipPlant: (plant) => set({ tooltipPlant: plant }),
   setSelectedPlant: (plant) => set({ selectedPlant: plant }),
+  setHoveredPlant: (plant) => set({ hoveredPlant: plant }),
   addPlant: (plant) =>
     set((state) => ({
       allPlants: [...state.allPlants, plant],

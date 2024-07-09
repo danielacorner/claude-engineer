@@ -11,12 +11,12 @@ export function PlantSelectorItem({
   plant: PlantData;
   idx: number;
 }) {
-  const { selectedPlant, setSelectedPlant, setTooltipPlant } = useAppStore();
+  const { selectedPlant, setSelectedPlant, setHoveredPlant } = useAppStore();
 
   return (
     <>
       <Styles
-        onMouseEnter={() => setTooltipPlant(plant)}
+        onMouseEnter={() => setHoveredPlant(plant)}
         key={plant.id ?? idx}
         className={`${"plantCard plantCard-"}${plant.id} ${
           selectedPlant?.id === plant.id ? "selected" : ""

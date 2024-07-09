@@ -41,7 +41,7 @@ const App: React.FC = () => {
     return color;
   }, []);
 
-  const lightIntensity = 1;
+  const lightIntensity = 1.5;
   const sunPosition = new THREE.Vector3(0, 10, 0);
 
   useEffect(() => {
@@ -97,6 +97,11 @@ const App: React.FC = () => {
         />
         <pointLight
           position={sunPosition}
+          intensity={lightIntensity * (1 - cloudCover * 0.5)}
+          castShadow
+        />
+        <directionalLight
+          position={new THREE.Vector3(0, 1, 0)}
           intensity={lightIntensity * (1 - cloudCover * 0.5)}
           castShadow
         />

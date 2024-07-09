@@ -8,4 +8,5 @@ features:
 
 TODOS:
 
-- src/data/plantDatabase.ts -> read the database file and then fix up the items in the plant list that have missing fields -> use your best judgment to guess the missing values, note that scale is in meters. Keep the current modelUrl for each plant.
+- convert all animations to @react-spring instead of css transitions
+- plant preview broken

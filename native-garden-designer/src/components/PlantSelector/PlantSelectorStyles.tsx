@@ -1,11 +1,23 @@
 import styled from "@emotion/styled";
 
-export const PlantSelectorStyles = styled.div`
+export const PlantSelectorStyles = styled.div<{ $open: boolean }>`
   position: fixed;
   inset: 0;
   pointer-events: none;
+
   .tooltip-wrapper {
     pointer-events: auto;
+  }
+  .plantSelectorWrapper {
+    position: relative;
+    transition: transform 0.2s ease-in-out;
+    width: 450px;
+    transform: translateX(calc(-100% + 48px));
+    ${({ $open }) =>
+      $open &&
+      `
+    transform: translateX(0);
+  `}
   }
   .plantSelector {
     pointer-events: auto;
@@ -13,10 +25,7 @@ export const PlantSelectorStyles = styled.div`
     top: 0px;
     bottom: 0;
     left: 0px;
-    width: 350px;
-    @media (min-width: 768px) {
-      width: 450px;
-    }
+    width: 100%;
     height: 100vh;
     background-color: rgba(255, 255, 255, 0.95);
     border-radius: 0 10px 10px;

@@ -6,17 +6,24 @@ import WikiImage from "../WikiImage";
 
 const PADDING = 20;
 export function HtmlTooltip() {
-  const { tooltipPlant } = useAppStore();
+  const { selectedPlant, hoveredPlant } = useAppStore();
+  const plant = hoveredPlant || selectedPlant;
   return (
-    <TooltipStyles $open={Boolean(tooltipPlant)}>
-      {tooltipPlant ? <HtmlTooltipContent plant={tooltipPlant} /> : null}
+    <TooltipStyles $open={Boolean(hoveredPlant)}>
+      {plant ? <HtmlTooltipContent plant={plant} /> : null}
     </TooltipStyles>
   );
 }
 
 function HtmlTooltipContent({ plant }: { plant: PlantData }) {
+  const { setHoveredPlant } = useAppStore();
+
   return (
-    <div className={"tooltip-content"}>
+    <div
+      className={"tooltip-content"}
+      onMouseEnter={() => setHoveredPlant(plant)}
+      onMouseLeave={() => setHoveredPlant(null)}
+    >
       <WikiImage
         imageTitle={plant.scientificName ?? plant.name}
         style={{
@@ -27,6 +34,11 @@ function HtmlTooltipContent({ plant }: { plant: PlantData }) {
       />
       <h3>{plant.name}</h3>
       <p>{plant.description}</p>
+      {plant.scientificName && (
+        <p>
+          <em>{plant.scientificName}</em>
+        </p>
+      )}
       {plant.height && <p>Height: {plant.height}m</p>}
       {plant.spread && <p>Spread: {plant.spread}m</p>}
       {plant.category && <p>Category: {plant.category}</p>}
@@ -52,7 +64,7 @@ const TooltipStyles = styled.div<{
   border-radius: 10px 0 0 10px;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease-in-out;
-  transform: translateX(100%);
+  transform: translateX(calc(100% - 48px));
   ${({ $open }) =>
     $open &&
     `
