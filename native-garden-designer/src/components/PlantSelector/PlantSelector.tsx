@@ -15,7 +15,9 @@ const PlantSelector: React.FC = () => {
   const selectedPlant = useAppStore((state) => state.selectedPlant);
   const addPlant = useAppStore((state) => state.addPlant);
   const setSelectedPlant = useAppStore((state) => state.setSelectedPlant);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [[searchTerm, isFirstLetterOnly], setSearchTerm] = useState<
+    [string, boolean]
+  >(["", false]);
   const [currentPage, setCurrentPage] = useState(1);
   const [customColor, setCustomColor] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
@@ -47,8 +49,16 @@ const PlantSelector: React.FC = () => {
     });
   }, [searchTerm, selectedCategory]);
 
-  const pageCount = Math.ceil(filteredPlants.length / ITEMS_PER_PAGE);
-  const paginatedPlants = filteredPlants.slice(
+  const firstLetterFilteredPlants = isFirstLetterOnly
+    ? filteredPlants.filter((plant) => {
+        return plant.name.toLowerCase().startsWith(searchTerm.toLowerCase());
+      })
+    : filteredPlants;
+
+  const pageCount = Math.ceil(
+    firstLetterFilteredPlants.length / ITEMS_PER_PAGE
+  );
+  let paginatedPlants = firstLetterFilteredPlants.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -78,7 +88,7 @@ const PlantSelector: React.FC = () => {
             type="text"
             placeholder="Search plants..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm((p) => [e.target.value, true])}
             className={"searchInput"}
           />
           <select
@@ -102,12 +112,44 @@ const PlantSelector: React.FC = () => {
           {Array.from({ length: pageCount }, (_, i) => (
             <button
               key={i}
-              onClick={() => setCurrentPage(i + 1)}
+              onClick={() => {
+                setCurrentPage(i + 1);
+                // setSearchTerm([searchTerm[0], false]);
+              }}
               className={currentPage === i + 1 ? "activePage" : ""}
             >
               {i + 1}
             </button>
           ))}
+        </div>
+        {/* a second pagination but showing one tile per letter in alphabet, which filters the list to items starting with that letter */}
+        <div className={"pagination"}>
+          {Array.from({ length: 26 }, (_, i) => {
+            return (
+              <button
+                key={i}
+                onClick={() => {
+                  setSearchTerm([
+                    String.fromCharCode(65 + i).toLowerCase(),
+                    true,
+                  ]);
+                  setCurrentPage(1);
+                }}
+                className={
+                  isFirstLetterOnly &&
+                  searchTerm[0].toLowerCase() ===
+                    String.fromCharCode(65 + i).toLowerCase()
+                    ? "activePage"
+                    : ""
+                }
+              >
+                {String.fromCharCode(65 + i)}
+              </button>
+            );
+          })}
+          <button onClick={() => setSearchTerm(["", false])}>Clear</button>
+          <button onClick={() => setCurrentPage(1)}>Reset</button>
+          <button onClick={() => setSelectedPlant(null)}>Deselect</button>
         </div>
         {selectedPlant && (
           <div className={"selectedPlant"}>

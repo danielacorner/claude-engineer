@@ -57,7 +57,7 @@ const SaveLoadControls: React.FC = () => {
   return (
     <div
       style={{
-        position: "absolute",
+        position: "fixed",
         top: 20,
         left: 20,
         background: "rgba(255, 255, 255, 0.8)",

@@ -9,6 +9,8 @@ interface PlantGrowthAnimationProps {
   children?: React.ReactNode;
 }
 
+const SCALE = 5;
+
 const PlantGrowthAnimation: React.FC<PlantGrowthAnimationProps> = ({
   scale,
   growthDuration,
@@ -17,7 +19,7 @@ const PlantGrowthAnimation: React.FC<PlantGrowthAnimationProps> = ({
 }) => {
   const groupRef = useRef<THREE.Group>(null);
   const startTime = useRef(Date.now());
-  const finalScale = useRef(new THREE.Vector3(...scale));
+  const finalScale = useRef(new THREE.Vector3(...scale.map((n) => n * SCALE)));
 
   useEffect(() => {
     startTime.current = Date.now();

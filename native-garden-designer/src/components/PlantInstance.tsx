@@ -181,7 +181,7 @@ const PlantInstance = ({
     >
       <PlantGrowthAnimation
         scale={plant.scale || [1, 1, 1]}
-        growthDuration={3}
+        growthDuration={1}
         onGrowthComplete={handleGrowthComplete}
       >
         <primitive object={lodMeshes[lodLevel]} />

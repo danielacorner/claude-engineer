@@ -27,7 +27,7 @@ export const plantDatabase: PlantData[] = [
     id: 3,
     name: "Wild Columbine",
     scientificName: "Aquilegia canadensis",
-    modelUrl: "/models/Canada_Lily.glb",
+    modelUrl: "/models/Wild_Columbine.glb",
     scale: [0.4, 0.4, 0.4],
     height: 0.6,
     spread: 0.3,

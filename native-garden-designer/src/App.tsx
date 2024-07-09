@@ -121,7 +121,7 @@ const App: React.FC = () => {
         <PlantSelector />
       </ErrorBoundary>
       <EnvironmentControls />
-      <SaveLoadControls />
+      {/* <SaveLoadControls /> */}
       {showPlantInfo && (
         <PlantInfoModal
           plant={showPlantInfo}

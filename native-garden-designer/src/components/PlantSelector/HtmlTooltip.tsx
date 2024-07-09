@@ -52,7 +52,7 @@ const TooltipStyles = styled.div<{
   border-radius: 10px 0 0 10px;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease-in-out;
-  transform: translateX(-100%);
+  transform: translateX(100%);
   ${({ $open }) =>
     $open &&
     `
