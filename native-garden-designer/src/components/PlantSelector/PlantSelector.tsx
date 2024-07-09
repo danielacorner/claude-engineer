@@ -66,7 +66,7 @@ const PlantSelector: React.FC = () => {
   const pageCount = Math.ceil(
     firstLetterFilteredPlants.length / ITEMS_PER_PAGE
   );
-  let paginatedPlants = firstLetterFilteredPlants.slice(
+  const paginatedPlants = firstLetterFilteredPlants.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -114,7 +114,7 @@ const PlantSelector: React.FC = () => {
               type="text"
               placeholder="Search plants..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm((p) => [e.target.value, true])}
+              onChange={(e) => setSearchTerm(() => [e.target.value, true])}
               className={"searchInput"}
             />
             <select
