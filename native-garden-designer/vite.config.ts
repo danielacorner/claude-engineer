@@ -19,14 +19,14 @@ export default defineConfig({
   },
   build: {
     outDir: "build",
-    sourcemap: true,
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
+    sourcemap: false,
+    minify: false,
+    // terserOptions: {
+    //   compress: {
+    //     drop_console: true,
+    //     drop_debugger: true,
+    //   },
+    // },
   },
   esbuild: {
     logOverride: { "this-is-undefined-in-esm": "silent" },
