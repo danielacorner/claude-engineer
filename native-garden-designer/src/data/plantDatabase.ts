@@ -16,7 +16,7 @@ export const plantDatabase: PlantData[] = [
     id: 2,
     name: "Trillium",
     scientificName: "Trillium grandiflorum",
-    modelUrl: "/models/Canada_Lily.glb",
+    modelUrl: "/models/Trillium.glb",
     scale: [0.3, 0.3, 0.3],
     height: 0.4,
     spread: 0.3,
