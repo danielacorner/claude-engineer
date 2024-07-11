@@ -1,8 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
 import { plantDatabase } from "../../data/plantDatabase";
-import { PlantData } from "../../types";
 import { useAppStore } from "../../store";
 import ErrorBoundary from "../ErrorBoundary";
 import { PlantSelectorItem } from "./PlantSelectorItem";
@@ -10,6 +7,7 @@ import { HtmlTooltip } from "./HtmlTooltip";
 import { PlantSelectorStyles } from "./PlantSelectorStyles";
 import { IconButton } from "@mui/material";
 import { ArrowBackIos } from "@mui/icons-material";
+import { PlantSelectionPreview } from "./PlantSelectionPreview";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -208,19 +206,6 @@ const PlantSelector: React.FC = () => {
       </div>
     </PlantSelectorStyles>
   );
-};
-
-const PlantSelectionPreview: React.FC<{ plant: PlantData }> = ({ plant }) => {
-  const { scene } = useGLTF(plant.modelUrl);
-
-  return scene ? (
-    <Canvas>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} />
-      <primitive object={scene} scale={plant.scale} />
-      <OrbitControls />
-    </Canvas>
-  ) : null;
 };
 
 export default PlantSelector;

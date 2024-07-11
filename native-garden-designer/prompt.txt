@@ -8,5 +8,4 @@ features:
 
 TODOS:
 
-- convert all animations to @react-spring instead of css transitions
-- plant preview broken
+- plant preview loads too slowly
