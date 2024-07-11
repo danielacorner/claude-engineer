@@ -56,6 +56,8 @@ interface AppState {
   setIsDragging: (dragging: false | number) => void;
   isHovered: false | number;
   setIsHovered: (hovered: false | number) => void;
+  showContextMenu: false | number;
+  setShowContextMenu: (show: false | number) => void;
 }
 
 export const useAppStore = create<AppState>(
@@ -128,9 +130,11 @@ export const useAppStore = create<AppState>(
           ),
         })),
 
-      removePlant: (id) =>
+      removePlant: (instanceId) =>
         set((state) => ({
-          plants: state.plants.filter((plant) => plant.id !== id),
+          plants: state.plants.filter(
+            (plant) => plant.instanceId !== instanceId
+          ),
         })),
 
       customizePlant: (id, customizations) =>
@@ -152,6 +156,8 @@ export const useAppStore = create<AppState>(
       setIsDragging: (dragging) => set({ isDragging: dragging }),
       isHovered: false,
       setIsHovered: (hovered) => set({ isHovered: hovered }),
+      showContextMenu: false,
+      setShowContextMenu: (show) => set({ showContextMenu: show }),
     }),
     {
       name: "app",

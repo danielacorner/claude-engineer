@@ -37,10 +37,11 @@ const PlantInstance = ({
     setIsDragging,
     isHovered,
     setIsHovered,
+    showContextMenu,
+    setShowContextMenu,
   } = useAppStore();
 
   const groupRef = useRef<Group>(null);
-  const [showContextMenu, setShowContextMenu] = useState(false);
   const [position, setPosition] = useState<[number, number, number]>(
     plant.position
   );
@@ -141,7 +142,7 @@ const PlantInstance = ({
 
   const handleContextMenu = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
-    setShowContextMenu(true);
+    setShowContextMenu(plant.instanceId);
   };
 
   const handleCustomize = () => {
@@ -209,7 +210,7 @@ const PlantInstance = ({
         >
           {plant.name}
         </div>
-        {showContextMenu && (
+        {showContextMenu && showContextMenu === plant.instanceId && (
           <div
             style={{
               position: "absolute",

@@ -93,7 +93,12 @@ const App: React.FC = () => {
         setTooltipPlant(null);
       }}
     >
-      <Canvas id="canvas" shadows camera={{ position: [0, 5, 10], fov: 50 }}>
+      <Canvas
+        id="canvas"
+        shadows
+        camera={{ position: [0, 5, 10], fov: 50 }}
+        onContextMenu={(e) => e.preventDefault()}
+      >
         <fog attach="fog" args={[fogColor, 10, 100]} />
         <ambientLight
           intensity={lightIntensity * 0.5 * (1 - cloudCover * 0.5)}

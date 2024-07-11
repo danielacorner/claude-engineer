@@ -9,6 +9,7 @@ import React, {
 import { Plane, useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useAppStore } from "../store";
 
 interface GroundProps {
   onPlantPlace: (position: [number, number, number]) => void;
@@ -95,6 +96,8 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
       [heightMap]
     );
 
+    const { plants, setShowContextMenu } = useAppStore();
+
     const handleClick = () => {
       if (meshRef.current) {
         raycaster.setFromCamera(mouse, camera);
@@ -106,7 +109,18 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
             snappedPosition.x,
             snappedPosition.z
           );
-          onPlantPlace([snappedPosition.x, height, snappedPosition.z]);
+          // if there's not already a plant in that location place plant, else remove plant
+          const plantAtClickedPosition = plants.find(
+            (plant) =>
+              plant.position[0] === snappedPosition.x &&
+              plant.position[2] === snappedPosition.z
+          );
+          if (!plantAtClickedPosition) {
+            onPlantPlace([snappedPosition.x, height, snappedPosition.z]);
+            setShowContextMenu(false);
+          } else {
+            setShowContextMenu(plantAtClickedPosition.instanceId);
+          }
         }
       }
     };
