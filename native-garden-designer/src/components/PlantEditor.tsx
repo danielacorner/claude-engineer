@@ -3,12 +3,8 @@ import { useAppStore } from "../store";
 import { Plant } from "../types";
 
 const PlantEditor: React.FC = () => {
-  const {
-    customizingPlant,
-    customizePlant,
-    setCustomizingPlant,
-    setShowPlantSelector,
-  } = useAppStore();
+  const { customizingPlant, customizePlant, setCustomizingPlant } =
+    useAppStore();
 
   if (!customizingPlant) return null;
 

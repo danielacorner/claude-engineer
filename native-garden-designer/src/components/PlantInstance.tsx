@@ -45,6 +45,9 @@ const PlantInstance = ({
   const [position, setPosition] = useState<[number, number, number]>(
     plant.position
   );
+  const [rotation, _setRotation] = useState<[number, number, number]>(
+    plant.rotation ?? [0, 0, 0]
+  );
   const { scene } = useGLTF(plant.modelUrl);
 
   const { size, viewport, camera, gl, raycaster } = useThree();
@@ -82,7 +85,7 @@ const PlantInstance = ({
   }));
 
   useEffect(() => {
-    api.start({ scale: isHovered && isHovered === plant.instanceId ? 1.1 : 1 });
+    api.start({ scale: isHovered && isHovered === plant.id ? 1.1 : 1 });
   }, [isHovered, api]);
 
   const snapToGrid = (point: Vector3): Vector3 => {
@@ -109,7 +112,7 @@ const PlantInstance = ({
     return 0;
   };
   useFrame((state) => {
-    if (isDragging && isDragging === plant.instanceId && groupRef.current) {
+    if (isDragging && isDragging === plant.id && groupRef.current) {
       const intersection = new Vector3();
       raycaster.ray.intersectPlane(dragPlane, intersection);
       const snappedPosition = snapToGrid(intersection);
@@ -142,7 +145,7 @@ const PlantInstance = ({
 
   const handleContextMenu = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
-    setShowContextMenu(plant.instanceId);
+    setShowContextMenu(plant.id);
   };
 
   const handleCustomize = () => {
@@ -161,9 +164,10 @@ const PlantInstance = ({
     <a.group
       ref={groupRef}
       position={position}
+      rotation={rotation}
       onPointerDown={(e) => {
         e.stopPropagation();
-        setIsDragging(plant.instanceId);
+        setIsDragging(plant.id);
         gl.domElement.style.cursor = "grabbing";
       }}
       onPointerUp={() => {
@@ -176,7 +180,7 @@ const PlantInstance = ({
         gl.domElement.style.cursor = "auto";
       }}
       onPointerOver={() => {
-        setIsHovered(plant.instanceId);
+        setIsHovered(plant.id);
         gl.domElement.style.cursor = "grab";
       }}
       onContextMenu={handleContextMenu}
@@ -190,7 +194,7 @@ const PlantInstance = ({
         <primitive object={lodMeshes[lodLevel]} />
       </PlantGrowthAnimation>
 
-      {isDragging && isDragging === plant.instanceId && (
+      {isDragging && isDragging === plant.id && (
         <mesh position={[0, 0.01, 0]}>
           <planeGeometry args={[1, 1]} />
           <meshBasicMaterial color="yellow" opacity={0.5} transparent />
@@ -210,7 +214,7 @@ const PlantInstance = ({
         >
           {plant.name}
         </div>
-        {showContextMenu && showContextMenu === plant.instanceId && (
+        {showContextMenu && showContextMenu === plant.id && (
           <div
             style={{
               position: "absolute",

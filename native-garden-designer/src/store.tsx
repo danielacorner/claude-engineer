@@ -44,7 +44,7 @@ interface AppState {
 
   placePlant: (position: [number, number, number]) => void;
   updatePlantPosition: (
-    id: number,
+    instanceId: number,
     newPosition: [number, number, number]
   ) => void;
   removePlant: (id: number) => void;
@@ -116,7 +116,7 @@ export const useAppStore = create<AppState>(
               ...state.selectedPlant,
               id: state.plants.length + 1,
               position,
-              instanceId: state.plants.length + 1,
+              rotation: [0, Math.random() * 360, 0],
             };
             return { plants: [...state.plants, newPlant] };
           }
@@ -130,11 +130,9 @@ export const useAppStore = create<AppState>(
           ),
         })),
 
-      removePlant: (instanceId) =>
+      removePlant: (id) =>
         set((state) => ({
-          plants: state.plants.filter(
-            (plant) => plant.instanceId !== instanceId
-          ),
+          plants: state.plants.filter((plant) => plant.id !== id),
         })),
 
       customizePlant: (id, customizations) =>

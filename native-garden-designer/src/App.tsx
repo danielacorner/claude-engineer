@@ -3,13 +3,13 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sky } from "@react-three/drei";
 import Ground from "./components/Ground";
 import PlantSelector from "./components/PlantSelector/PlantSelector";
-import EnvironmentControls from "./components/EnvironmentControls";
+// import EnvironmentControls from "./components/EnvironmentControls";
 import RainEffect from "./components/RainEffect";
 import WindEffect from "./components/WindEffect";
 import GridSystem from "./components/GridSystem";
 import { Plant } from "./types";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { Instructions } from "./Instructions";
+// import { Instructions } from "./Instructions";
 import * as THREE from "three";
 import { getAllPlants } from "./data/plantDatabase";
 import { useAppStore } from "./store";
@@ -137,7 +137,7 @@ const App: React.FC = () => {
           onClose={() => setShowPlantInfo(null)}
         />
       )}
-      <Instructions />
+      {/* <Instructions /> */}
       <BottomToolbar />
     </div>
   );

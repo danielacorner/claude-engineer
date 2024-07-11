@@ -134,7 +134,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
             onPlantPlace([snappedPosition.x, height, snappedPosition.z]);
             setShowContextMenu(false);
           } else {
-            setShowContextMenu(plantAtClickedPosition.instanceId);
+            setShowContextMenu(plantAtClickedPosition.id);
           }
         }
       }
