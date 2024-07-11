@@ -4,7 +4,6 @@ import { OrbitControls, Sky } from "@react-three/drei";
 import Ground from "./components/Ground";
 import PlantSelector from "./components/PlantSelector/PlantSelector";
 import EnvironmentControls from "./components/EnvironmentControls";
-// import SaveLoadControls from "./components/SaveLoadControls";
 import RainEffect from "./components/RainEffect";
 import WindEffect from "./components/WindEffect";
 import GridSystem from "./components/GridSystem";
@@ -15,6 +14,7 @@ import * as THREE from "three";
 import { getAllPlants } from "./data/plantDatabase";
 import { useAppStore } from "./store";
 import { PlantsInstances } from "./components/PlantsInstances";
+import BottomToolbar from "./components/BottomToolbar";
 
 const App: React.FC = () => {
   const {
@@ -25,10 +25,11 @@ const App: React.FC = () => {
     cloudCover,
     showGrid,
     setSelectedPlant,
-    // setPlants,
     setHoveredPosition,
     placePlant,
     setShowPlantInfo,
+    showPlantSelector,
+    editMode,
   } = useAppStore();
 
   const orbitControlsRef = useRef<any>();
@@ -58,17 +59,6 @@ const App: React.FC = () => {
       .map(() => Array(size).fill(0));
     setHeightMap(initialHeightMap);
   }, [setSelectedPlant]);
-
-  // function resetCamera(): void {
-  //   if (orbitControlsRef.current) {
-  //     orbitControlsRef.current.target.set(0, 0, 0);
-  //     orbitControlsRef.current.update();
-  //   }
-  // }
-
-  // function loadPlants(loadedPlants: Plant[]): void {
-  //   setPlants(loadedPlants);
-  // }
 
   const handleGroundHeightChange = (x: number, y: number, height: number) => {
     setHeightMap((prevHeightMap) => {
@@ -119,14 +109,10 @@ const App: React.FC = () => {
         <PlantsInstances groundRef={groundRef} />
         <RainEffect intensity={rainIntensity} />
         <WindEffect speed={windSpeed} />
-        {/* <CompassIcon onClick={resetCamera} /> */}
       </Canvas>
 
-      <ErrorBoundary>
-        <PlantSelector />
-      </ErrorBoundary>
+      <ErrorBoundary>{showPlantSelector && <PlantSelector />}</ErrorBoundary>
       <EnvironmentControls />
-      {/* <SaveLoadControls /> */}
       {showPlantInfo && (
         <PlantInfoModal
           plant={showPlantInfo}
@@ -134,30 +120,12 @@ const App: React.FC = () => {
         />
       )}
       <Instructions />
+      <BottomToolbar />
     </div>
   );
 };
 
 export default App;
-
-// function CompassIcon(props: { onClick: () => void }): JSX.Element {
-//   return (
-//     <Html>
-//       <div
-//         style={{
-//           position: "absolute",
-//           top: 20,
-//           right: 20,
-//           cursor: "pointer",
-//           zIndex: 1000,
-//         }}
-//         onClick={props.onClick}
-//       >
-//         <img src="https://picsum.photos/50/50" alt="Compass" />
-//       </div>
-//     </Html>
-//   );
-// }
 
 function PlantInfoModal({
   plant,
