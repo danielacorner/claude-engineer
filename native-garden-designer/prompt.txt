@@ -8,6 +8,7 @@ features:
 
 TODOS:
 
+- while dragging a plant, OrbitControls should be disabled to prevent the user from moving the camera
 - add a toolbar on bottom middle of the canvas that lets user toggle different menus, iconbuttons for each, such as but not limited to Add Plant, Edit Plant, etc.
 - Add Plant iconbutton should open the PlantSelector drawer
 - Edit Plant should close the PlantSelector drawer and change cursor to edit, and open the PlantEditor drawer when a plant is selected

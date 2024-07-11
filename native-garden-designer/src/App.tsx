@@ -29,12 +29,25 @@ const App: React.FC = () => {
     placePlant,
     setShowPlantInfo,
     showPlantSelector,
-    editMode,
+    isDragging,
+    isHovered,
   } = useAppStore();
 
   const orbitControlsRef = useRef<any>();
   const groundRef = useRef<any>(null);
   const [heightMap, setHeightMap] = useState<number[][]>([]);
+
+  // disable orbitControls while dragging
+  useEffect(() => {
+    if (!orbitControlsRef.current) {
+      return;
+    }
+    if (isDragging || isHovered) {
+      orbitControlsRef.current.enabled = false;
+    } else {
+      orbitControlsRef.current.enabled = true;
+    }
+  }, [isDragging]);
 
   const fogColor = useMemo(() => {
     const color = new THREE.Color();

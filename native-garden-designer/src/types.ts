@@ -15,4 +15,5 @@ export interface PlantData {
 
 export interface Plant extends PlantData {
   position: [number, number, number];
+  instanceId: number;
 }

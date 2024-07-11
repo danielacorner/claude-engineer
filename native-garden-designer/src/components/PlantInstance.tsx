@@ -33,11 +33,13 @@ const PlantInstance = ({
     removePlant,
     customizePlant,
     openPlantInfo,
+    isDragging,
+    setIsDragging,
+    isHovered,
+    setIsHovered,
   } = useAppStore();
 
   const groupRef = useRef<Group>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [showContextMenu, setShowContextMenu] = useState(false);
   const [position, setPosition] = useState<[number, number, number]>(
     plant.position
@@ -79,7 +81,7 @@ const PlantInstance = ({
   }));
 
   useEffect(() => {
-    api.start({ scale: isHovered ? 1.1 : 1 });
+    api.start({ scale: isHovered && isHovered === plant.instanceId ? 1.1 : 1 });
   }, [isHovered, api]);
 
   const snapToGrid = (point: Vector3): Vector3 => {
@@ -106,7 +108,7 @@ const PlantInstance = ({
     return 0;
   };
   useFrame((state) => {
-    if (isDragging && groupRef.current) {
+    if (isDragging && isDragging === plant.instanceId && groupRef.current) {
       const intersection = new Vector3();
       raycaster.ray.intersectPlane(dragPlane, intersection);
       const snappedPosition = snapToGrid(intersection);
@@ -160,7 +162,7 @@ const PlantInstance = ({
       position={position}
       onPointerDown={(e) => {
         e.stopPropagation();
-        setIsDragging(true);
+        setIsDragging(plant.instanceId);
         gl.domElement.style.cursor = "grabbing";
       }}
       onPointerUp={() => {
@@ -173,7 +175,7 @@ const PlantInstance = ({
         gl.domElement.style.cursor = "auto";
       }}
       onPointerOver={() => {
-        setIsHovered(true);
+        setIsHovered(plant.instanceId);
         gl.domElement.style.cursor = "grab";
       }}
       onContextMenu={handleContextMenu}
@@ -187,7 +189,7 @@ const PlantInstance = ({
         <primitive object={lodMeshes[lodLevel]} />
       </PlantGrowthAnimation>
 
-      {isDragging && (
+      {isDragging && isDragging === plant.instanceId && (
         <mesh position={[0, 0.01, 0]}>
           <planeGeometry args={[1, 1]} />
           <meshBasicMaterial color="yellow" opacity={0.5} transparent />

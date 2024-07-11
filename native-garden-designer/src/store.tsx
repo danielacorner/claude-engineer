@@ -52,6 +52,10 @@ interface AppState {
   openPlantInfo: (plant: Plant) => void;
   showEnvironmentControls: boolean;
   setShowEnvironmentControls: (show: boolean) => void;
+  isDragging: false | number;
+  setIsDragging: (dragging: false | number) => void;
+  isHovered: false | number;
+  setIsHovered: (hovered: false | number) => void;
 }
 
 export const useAppStore = create<AppState>(
@@ -110,6 +114,7 @@ export const useAppStore = create<AppState>(
               ...state.selectedPlant,
               id: state.plants.length + 1,
               position,
+              instanceId: state.plants.length + 1,
             };
             return { plants: [...state.plants, newPlant] };
           }
@@ -143,6 +148,10 @@ export const useAppStore = create<AppState>(
       showEnvironmentControls: false,
       setShowEnvironmentControls: (show) =>
         set({ showEnvironmentControls: show }),
+      isDragging: false,
+      setIsDragging: (dragging) => set({ isDragging: dragging }),
+      isHovered: false,
+      setIsHovered: (hovered) => set({ isHovered: hovered }),
     }),
     {
       name: "app",
