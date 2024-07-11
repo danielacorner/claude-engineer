@@ -23,7 +23,14 @@ const BottomToolbar: React.FC = () => {
       <button onClick={() => setShowPlantSelector(!showPlantSelector)}>
         Add Plant
       </button>
-      <button onClick={() => setEditMode(true)}>Edit Plant</button>
+      <button
+        onClick={() => {
+          setEditMode(true);
+          setShowPlantSelector(false);
+        }}
+      >
+        Edit Plant
+      </button>
       {/* Add more buttons as needed */}
     </div>
   );

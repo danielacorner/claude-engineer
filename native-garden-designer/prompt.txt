@@ -8,8 +8,7 @@ features:
 
 TODOS:
 
-- add a toolbar on bottom middle of the canvas that lets user toggle different menus, iconbuttons for each, such as but not limited to Add Plant, Edit Plant, etc.
-- Add Plant iconbutton should open the PlantSelector drawer
-- Edit Plant should close the PlantSelector drawer and change cursor to edit, and open the PlantEditor drawer when a plant is selected
+- PlantPreview.tsx always shows "invalid plant data" -> instead of trying to show previewImage, it should show a semi-transparent version of the plant's model
 - add a top left menu toolbar that lets user save or load designs, and also lets user toggle between different designs
 - plant preview loads too slowly
+- add a toolbar on bottom middle of the canvas that lets user toggle different modes, using square iconbuttons for each: Add Plant, Edit Plant

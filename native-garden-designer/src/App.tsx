@@ -130,7 +130,7 @@ const App: React.FC = () => {
       </Canvas>
 
       <ErrorBoundary>{showPlantSelector && <PlantSelector />}</ErrorBoundary>
-      <EnvironmentControls />
+      {/* <EnvironmentControls /> */}
       {showPlantInfo && (
         <PlantInfoModal
           plant={showPlantInfo}

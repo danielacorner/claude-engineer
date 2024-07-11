@@ -26,6 +26,15 @@ const HEIGHTMAP_RESOLUTION = 128; // Resolution of the heightmap
 const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
   ({ onPlantPlace, onHover, heightMap, setHeightmap }, ref) => {
     const meshRef = useRef<THREE.Mesh>(null);
+    const [mousePosition, setMousePosition] = useState({
+      x: 0,
+      y: 0,
+      prev: {
+        x: 0,
+        y: 0,
+      },
+    });
+
     const { camera, raycaster, mouse } = useThree();
     const [hoverPoint, setHoverPoint] = useState<THREE.Vector3 | null>(null);
 
@@ -99,6 +108,11 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
     const { plants, setShowContextMenu } = useAppStore();
 
     const handleClick = () => {
+      const draggedBetweenMouseDownMouseUp =
+        mouse.x !== mousePosition.prev.x || mouse.y !== mousePosition.prev.y;
+      if (draggedBetweenMouseDownMouseUp) {
+        return;
+      }
       if (meshRef.current) {
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObject(meshRef.current);
@@ -115,6 +129,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
               plant.position[0] === snappedPosition.x &&
               plant.position[2] === snappedPosition.z
           );
+
           if (!plantAtClickedPosition) {
             onPlantPlace([snappedPosition.x, height, snappedPosition.z]);
             setShowContextMenu(false);
@@ -129,6 +144,14 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
       if (meshRef.current) {
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObject(meshRef.current);
+        setMousePosition((prev) => ({
+          x: mouse.x,
+          y: mouse.y,
+          prev: {
+            x: prev.x,
+            y: prev.y,
+          },
+        }));
         if (intersects.length > 0) {
           const { point } = intersects[0];
           const snappedPosition = snapToGrid(point);
@@ -227,6 +250,16 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
           ]}
           onClick={handleClick}
           onPointerMove={handlePointerMove}
+          onPointerDown={(event) => {
+            setMousePosition((prev) => ({
+              x: event.clientX,
+              y: event.clientY,
+              prev: {
+                x: prev.x,
+                y: prev.y,
+              },
+            }));
+          }}
         >
           <primitive object={groundMaterial} attach="material" />
         </Plane>
