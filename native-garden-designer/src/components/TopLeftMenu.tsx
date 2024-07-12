@@ -62,7 +62,13 @@ const TopLeftMenu: React.FC = () => {
         <MenuItemWithSub>
           File
           <SubMenu>
-            <MenuItem>New Project</MenuItem>
+            <MenuItem
+              onClick={() => {
+                setIsMenuOpen(false);
+              }}
+            >
+              New Project
+            </MenuItem>
             <MenuItem>Open Project</MenuItem>
             <MenuItem>Save</MenuItem>
             <MenuItem>Save As...</MenuItem>

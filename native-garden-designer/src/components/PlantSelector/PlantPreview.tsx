@@ -15,7 +15,7 @@ const PlantPreview: React.FC<PlantPreviewProps> = ({
 }) => {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF(plant.modelUrl);
-  const { raycaster, camera } = useThree();
+  const { raycaster } = useThree();
 
   useEffect(() => {
     if (groupRef.current) {

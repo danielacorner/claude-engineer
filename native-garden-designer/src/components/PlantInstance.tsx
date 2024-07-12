@@ -46,14 +46,14 @@ const PlantInstance = ({
   const [position, setPosition] = useState<[number, number, number]>(
     plant.position
   );
-  const [rotation, _setRotation] = useState<[number, number, number]>(
+  const [rotation] = useState<[number, number, number]>(
     plant.rotation ?? [0, 0, 0]
   );
   const { scene } = useGLTF(plant.modelUrl);
 
   const { size, viewport, camera, gl, raycaster } = useThree();
   const aspect = size.width / viewport.width;
-  const [isGrowing, setIsGrowing] = useState(true);
+  const [isGrowing] = useState(true); // not used until we need animation
 
   // LOD system
   const [lodLevel, setLodLevel] = useState(0);
@@ -71,12 +71,6 @@ const PlantInstance = ({
     return [highDetailModel, mediumDetailModel, lowDetailModel];
   }, [scene]);
 
-  useEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.scale.set(...(plant.scale || [1, 1, 1]));
-    }
-  }, [plant.scale]);
-
   const [spring, api] = useSpring(() => ({
     scale: 1,
     config: { tension: 300, friction: 10 },
@@ -84,9 +78,7 @@ const PlantInstance = ({
 
   useEffect(() => {
     api.start({
-      scale:
-        plant.scale[0] *
-        (isHovered && isHovered === plant.id ? HOVER_SCALE : 1),
+      scale: isHovered === plant.id ? HOVER_SCALE : 1,
       immediate: false,
     });
   }, [isHovered, api, plant.id]);
@@ -114,6 +106,7 @@ const PlantInstance = ({
     }
     return 0;
   };
+
   useFrame((state) => {
     if (isDragging && isDragging === plant.id && groupRef.current) {
       const intersection = new Vector3();
@@ -126,6 +119,7 @@ const PlantInstance = ({
 
     // Enhanced wind and rain animation
     if (groupRef.current && !isGrowing) {
+      // ! disabled for now
       animatePlant(
         groupRef.current,
         state.clock.elapsedTime,
@@ -160,7 +154,7 @@ const PlantInstance = ({
   };
 
   const handleGrowthComplete = () => {
-    setIsGrowing(false);
+    // setIsGrowing(false);
   };
 
   return (
@@ -191,6 +185,7 @@ const PlantInstance = ({
     >
       <PlantGrowthAnimation
         scale={plant.scale || [1, 1, 1]}
+        rotation={rotation}
         growthDuration={1}
         onGrowthComplete={handleGrowthComplete}
       >

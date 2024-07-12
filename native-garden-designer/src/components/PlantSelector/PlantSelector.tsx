@@ -6,7 +6,7 @@ import { PlantSelectorItem } from "./PlantSelectorItem";
 import { HtmlTooltip } from "./HtmlTooltip";
 import { PlantSelectorStyles } from "./PlantSelectorStyles";
 import { IconButton } from "@mui/material";
-import { ArrowBackIos } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import { PlantSelectionPreview } from "./PlantSelectionPreview";
 
 const ITEMS_PER_PAGE = 12;
@@ -16,6 +16,7 @@ const PlantSelector: React.FC = () => {
   const addPlant = useAppStore((state) => state.addPlant);
   const setSelectedPlant = useAppStore((state) => state.setSelectedPlant);
   const setHoveredPlant = useAppStore((state) => state.setHoveredPlant);
+  const { showPlantSelector, setShowPlantSelector } = useAppStore();
   const [[searchTerm, isFirstLetterOnly], setSearchTerm] = useState<
     [string, boolean]
   >(["", false]);
@@ -81,10 +82,9 @@ const PlantSelector: React.FC = () => {
   // ) => {
   //   event.currentTarget.src = "/plant_thumbnails/default.jpg";
   // };
-  const [open, setOpen] = useState(true);
   return (
     <PlantSelectorStyles
-      $open={open}
+      $open={showPlantSelector}
       onClick={(e) => e.stopPropagation()}
       onMouseLeave={() => setHoveredPlant(null)}
     >
@@ -94,17 +94,17 @@ const PlantSelector: React.FC = () => {
       <div className={"plantSelectorWrapper"}>
         <div className={"plantSelector"}>
           <IconButton
-            onClick={() => setOpen(!open)}
+            onClick={() => setShowPlantSelector(!showPlantSelector)}
             style={{
               position: "absolute",
               top: "1rem",
               right: "0.5rem",
               zIndex: 1000,
-              transform: `rotate(${open ? 0 : 180}deg)`,
-              transition: "all 0.3s ease-in-out",
+              // transform: `rotate(${open ? 0 : 180}deg)`,
+              // transition: "all 0.3s ease-in-out",
             }}
           >
-            <ArrowBackIos />
+            <Close />
           </IconButton>
           <h3>Plant Selector</h3>
           <div className={"filters"}>

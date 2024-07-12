@@ -6,10 +6,10 @@ import WikiImage from "../WikiImage";
 
 const PADDING = 20;
 export function HtmlTooltip() {
-  const { selectedPlant, hoveredPlant } = useAppStore();
+  const { selectedPlant, hoveredPlant, showPlantSelector } = useAppStore();
   const plant = hoveredPlant || selectedPlant;
   return (
-    <TooltipStyles $open={Boolean(hoveredPlant)}>
+    <TooltipStyles $open={Boolean(hoveredPlant && showPlantSelector)}>
       {plant ? <HtmlTooltipContent plant={plant} /> : null}
     </TooltipStyles>
   );
@@ -64,7 +64,7 @@ const TooltipStyles = styled.div<{
   border-radius: 10px 0 0 10px;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease-in-out;
-  transform: translateX(calc(100% - 48px));
+  transform: translateX(calc(100%));
   ${({ $open }) =>
     $open &&
     `

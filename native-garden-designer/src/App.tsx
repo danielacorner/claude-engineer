@@ -27,7 +27,6 @@ const App: React.FC = () => {
     setHoveredPosition,
     placePlant,
     setShowPlantInfo,
-    showPlantSelector,
     isDragging,
     isHovered,
   } = useAppStore();
@@ -128,8 +127,9 @@ const App: React.FC = () => {
         <RainEffect intensity={rainIntensity} />
         <WindEffect speed={windSpeed} />
       </Canvas>
-
-      <ErrorBoundary>{showPlantSelector && <PlantSelector />}</ErrorBoundary>
+      <ErrorBoundary>
+        <PlantSelector />
+      </ErrorBoundary>
       {showPlantInfo && (
         <PlantInfoModal
           plant={showPlantInfo}

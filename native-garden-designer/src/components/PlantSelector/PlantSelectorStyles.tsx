@@ -12,7 +12,7 @@ export const PlantSelectorStyles = styled.div<{ $open: boolean }>`
     position: relative;
     transition: transform 0.2s ease-in-out;
     width: 450px;
-    transform: translateX(calc(-100% + 48px));
+    transform: translateX(calc(-100%));
     ${({ $open }) =>
       $open &&
       `
