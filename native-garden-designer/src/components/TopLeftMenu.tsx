@@ -1,59 +1,114 @@
-import React, { useState } from 'react';
-import { useAppStore } from '../store';
+import React, { useState } from "react";
+import styled from "styled-components";
+
+const MenuContainer = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+`;
+
+const MenuButton = styled.button`
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+`;
+
+const MenuDropdown = styled.div<{ isOpen: boolean }>`
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+`;
+
+const MenuItem = styled.div`
+  padding: 12px 16px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
+
+const SubMenu = styled.div`
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+`;
+
+const MenuItemWithSub = styled(MenuItem)`
+  position: relative;
+  &:hover ${SubMenu} {
+    display: block;
+  }
+`;
 
 const TopLeftMenu: React.FC = () => {
-  const { plants, setPlants } = useAppStore();
-  const [designs, setDesigns] = useState<{ name: string; plants: any[] }[]>([]);
-  const [currentDesign, setCurrentDesign] = useState<string>('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const saveDesign = () => {
-    const designName = prompt('Enter a name for this design:');
-    if (designName) {
-      const newDesign = { name: designName, plants: plants };
-      setDesigns([...designs, newDesign]);
-      setCurrentDesign(designName);
-      localStorage.setItem('gardenDesigns', JSON.stringify([...designs, newDesign]));
-    }
-  };
-
-  const loadDesign = (designName: string) => {
-    const design = designs.find(d => d.name === designName);
-    if (design) {
-      setPlants(design.plants);
-      setCurrentDesign(designName);
-    }
-  };
-
-  React.useEffect(() => {
-    const savedDesigns = localStorage.getItem('gardenDesigns');
-    if (savedDesigns) {
-      setDesigns(JSON.parse(savedDesigns));
-    }
-  }, []);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div style={{
-      position: 'absolute',
-      top: '20px',
-      left: '20px',
-      zIndex: 1000,
-      background: 'white',
-      padding: '10px',
-      borderRadius: '5px',
-      boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-    }}>
-      <button onClick={saveDesign}>Save Design</button>
-      <select 
-        value={currentDesign} 
-        onChange={(e) => loadDesign(e.target.value)}
-        style={{ marginLeft: '10px' }}
-      >
-        <option value="">Load Design</option>
-        {designs.map((design, index) => (
-          <option key={index} value={design.name}>{design.name}</option>
-        ))}
-      </select>
-    </div>
+    <MenuContainer>
+      <MenuButton onClick={toggleMenu}>Menu</MenuButton>
+      <MenuDropdown isOpen={isMenuOpen}>
+        <MenuItemWithSub>
+          File
+          <SubMenu>
+            <MenuItem>New Project</MenuItem>
+            <MenuItem>Open Project</MenuItem>
+            <MenuItem>Save</MenuItem>
+            <MenuItem>Save As...</MenuItem>
+            <MenuItem>Close Project</MenuItem>
+          </SubMenu>
+        </MenuItemWithSub>
+        <MenuItemWithSub>
+          Edit
+          <SubMenu>
+            <MenuItem>Undo</MenuItem>
+            <MenuItem>Redo</MenuItem>
+            <MenuItem>Cut</MenuItem>
+            <MenuItem>Copy</MenuItem>
+            <MenuItem>Paste</MenuItem>
+            <MenuItem>Delete</MenuItem>
+          </SubMenu>
+        </MenuItemWithSub>
+        <MenuItemWithSub>
+          View
+          <SubMenu>
+            <MenuItem>Zoom In</MenuItem>
+            <MenuItem>Zoom Out</MenuItem>
+            <MenuItem>Reset View</MenuItem>
+            <MenuItem>Toggle Grid</MenuItem>
+            <MenuItem>Toggle Labels</MenuItem>
+          </SubMenu>
+        </MenuItemWithSub>
+        <MenuItemWithSub>
+          Export
+          <SubMenu>
+            <MenuItem>Export as Image</MenuItem>
+            <MenuItem>Export as 3D Model</MenuItem>
+            <MenuItem>Export Plant List</MenuItem>
+          </SubMenu>
+        </MenuItemWithSub>
+        <MenuItemWithSub>
+          Preferences
+          <SubMenu>
+            <MenuItem>General Settings</MenuItem>
+            <MenuItem>Appearance</MenuItem>
+            <MenuItem>Keyboard Shortcuts</MenuItem>
+            <MenuItem>Plant Database</MenuItem>
+          </SubMenu>
+        </MenuItemWithSub>
+      </MenuDropdown>
+    </MenuContainer>
   );
 };
 

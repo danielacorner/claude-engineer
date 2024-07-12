@@ -3,18 +3,17 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sky } from "@react-three/drei";
 import Ground from "./components/Ground";
 import PlantSelector from "./components/PlantSelector/PlantSelector";
-// import EnvironmentControls from "./components/EnvironmentControls";
 import RainEffect from "./components/RainEffect";
 import WindEffect from "./components/WindEffect";
 import GridSystem from "./components/GridSystem";
 import { Plant } from "./types";
 import ErrorBoundary from "./components/ErrorBoundary";
-// import { Instructions } from "./Instructions";
 import * as THREE from "three";
 import { getAllPlants } from "./data/plantDatabase";
 import { useAppStore } from "./store";
 import { PlantsInstances } from "./components/PlantsInstances";
 import BottomToolbar from "./components/BottomToolbar";
+import TopLeftMenu from "./components/TopLeftMenu"; // Import the new TopLeftMenu component
 
 const App: React.FC = () => {
   const {
@@ -93,6 +92,7 @@ const App: React.FC = () => {
         setTooltipPlant(null);
       }}
     >
+      <TopLeftMenu /> {/* Add the TopLeftMenu component here */}
       <Canvas
         id="canvas"
         shadows
@@ -130,14 +130,12 @@ const App: React.FC = () => {
       </Canvas>
 
       <ErrorBoundary>{showPlantSelector && <PlantSelector />}</ErrorBoundary>
-      {/* <EnvironmentControls /> */}
       {showPlantInfo && (
         <PlantInfoModal
           plant={showPlantInfo}
           onClose={() => setShowPlantInfo(null)}
         />
       )}
-      {/* <Instructions /> */}
       <BottomToolbar />
     </div>
   );

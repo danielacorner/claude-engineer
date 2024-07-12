@@ -16,15 +16,16 @@ import PlantGrowthAnimation from "./PlantGrowthAnimation";
 import { useAppStore } from "../store";
 
 const GRID_SIZE = 1; // Size of each grid cell
+const HOVER_SCALE = 1.05; // Scale factor for hover effect
 
 const PlantInstance = ({
   plant,
   id,
-  groundRef, // Add this prop
+  groundRef,
 }: {
   plant: Plant;
   id: number;
-  groundRef: React.RefObject<Object3D>; // Add this prop
+  groundRef: React.RefObject<Object3D>;
 }) => {
   const {
     windSpeed,
@@ -82,8 +83,13 @@ const PlantInstance = ({
   }));
 
   useEffect(() => {
-    api.start({ scale: isHovered && isHovered === plant.id ? 1.1 : 1 });
-  }, [isHovered, api]);
+    api.start({
+      scale:
+        plant.scale[0] *
+        (isHovered && isHovered === plant.id ? HOVER_SCALE : 1),
+      immediate: false,
+    });
+  }, [isHovered, api, plant.id]);
 
   const snapToGrid = (point: Vector3): Vector3 => {
     return new Vector3(
