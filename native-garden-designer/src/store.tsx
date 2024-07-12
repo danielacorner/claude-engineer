@@ -117,6 +117,10 @@ export const useAppStore = create<AppState>(
               id: state.plants.length + 1,
               position,
               rotation: [0, Math.random() * 360, 0],
+              // modify the scale a bit at random
+              scale: state.selectedPlant.scale.map(
+                (s) => s * (0.8 + Math.random() * 0.4)
+              ) as [number, number, number],
             };
             return { plants: [...state.plants, newPlant] };
           }

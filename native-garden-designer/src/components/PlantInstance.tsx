@@ -72,13 +72,13 @@ const PlantInstance = ({
   }, [scene]);
 
   const [spring, api] = useSpring(() => ({
-    scale: 1,
+    scale: plant.scale[0] ?? 1,
     config: { tension: 300, friction: 10 },
   }));
 
   useEffect(() => {
     api.start({
-      scale: isHovered === plant.id ? HOVER_SCALE : 1,
+      scale: (plant.scale[0] ?? 1) * (isHovered === plant.id ? HOVER_SCALE : 1),
       immediate: false,
     });
   }, [isHovered, api, plant.id]);
