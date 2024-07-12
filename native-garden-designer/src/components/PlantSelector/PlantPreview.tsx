@@ -3,6 +3,9 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { PlantData } from "../../types";
 import * as THREE from "three";
+import { useAppStore } from "../../store";
+import { isEqual } from "lodash";
+import { PlantShrinkAnimation } from "./PlantShrinkAnimation";
 
 interface PlantPreviewProps {
   plant: PlantData;
@@ -17,11 +20,17 @@ const PlantPreview: React.FC<PlantPreviewProps> = ({
   const { scene } = useGLTF(plant.modelUrl);
   const { raycaster } = useThree();
 
+  // hide the mesh if there's another plant at the hovered position
+  const { plants } = useAppStore();
+  const plantAtPosition = plants.find((p) =>
+    isEqual(p.position, [cursorPosition.x, cursorPosition.y, cursorPosition.z])
+  );
+
   useEffect(() => {
     if (groupRef.current) {
       groupRef.current.scale.set(...(plant.scale || [1, 1, 1]));
     }
-  }, [plant.scale]);
+  }, [plant.scale, plantAtPosition]);
 
   useFrame(() => {
     if (groupRef.current && cursorPosition) {
@@ -40,6 +49,17 @@ const PlantPreview: React.FC<PlantPreviewProps> = ({
     }
   });
 
+  useFrame((state) => {
+    if (groupRef.current) {
+      // make the plant slowly rotate
+      groupRef.current.rotation.y += 0.01;
+
+      // make the plant bob up and down
+      groupRef.current.position.y +=
+        0.3 + Math.cos(state.clock.getElapsedTime()) * 0.05;
+    }
+  });
+
   // Clone the scene and apply transparency to all materials
   const previewScene = React.useMemo(() => {
     const clonedScene = scene.clone();
@@ -53,9 +73,13 @@ const PlantPreview: React.FC<PlantPreviewProps> = ({
     return clonedScene;
   }, [scene]);
 
+  const shrink = Boolean(plantAtPosition);
+
   return (
     <group ref={groupRef}>
-      <primitive object={previewScene} />
+      <PlantShrinkAnimation shrink={shrink}>
+        <primitive object={previewScene} />
+      </PlantShrinkAnimation>
     </group>
   );
 };

@@ -273,10 +273,10 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
               <boxGeometry args={[GRID_SIZE, 0.1, GRID_SIZE]} />
               <meshBasicMaterial color="yellow" opacity={0.5} transparent />
             </mesh>
-            <mesh position={[hoverPoint.x, hoverPoint.y + 0.5, hoverPoint.z]}>
+            {/* <mesh position={[hoverPoint.x, hoverPoint.y + 0.5, hoverPoint.z]}>
               <sphereGeometry args={[0.1, 16, 16]} />
               <meshBasicMaterial color="red" />
-            </mesh>
+            </mesh> */}
           </>
         )}
       </group>

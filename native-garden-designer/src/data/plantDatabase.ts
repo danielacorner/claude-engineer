@@ -7,7 +7,7 @@ export const plantDatabase: PlantData[] = [
     scientificName: "Lilium canadense",
     modelUrl: "/models/Canada_Lily.glb",
     scale: [0.5, 0.5, 0.5],
-    height: 0.6,
+    height: 1.5,
     spread: 0.3,
     description: "Tall perennial herb with nodding yellow to red flowers",
     color: "orange",

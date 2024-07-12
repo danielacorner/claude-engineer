@@ -43,9 +43,11 @@ const PlantInstance = ({
   } = useAppStore();
 
   const groupRef = useRef<Group>(null);
-  const [position, setPosition] = useState<[number, number, number]>(
-    plant.position
-  );
+  const [position, setPosition] = useState<[number, number, number]>([
+    plant.position[0],
+    plant.position[1] + (plant.height ?? 0) * 0.15,
+    plant.position[2],
+  ]);
   const [rotation] = useState<[number, number, number]>(
     plant.rotation ?? [0, 0, 0]
   );
@@ -81,7 +83,7 @@ const PlantInstance = ({
       scale: (plant.scale[0] ?? 1) * (isHovered === plant.id ? HOVER_SCALE : 1),
       immediate: false,
     });
-  }, [isHovered, api, plant.id]);
+  }, [isHovered, api, plant.id, plant.scale]);
 
   const snapToGrid = (point: Vector3): Vector3 => {
     return new Vector3(
@@ -112,7 +114,9 @@ const PlantInstance = ({
       const intersection = new Vector3();
       raycaster.ray.intersectPlane(dragPlane, intersection);
       const snappedPosition = snapToGrid(intersection);
-      const y = getGroundHeight(snappedPosition.x, snappedPosition.z);
+      const y =
+        getGroundHeight(snappedPosition.x, snappedPosition.z) +
+        (plant.height ?? 0);
       setPosition([snappedPosition.x, y, snappedPosition.z]);
       updatePlantPosition(id, [snappedPosition.x, y, snappedPosition.z]);
     }
