@@ -1,78 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
 import { PlantData } from "../../types";
 import * as THREE from "three";
 
 interface PlantPreviewProps {
   plant: PlantData;
-  position: [number, number, number];
+  cursorPosition: THREE.Vector3;
 }
 
-const PlantPreview: React.FC<PlantPreviewProps> = ({ plant, position }) => {
-  const [error, setError] = useState<string | null>(null);
-  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+const PlantPreview: React.FC<PlantPreviewProps> = ({
+  plant,
+  cursorPosition,
+}) => {
+  const groupRef = useRef<THREE.Group>(null);
+  const { scene } = useGLTF(plant.modelUrl);
+  const { raycaster, camera } = useThree();
 
   useEffect(() => {
-    if (!plant || !plant.previewImage) {
-      setError("Invalid plant data");
-      return;
+    if (groupRef.current) {
+      groupRef.current.scale.set(...(plant.scale || [1, 1, 1]));
     }
+  }, [plant.scale]);
 
-    const loadTexture = async () => {
-      try {
-        const loadedTexture = await new THREE.TextureLoader().loadAsync(
-          plant.previewImage ?? ""
-        );
-        setTexture(loadedTexture);
-        setError(null);
-      } catch (err) {
-        console.error("Failed to load texture:", err);
-        setError("Failed to load plant preview");
+  useFrame(() => {
+    if (groupRef.current && cursorPosition) {
+      // Update the position to follow the cursor
+      groupRef.current.position.copy(cursorPosition);
+
+      // Adjust the height based on the ground
+      raycaster.set(
+        new THREE.Vector3(cursorPosition.x, 100, cursorPosition.z),
+        new THREE.Vector3(0, -1, 0)
+      );
+      const intersects = raycaster.intersectObjects(scene.children, true);
+      if (intersects.length > 0) {
+        groupRef.current.position.y = intersects[0].point.y;
       }
-    };
+    }
+  });
 
-    loadTexture();
-  }, [plant]);
-
-  if (error) {
-    return (
-      <sprite position={position} scale={[1, 1, 1]}>
-        <spriteMaterial attach="material">
-          <canvasTexture attach="map" image={getErrorCanvas(error)} />
-        </spriteMaterial>
-      </sprite>
-    );
-  }
-
-  if (!texture) {
-    return null; // Or you could return a loading indicator here
-  }
+  // Clone the scene and apply transparency to all materials
+  const previewScene = React.useMemo(() => {
+    const clonedScene = scene.clone();
+    clonedScene.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.material = child.material.clone();
+        child.material.transparent = true;
+        child.material.opacity = 0.5;
+      }
+    });
+    return clonedScene;
+  }, [scene]);
 
   return (
-    <sprite position={position} scale={plant.scale || [1, 1, 1]}>
-      <spriteMaterial
-        attach="material"
-        map={texture}
-        transparent={true}
-        opacity={0.5}
-      />
-    </sprite>
+    <group ref={groupRef}>
+      <primitive object={previewScene} />
+    </group>
   );
 };
-
-function getErrorCanvas(message: string): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
-  canvas.width = 256;
-  canvas.height = 256;
-  const ctx = canvas.getContext("2d");
-  if (ctx) {
-    ctx.fillStyle = "red";
-    ctx.fillRect(0, 0, 256, 256);
-    ctx.fillStyle = "white";
-    ctx.font = "24px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(message, 128, 128);
-  }
-  return canvas;
-}
 
 export default PlantPreview;

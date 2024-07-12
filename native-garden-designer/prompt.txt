@@ -9,6 +9,5 @@ features:
 TODOS:
 
 - PlantPreview.tsx always shows "invalid plant data" -> instead of trying to show previewImage, it should show a semi-transparent version of the plant's model
-- add a top left File menu toolbar that lets user save or load designs, and also lets user toggle between different designs
+- add a top left Filemenu toolbar that lets user save or load designs, and also lets user toggle between different designs
 - plant preview loads too slowly
-- add a toolbar on bottom middle of the canvas that lets user toggle different modes, using square iconbuttons for each: Add Plant, Edit Plant

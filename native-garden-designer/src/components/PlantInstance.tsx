@@ -54,9 +54,6 @@ const PlantInstance = ({
   const aspect = size.width / viewport.width;
   const [isGrowing, setIsGrowing] = useState(true);
 
-  // Wind animation
-  // const windFactor = useRef(Math.random() * 0.05 + 0.02).current;
-
   // LOD system
   const [lodLevel, setLodLevel] = useState(0);
   const lodDistances = [10, 20, 40]; // Distances for each LOD level
