@@ -8,6 +8,30 @@ features:
 
 TODOS:
 
-- PlantPreview.tsx always shows "invalid plant data" -> instead of trying to show previewImage, it should show a semi-transparent version of the plant's model
-- add a top left Filemenu toolbar that lets user save or load designs, and also lets user toggle between different designs
-- plant preview loads too slowly
+- implement menu items in native-garden-designer\src\components\TopLeftMenu.tsx
+  - you'll need to update native-garden-designer\store.tsx to accommodate related items in the global state
+  - File, Edit, View, Export, Preferences
+  Submenu Items:
+  - New Project
+  - Open Project
+  - Save
+  - Save As...
+  - Close Project
+  - Undo
+  - Redo
+  - Cut
+  - Copy
+  - Paste
+  - Delete
+  - Zoom In
+  - Zoom Out
+  - Reset View
+  - Toggle Grid
+  - Toggle Labels
+  - Export as Image
+  - Export as 3D Model
+  - Export Plant List
+  - General Settings
+  - Appearance
+  - Keyboard Shortcuts
+  - Plant Database

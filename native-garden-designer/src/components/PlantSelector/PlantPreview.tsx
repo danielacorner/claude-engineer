@@ -23,7 +23,10 @@ const PlantPreview: React.FC<PlantPreviewProps> = ({
   // hide the mesh if there's another plant at the hovered position
   const { plants } = useAppStore();
   const plantAtPosition = plants.find((p) =>
-    isEqual(p.position, [cursorPosition.x, cursorPosition.y, cursorPosition.z])
+    isEqual(
+      [p.position[0], 0, p.position[2]],
+      [cursorPosition.x, 0, cursorPosition.z]
+    )
   );
 
   useEffect(() => {

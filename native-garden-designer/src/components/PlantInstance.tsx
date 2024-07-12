@@ -14,6 +14,8 @@ import {
 import { useSpring, a } from "@react-spring/three";
 import PlantGrowthAnimation from "./PlantGrowthAnimation";
 import { useAppStore } from "../store";
+import { HEIGHT_SCALE } from "../constants";
+import { useEvent } from "react-use";
 
 const GRID_SIZE = 1; // Size of each grid cell
 const HOVER_SCALE = 1.05; // Scale factor for hover effect
@@ -43,9 +45,10 @@ const PlantInstance = ({
   } = useAppStore();
 
   const groupRef = useRef<Group>(null);
+  const plantHeight = (plant.height ?? 0) * HEIGHT_SCALE;
   const [position, setPosition] = useState<[number, number, number]>([
     plant.position[0],
-    plant.position[1] + (plant.height ?? 0) * 0.15,
+    plant.position[1] + plantHeight,
     plant.position[2],
   ]);
   const [rotation] = useState<[number, number, number]>(
@@ -114,11 +117,13 @@ const PlantInstance = ({
       const intersection = new Vector3();
       raycaster.ray.intersectPlane(dragPlane, intersection);
       const snappedPosition = snapToGrid(intersection);
-      const y =
-        getGroundHeight(snappedPosition.x, snappedPosition.z) +
-        (plant.height ?? 0);
-      setPosition([snappedPosition.x, y, snappedPosition.z]);
-      updatePlantPosition(id, [snappedPosition.x, y, snappedPosition.z]);
+      const y = getGroundHeight(snappedPosition.x, snappedPosition.z);
+      setPosition([snappedPosition.x, y + plantHeight, snappedPosition.z]);
+      updatePlantPosition(id, [
+        snappedPosition.x,
+        y + plantHeight,
+        snappedPosition.z,
+      ]);
     }
 
     // Enhanced wind and rain animation
@@ -160,7 +165,10 @@ const PlantInstance = ({
   const handleGrowthComplete = () => {
     // setIsGrowing(false);
   };
-
+  useEvent("pointerup", () => {
+    setIsDragging(false);
+    gl.domElement.style.cursor = "auto";
+  });
   return (
     <a.group
       ref={groupRef}
@@ -176,7 +184,7 @@ const PlantInstance = ({
         gl.domElement.style.cursor = "auto";
       }}
       onPointerOut={() => {
-        setIsDragging(false);
+        // setIsDragging(false);
         setIsHovered(false);
         gl.domElement.style.cursor = "auto";
       }}
@@ -184,7 +192,7 @@ const PlantInstance = ({
         setIsHovered(plant.id);
         gl.domElement.style.cursor = "grab";
       }}
-      onContextMenu={handleContextMenu}
+      onContextMenu={isDragging ? () => {} : handleContextMenu}
       {...spring}
     >
       <PlantGrowthAnimation

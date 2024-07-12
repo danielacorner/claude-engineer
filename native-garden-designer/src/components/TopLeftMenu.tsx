@@ -67,6 +67,7 @@ const TopLeftMenu: React.FC = () => {
                 setIsMenuOpen(false);
               }}
             >
+              {" "}
               New Project
             </MenuItem>
             <MenuItem>Open Project</MenuItem>
