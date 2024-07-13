@@ -1,7 +1,14 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useAppStore } from "../store";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, TextField } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+} from "@mui/material";
 
 const MenuContainer = styled.div`
   position: absolute;
@@ -54,9 +61,7 @@ const MenuItemWithSub = styled(MenuItem)`
 
 const TopLeftMenu: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isNewProjectDialogOpen, setIsNewProjectDialogOpen] = useState(false);
-  const [newProjectName, setNewProjectName] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -77,6 +82,7 @@ const TopLeftMenu: React.FC = () => {
     zoomOut,
     resetView,
     toggleLabels,
+    showLabels,
     exportAsImage,
     exportAs3DModel,
     exportPlantList,
@@ -89,21 +95,13 @@ const TopLeftMenu: React.FC = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleNewProject = () => {
-    setIsConfirmDialogOpen(true);
+    setIsNewProjectDialogOpen(true);
     setIsMenuOpen(false);
   };
 
-  const handleConfirmNewProject = () => {
-    setIsConfirmDialogOpen(false);
-    setIsNewProjectDialogOpen(true);
-  };
-
   const handleCreateNewProject = () => {
-    if (newProjectName.trim()) {
-      createNewProject(newProjectName.trim());
-      setIsNewProjectDialogOpen(false);
-      setNewProjectName("");
-    }
+    createNewProject();
+    setIsNewProjectDialogOpen(false);
   };
 
   const handleOpenFile = () => {
@@ -137,8 +135,8 @@ const TopLeftMenu: React.FC = () => {
     setIsMenuOpen(false);
   };
 
-  const handleToggleGrid = () => {
-    setShowGrid(!showGrid);
+  const handleMenuItemClick = (action: () => void) => {
+    action();
     setIsMenuOpen(false);
   };
 
@@ -158,79 +156,98 @@ const TopLeftMenu: React.FC = () => {
         <MenuItemWithSub>
           Edit
           <SubMenu>
-            <MenuItem onClick={() => { undo(); setIsMenuOpen(false); }}>Undo</MenuItem>
-            <MenuItem onClick={() => { redo(); setIsMenuOpen(false); }}>Redo</MenuItem>
-            <MenuItem onClick={() => { cut(); setIsMenuOpen(false); }}>Cut</MenuItem>
-            <MenuItem onClick={() => { copy(); setIsMenuOpen(false); }}>Copy</MenuItem>
-            <MenuItem onClick={() => { paste(); setIsMenuOpen(false); }}>Paste</MenuItem>
-            <MenuItem onClick={() => { deleteItem(); setIsMenuOpen(false); }}>Delete</MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(undo)}>Undo</MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(redo)}>Redo</MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(cut)}>Cut</MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(copy)}>Copy</MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(paste)}>
+              Paste
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(deleteItem)}>
+              Delete
+            </MenuItem>
           </SubMenu>
         </MenuItemWithSub>
         <MenuItemWithSub>
           View
           <SubMenu>
-            <MenuItem onClick={() => { zoomIn(); setIsMenuOpen(false); }}>Zoom In</MenuItem>
-            <MenuItem onClick={() => { zoomOut(); setIsMenuOpen(false); }}>Zoom Out</MenuItem>
-            <MenuItem onClick={() => { resetView(); setIsMenuOpen(false); }}>Reset View</MenuItem>
-            <MenuItem onClick={handleToggleGrid}>
+            <MenuItem onClick={() => handleMenuItemClick(zoomIn)}>
+              Zoom In
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(zoomOut)}>
+              Zoom Out
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(resetView)}>
+              Reset View
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuItemClick(() => setShowGrid(!showGrid))}
+            >
               {showGrid ? "Hide Grid" : "Show Grid"}
             </MenuItem>
-            <MenuItem onClick={() => { toggleLabels(); setIsMenuOpen(false); }}>Toggle Labels</MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(toggleLabels)}>
+              {showLabels ? "Hide Labels" : "Show Labels"}
+            </MenuItem>
           </SubMenu>
         </MenuItemWithSub>
         <MenuItemWithSub>
           Export
           <SubMenu>
-            <MenuItem onClick={() => { exportAsImage(); setIsMenuOpen(false); }}>Export as Image</MenuItem>
-            <MenuItem onClick={() => { exportAs3DModel(); setIsMenuOpen(false); }}>Export as 3D Model</MenuItem>
-            <MenuItem onClick={() => { exportPlantList(); setIsMenuOpen(false); }}>Export Plant List</MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(exportAsImage)}>
+              Export as Image
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(exportAs3DModel)}>
+              Export as 3D Model
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(exportPlantList)}>
+              Export Plant List
+            </MenuItem>
           </SubMenu>
         </MenuItemWithSub>
         <MenuItemWithSub>
           Preferences
           <SubMenu>
-            <MenuItem onClick={() => { openGeneralSettings(); setIsMenuOpen(false); }}>General Settings</MenuItem>
-            <MenuItem onClick={() => { openAppearanceSettings(); setIsMenuOpen(false); }}>Appearance</MenuItem>
-            <MenuItem onClick={() => { openKeyboardShortcuts(); setIsMenuOpen(false); }}>Keyboard Shortcuts</MenuItem>
-            <MenuItem onClick={() => { openPlantDatabase(); setIsMenuOpen(false); }}>Plant Database</MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(openGeneralSettings)}>
+              General Settings
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuItemClick(openAppearanceSettings)}
+            >
+              Appearance
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuItemClick(openKeyboardShortcuts)}
+            >
+              Keyboard Shortcuts
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(openPlantDatabase)}>
+              Plant Database
+            </MenuItem>
           </SubMenu>
         </MenuItemWithSub>
       </MenuDropdown>
 
-      <Dialog open={isConfirmDialogOpen} onClose={() => setIsConfirmDialogOpen(false)}>
+      <Dialog
+        open={isNewProjectDialogOpen}
+        onClose={() => setIsNewProjectDialogOpen(false)}
+      >
         <DialogTitle>Clear current project?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Creating a new project will clear your current project and any unsaved changes will be lost. Are you sure you want to continue?
+            Creating a new project will clear your current project and any
+            unsaved changes will be lost. Are you sure you want to continue?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsConfirmDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleConfirmNewProject} variant="contained" color="primary">
-            Continue
+          <Button onClick={() => setIsNewProjectDialogOpen(false)}>
+            Cancel
           </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog open={isNewProjectDialogOpen} onClose={() => setIsNewProjectDialogOpen(false)}>
-        <DialogTitle>Create New Project</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Project Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={newProjectName}
-            onChange={(e) => setNewProjectName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsNewProjectDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleCreateNewProject} variant="contained" color="primary">
-            Create
+          <Button
+            onClick={handleCreateNewProject}
+            variant="contained"
+            color="primary"
+          >
+            Continue
           </Button>
         </DialogActions>
       </Dialog>
@@ -238,7 +255,7 @@ const TopLeftMenu: React.FC = () => {
       <input
         type="file"
         ref={fileInputRef}
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         onChange={handleFileChange}
         accept=".json"
       />

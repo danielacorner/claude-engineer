@@ -78,11 +78,12 @@ interface AppState {
   openPlantDatabase: () => void;
   saveACopy: () => void;
   openFile: (fileContent: string) => void;
-  createNewProject: (name: string) => void;
+  createNewProject: () => void;
   currentProject: {
     name: string;
     plants: PlantData[];
   };
+  showLabels: boolean;
   shareProject: () => void;
 }
 
@@ -93,6 +94,7 @@ export const useAppStore = create<AppState>(
       selectedPlant: null,
       hoveredPlant: null,
       plants: [],
+      showLabels: false,
       hoveredPosition: null,
       timeOfDay: 12,
       season: "Summer",
@@ -258,8 +260,8 @@ export const useAppStore = create<AppState>(
           console.error("Error parsing file:", error);
         }
       },
-      createNewProject: (name: string) => {
-        console.log("Create New Project functionality to be implemented", name);
+      createNewProject: () => {
+        console.log("Create New Project functionality to be implemented");
       },
       currentProject: {
         name: "Untitled",
