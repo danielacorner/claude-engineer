@@ -79,6 +79,11 @@ interface AppState {
   saveACopy: () => void;
   openFile: (fileContent: string) => void;
   createNewProject: (name: string) => void;
+  currentProject: {
+    name: string;
+    plants: PlantData[];
+  };
+  shareProject: () => void;
 }
 
 export const useAppStore = create<AppState>(
@@ -255,6 +260,13 @@ export const useAppStore = create<AppState>(
       },
       createNewProject: (name: string) => {
         console.log("Create New Project functionality to be implemented", name);
+      },
+      currentProject: {
+        name: "Untitled",
+        plants: [],
+      },
+      shareProject: () => {
+        console.log("Share Project functionality to be implemented");
       },
     }),
     {
