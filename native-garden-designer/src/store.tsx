@@ -1,5 +1,5 @@
 import { StateCreator, create } from "zustand";
-import { PlantData, Plant } from "./types";
+import { PlantData, Plant, ProjectPage } from "./types";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 interface AppState {
@@ -22,6 +22,11 @@ interface AppState {
   tooltipPlant: PlantData | null;
   showPlantSelector: boolean;
   editMode: boolean;
+  currentProject: {
+    name: string;
+    pages: ProjectPage[];
+  } | null;
+  currentPage: number | null;
   setTooltipPlant: (plant: PlantData | null) => void;
   setSelectedPlant: (plant: PlantData | null) => void;
   setHoveredPlant: (plant: PlantData | null) => void;
@@ -41,6 +46,8 @@ interface AppState {
   setErrorMessage: (message: string | null) => void;
   setShowPlantSelector: (show: boolean) => void;
   setEditMode: (edit: boolean) => void;
+  setCurrentPage: (pageIndex: number) => void;
+  addNewPage: () => void;
 
   placePlant: (position: [number, number, number]) => void;
   updatePlantPosition: (
@@ -79,12 +86,8 @@ interface AppState {
   saveACopy: () => void;
   openFile: (fileContent: string) => void;
   createNewProject: () => void;
-  currentProject: {
-    name: string;
-    plants: PlantData[];
-  };
-  showLabels: boolean;
   shareProject: () => void;
+  showLabels: boolean;
 }
 
 export const useAppStore = create<AppState>(
@@ -110,6 +113,8 @@ export const useAppStore = create<AppState>(
       tooltipPlant: null,
       showPlantSelector: false,
       editMode: false,
+      currentProject: null,
+      currentPage: null,
       setTooltipPlant: (plant) => set({ tooltipPlant: plant }),
       setSelectedPlant: (plant) => set({ selectedPlant: plant }),
       setHoveredPlant: (plant) => set({ hoveredPlant: plant }),
@@ -136,43 +141,124 @@ export const useAppStore = create<AppState>(
       setErrorMessage: (message) => set({ errorMessage: message }),
       setShowPlantSelector: (show) => set({ showPlantSelector: show }),
       setEditMode: (edit) => set({ editMode: edit }),
+      setCurrentPage: (pageIndex) => set({ currentPage: pageIndex }),
+      addNewPage: () =>
+        set((state) => {
+          if (state.currentProject) {
+            const newPage: ProjectPage = {
+              plants: [],
+              name: `Page ${state.currentProject.pages.length + 1}`,
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: [...state.currentProject.pages, newPage],
+              },
+              currentPage: state.currentProject.pages.length,
+            };
+          }
+          return state;
+        }),
 
       placePlant: (position) =>
         set((state) => {
-          if (state.selectedPlant) {
+          if (
+            state.selectedPlant &&
+            state.currentProject &&
+            state.currentPage !== null
+          ) {
             const newPlant: Plant = {
               ...state.selectedPlant,
               id: state.plants.length + 1,
               position,
               rotation: [0, Math.random() * 360, 0],
-              // modify the scale a bit at random
               scale: state.selectedPlant.scale.map(
                 (s) => s * (0.8 + Math.random() * 0.4)
               ) as [number, number, number],
+              selected: false,
             };
-            return { plants: [...state.plants, newPlant] };
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPage] = {
+              ...updatedPages[state.currentPage],
+              plants: [...updatedPages[state.currentPage].plants, newPlant],
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: [...state.plants, newPlant],
+            };
           }
           return state;
         }),
 
       updatePlantPosition: (id, newPosition) =>
-        set((state) => ({
-          plants: state.plants.map((plant) =>
-            plant.id === id ? { ...plant, position: newPosition } : plant
-          ),
-        })),
+        set((state) => {
+          if (state.currentProject && state.currentPage !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPage] = {
+              ...updatedPages[state.currentPage],
+              plants: updatedPages[state.currentPage].plants.map((plant) =>
+                plant.id === id ? { ...plant, position: newPosition } : plant
+              ),
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: state.plants.map((plant) =>
+                plant.id === id ? { ...plant, position: newPosition } : plant
+              ),
+            };
+          }
+          return state;
+        }),
 
       removePlant: (id) =>
-        set((state) => ({
-          plants: state.plants.filter((plant) => plant.id !== id),
-        })),
+        set((state) => {
+          if (state.currentProject && state.currentPage !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPage] = {
+              ...updatedPages[state.currentPage],
+              plants: updatedPages[state.currentPage].plants.filter(
+                (plant) => plant.id !== id
+              ),
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: state.plants.filter((plant) => plant.id !== id),
+            };
+          }
+          return state;
+        }),
 
       customizePlant: (id, customizations) =>
-        set((state) => ({
-          plants: state.plants.map((plant) =>
-            plant.id === id ? { ...plant, ...customizations } : plant
-          ),
-        })),
+        set((state) => {
+          if (state.currentProject && state.currentPage !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPage] = {
+              ...updatedPages[state.currentPage],
+              plants: updatedPages[state.currentPage].plants.map((plant) =>
+                plant.id === id ? { ...plant, ...customizations } : plant
+              ),
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: state.plants.map((plant) =>
+                plant.id === id ? { ...plant, ...customizations } : plant
+              ),
+            };
+          }
+          return state;
+        }),
 
       openPlantInfo: (plant) =>
         set(() => ({
@@ -217,7 +303,7 @@ export const useAppStore = create<AppState>(
         console.log("Reset View functionality to be implemented");
       },
       toggleLabels: () => {
-        console.log("Toggle Labels functionality to be implemented");
+        set((state) => ({ showLabels: !state.showLabels }));
       },
       exportAsImage: () => {
         console.log("Export as Image functionality to be implemented");
@@ -261,11 +347,22 @@ export const useAppStore = create<AppState>(
         }
       },
       createNewProject: () => {
-        console.log("Create New Project functionality to be implemented");
-      },
-      currentProject: {
-        name: "Untitled",
-        plants: [],
+        set({
+          currentProject: {
+            name: "Untitled Project",
+            pages: [{ plants: [], name: "Page 1" }],
+          },
+          currentPage: 0,
+          plants: [],
+          showPlantSelector: false,
+          editMode: false,
+          showPlantInfo: null,
+          customizingPlant: null,
+          showEnvironmentControls: false,
+          isDragging: false,
+          isHovered: false,
+          showContextMenu: false,
+        });
       },
       shareProject: () => {
         console.log("Share Project functionality to be implemented");

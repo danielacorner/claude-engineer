@@ -18,4 +18,10 @@ export interface PlantData {
 export interface Plant extends PlantData {
   position: [number, number, number];
   rotation: [number, number, number];
+  selected: boolean;
+}
+
+export interface ProjectPage {
+  name: string;
+  plants: Plant[];
 }

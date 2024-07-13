@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useAppStore } from "../store";
 import {
@@ -8,27 +8,33 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  IconButton,
+  Select,
+  FormControl,
+  MenuItem as MuiMenuItem,
+  ListItemIcon,
+  ListItemText,
+  SelectChangeEvent,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import CheckIcon from "@mui/icons-material/Check";
 
 const MenuContainer = styled.div`
   position: absolute;
   top: 10px;
   left: 10px;
   z-index: 1000;
-`;
-
-const MenuButton = styled.button`
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
+  display: flex;
+  align-items: center;
 `;
 
 const MenuDropdown = styled.div<{ isOpen: boolean }>`
   display: ${(props) => (props.isOpen ? "block" : "none")};
   position: absolute;
+  top: 100%;
+  left: 0;
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -59,9 +65,43 @@ const MenuItemWithSub = styled(MenuItem)`
   }
 `;
 
+const ShortcutIndicator = styled.span`
+  float: right;
+  color: #888;
+  font-size: 0.8em;
+`;
+
+const PageSelectContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+`;
+
+const PageSelect = styled(FormControl)`
+  min-width: 150px;
+`;
+
+const StyledSelect = styled(Select)`
+  height: 40px;
+  min-width: 150px;
+`;
+
+const PageMenuTitle = styled(MuiMenuItem)`
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 8px;
+`;
+
+const PageMenuItem = styled(MuiMenuItem)`
+  padding-left: 32px;
+`;
+
 const TopLeftMenu: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNewProjectDialogOpen, setIsNewProjectDialogOpen] = useState(false);
+  const [isMac, setIsMac] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -90,7 +130,24 @@ const TopLeftMenu: React.FC = () => {
     openAppearanceSettings,
     openKeyboardShortcuts,
     openPlantDatabase,
+    currentPage,
+    setCurrentPage,
+    addNewPage,
   } = useAppStore();
+
+  useEffect(() => {
+    setIsMac(navigator.platform.toUpperCase().indexOf("MAC") >= 0);
+  }, []);
+
+  useEffect(() => {
+    if (
+      currentProject &&
+      currentProject.pages.length > 0 &&
+      currentPage === null
+    ) {
+      setCurrentPage(0);
+    }
+  }, [currentProject, currentPage, setCurrentPage]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -140,9 +197,75 @@ const TopLeftMenu: React.FC = () => {
     setIsMenuOpen(false);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const modKey = isMac ? event.metaKey : event.ctrlKey;
+      if (modKey) {
+        switch (event.key.toLowerCase()) {
+          case "z":
+            if (event.shiftKey) {
+              redo();
+            } else {
+              undo();
+            }
+            event.preventDefault();
+            break;
+          case "y":
+            redo();
+            event.preventDefault();
+            break;
+          case "x":
+            cut();
+            event.preventDefault();
+            break;
+          case "c":
+            copy();
+            event.preventDefault();
+            break;
+          case "v":
+            paste();
+            event.preventDefault();
+            break;
+        }
+      }
+      if (event.key === "Delete" || (isMac && event.key === "Backspace")) {
+        deleteItem();
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [undo, redo, cut, copy, paste, deleteItem, isMac]);
+
+  const modKeySymbol = isMac ? "⌘" : "Ctrl";
+
+  const handlePageChange = (event: SelectChangeEvent<unknown>) => {
+    setCurrentPage(event.target.value as number);
+  };
+
+  const handleAddNewPage = () => {
+    addNewPage();
+  };
+
+  const handleEditPages = () => {
+    // Implement edit pages functionality
+    console.log("Edit pages");
+  };
+
   return (
     <MenuContainer>
-      <MenuButton onClick={toggleMenu}>Menu</MenuButton>
+      <IconButton
+        edge="start"
+        color="inherit"
+        aria-label="menu"
+        onClick={toggleMenu}
+        sx={{ width: 40, height: 40, marginLeft: 0 }}
+      >
+        <MenuIcon />
+      </IconButton>
       <MenuDropdown isOpen={isMenuOpen}>
         <MenuItemWithSub>
           File
@@ -156,15 +279,29 @@ const TopLeftMenu: React.FC = () => {
         <MenuItemWithSub>
           Edit
           <SubMenu>
-            <MenuItem onClick={() => handleMenuItemClick(undo)}>Undo</MenuItem>
-            <MenuItem onClick={() => handleMenuItemClick(redo)}>Redo</MenuItem>
-            <MenuItem onClick={() => handleMenuItemClick(cut)}>Cut</MenuItem>
-            <MenuItem onClick={() => handleMenuItemClick(copy)}>Copy</MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(undo)}>
+              Undo
+              <ShortcutIndicator>{modKeySymbol}+Z</ShortcutIndicator>
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(redo)}>
+              Redo
+              <ShortcutIndicator>{modKeySymbol}+Y</ShortcutIndicator>
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(cut)}>
+              Cut
+              <ShortcutIndicator>{modKeySymbol}+X</ShortcutIndicator>
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(copy)}>
+              Copy
+              <ShortcutIndicator>{modKeySymbol}+C</ShortcutIndicator>
+            </MenuItem>
             <MenuItem onClick={() => handleMenuItemClick(paste)}>
               Paste
+              <ShortcutIndicator>{modKeySymbol}+V</ShortcutIndicator>
             </MenuItem>
             <MenuItem onClick={() => handleMenuItemClick(deleteItem)}>
               Delete
+              <ShortcutIndicator>{isMac ? "⌫" : "Del"}</ShortcutIndicator>
             </MenuItem>
           </SubMenu>
         </MenuItemWithSub>
@@ -226,6 +363,38 @@ const TopLeftMenu: React.FC = () => {
           </SubMenu>
         </MenuItemWithSub>
       </MenuDropdown>
+
+      <PageSelectContainer>
+        <PageSelect>
+          <StyledSelect
+            value={currentPage}
+            onChange={handlePageChange}
+            renderValue={() =>
+              `${currentProject?.pages[currentPage ?? 0]?.name}`
+            }
+          >
+            <PageMenuTitle>
+              Pages
+              <div>
+                <IconButton size="small" onClick={handleEditPages}>
+                  <EditIcon fontSize="small" />
+                </IconButton>
+                <IconButton size="small" onClick={handleAddNewPage}>
+                  <AddIcon fontSize="small" />
+                </IconButton>
+              </div>
+            </PageMenuTitle>
+            {currentProject?.pages.map((page, index) => (
+              <PageMenuItem key={index} value={index}>
+                <ListItemIcon>
+                  {index === currentPage ? <CheckIcon /> : null}
+                </ListItemIcon>
+                <ListItemText>{page.name}</ListItemText>
+              </PageMenuItem>
+            ))}
+          </StyledSelect>
+        </PageSelect>
+      </PageSelectContainer>
 
       <Dialog
         open={isNewProjectDialogOpen}

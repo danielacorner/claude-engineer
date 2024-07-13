@@ -1,4 +1,4 @@
-- when returning code in responses, make sure you always include the full code and do not ever omit sections with e.g. " // ... (keep existing state and functions) " in your responses.
+IMPORTANT: when returning code in responses, make sure you always include the full code and do not ever omit sections with e.g. " // ... (keep existing state and functions) " in your responses.
 
 Continue building the web app found in this folder "native-garden-designer", it's a web app using r3f and ecosystem which allows the user to design a garden or landscape by placing plants along the ground in 3d space. The project has already been started using Vite+r3f and you can find the relevant files in ./native-garden-designer/src folder.
 
@@ -11,38 +11,14 @@ features:
 TODOS:
 
 - implement menu items in native-garden-designer\src\components\TopLeftMenu.tsx
-  - update native-garden-designer\store.tsx to accommodate related items like projects, pages in the global state
-    - user can create new pages within a project
-    - user can create new projects
-    - user can open existing projects
-    - user can save projects
-  - implement the items in these menus
-  - menus: File, Edit, View, Export, Preferences
-  - menu items:
-  menu-File:
-  - New Project
-  - Open File
-  - Save a copy
-  - Share this project
-  menu-Edit:
-  - Undo
-  - Redo
-  - Cut
-  - Copy
-  - Paste
-  - Delete
-  menu-View:
-  - Zoom In
-  - Zoom Out
-  - Reset View
-  - Toggle Grid
-  - Toggle Labels
-  menu-Export:
-  - Export as Image
-  - Export as 3D Model
-  - Export Plant List
-  menu-Preferences:
-  - General Settings
-  - Appearance
-  - Keyboard Shortcuts
-  - Plant Database
+  - update native-garden-designer\store.tsx to accommodate required functionality
+  - implement the following menu items:
+    Edit:
+    - Undo
+    - Redo
+    - Cut
+    - Copy
+    - Paste
+    - Delete
+  - at the same time, add standard keyboard shortcuts for each item, and add indicators to the menu items to show which keyboard shortcut maps to which menu item
+ 
