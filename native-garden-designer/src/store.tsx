@@ -58,11 +58,32 @@ interface AppState {
   setIsHovered: (hovered: false | number) => void;
   showContextMenu: false | number;
   setShowContextMenu: (show: false | number) => void;
+
+  undo: () => void;
+  redo: () => void;
+  cut: () => void;
+  copy: () => void;
+  paste: () => void;
+  delete: () => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
+  resetView: () => void;
+  toggleLabels: () => void;
+  exportAsImage: () => void;
+  exportAs3DModel: () => void;
+  exportPlantList: () => void;
+  openGeneralSettings: () => void;
+  openAppearanceSettings: () => void;
+  openKeyboardShortcuts: () => void;
+  openPlantDatabase: () => void;
+  saveACopy: () => void;
+  openFile: (fileContent: string) => void;
+  createNewProject: (name: string) => void;
 }
 
 export const useAppStore = create<AppState>(
   persist(
-    (set) => ({
+    (set, get) => ({
       allPlants: [],
       selectedPlant: null,
       hoveredPlant: null,
@@ -160,10 +181,85 @@ export const useAppStore = create<AppState>(
       setIsHovered: (hovered) => set({ isHovered: hovered }),
       showContextMenu: false,
       setShowContextMenu: (show) => set({ showContextMenu: show }),
+
+      undo: () => {
+        console.log("Undo functionality to be implemented");
+      },
+      redo: () => {
+        console.log("Redo functionality to be implemented");
+      },
+      cut: () => {
+        console.log("Cut functionality to be implemented");
+      },
+      copy: () => {
+        console.log("Copy functionality to be implemented");
+      },
+      paste: () => {
+        console.log("Paste functionality to be implemented");
+      },
+      delete: () => {
+        console.log("Delete functionality to be implemented");
+      },
+      zoomIn: () => {
+        console.log("Zoom In functionality to be implemented");
+      },
+      zoomOut: () => {
+        console.log("Zoom Out functionality to be implemented");
+      },
+      resetView: () => {
+        console.log("Reset View functionality to be implemented");
+      },
+      toggleLabels: () => {
+        console.log("Toggle Labels functionality to be implemented");
+      },
+      exportAsImage: () => {
+        console.log("Export as Image functionality to be implemented");
+      },
+      exportAs3DModel: () => {
+        console.log("Export as 3D Model functionality to be implemented");
+      },
+      exportPlantList: () => {
+        console.log("Export Plant List functionality to be implemented");
+      },
+      openGeneralSettings: () => {
+        console.log("Open General Settings functionality to be implemented");
+      },
+      openAppearanceSettings: () => {
+        console.log("Open Appearance Settings functionality to be implemented");
+      },
+      openKeyboardShortcuts: () => {
+        console.log("Open Keyboard Shortcuts functionality to be implemented");
+      },
+      openPlantDatabase: () => {
+        console.log("Open Plant Database functionality to be implemented");
+      },
+      saveACopy: () => {
+        const state = get();
+        const jsonState = JSON.stringify(state);
+        const blob = new Blob([jsonState], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "garden_project.json";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
+      openFile: (fileContent: string) => {
+        try {
+          const parsedState = JSON.parse(fileContent);
+          set(parsedState);
+        } catch (error) {
+          console.error("Error parsing file:", error);
+        }
+      },
+      createNewProject: (name: string) => {
+        console.log("Create New Project functionality to be implemented", name);
+      },
     }),
     {
       name: "app",
-      storage: createJSONStorage(() => window.localStorage),
+      storage: createJSONStorage(() => localStorage),
     }
   ) as StateCreator<AppState, [], []>
 );

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
+import { useAppStore } from "../store";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, TextField } from "@mui/material";
 
 const MenuContainer = styled.div`
   position: absolute;
@@ -52,8 +54,93 @@ const MenuItemWithSub = styled(MenuItem)`
 
 const TopLeftMenu: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isNewProjectDialogOpen, setIsNewProjectDialogOpen] = useState(false);
+  const [newProjectName, setNewProjectName] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    createNewProject,
+    openFile,
+    saveACopy,
+    shareProject,
+    setShowGrid,
+    showGrid,
+    currentProject,
+    undo,
+    redo,
+    cut,
+    copy,
+    paste,
+    delete: deleteItem,
+    zoomIn,
+    zoomOut,
+    resetView,
+    toggleLabels,
+    exportAsImage,
+    exportAs3DModel,
+    exportPlantList,
+    openGeneralSettings,
+    openAppearanceSettings,
+    openKeyboardShortcuts,
+    openPlantDatabase,
+  } = useAppStore();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const handleNewProject = () => {
+    setIsConfirmDialogOpen(true);
+    setIsMenuOpen(false);
+  };
+
+  const handleConfirmNewProject = () => {
+    setIsConfirmDialogOpen(false);
+    setIsNewProjectDialogOpen(true);
+  };
+
+  const handleCreateNewProject = () => {
+    if (newProjectName.trim()) {
+      createNewProject(newProjectName.trim());
+      setIsNewProjectDialogOpen(false);
+      setNewProjectName("");
+    }
+  };
+
+  const handleOpenFile = () => {
+    fileInputRef.current?.click();
+    setIsMenuOpen(false);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target?.result as string;
+        openFile(content);
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const handleSaveACopy = () => {
+    saveACopy();
+    setIsMenuOpen(false);
+  };
+
+  const handleShareProject = () => {
+    if (currentProject) {
+      shareProject();
+    } else {
+      alert("No active project to share.");
+    }
+    setIsMenuOpen(false);
+  };
+
+  const handleToggleGrid = () => {
+    setShowGrid(!showGrid);
+    setIsMenuOpen(false);
+  };
 
   return (
     <MenuContainer>
@@ -62,59 +149,99 @@ const TopLeftMenu: React.FC = () => {
         <MenuItemWithSub>
           File
           <SubMenu>
-            <MenuItem
-              onClick={() => {
-                setIsMenuOpen(false);
-              }}
-            >
-              {" "}
-              New Project
-            </MenuItem>
-            <MenuItem>Open Project</MenuItem>
-            <MenuItem>Save</MenuItem>
-            <MenuItem>Save As...</MenuItem>
-            <MenuItem>Close Project</MenuItem>
+            <MenuItem onClick={handleNewProject}>New Project</MenuItem>
+            <MenuItem onClick={handleOpenFile}>Open File</MenuItem>
+            <MenuItem onClick={handleSaveACopy}>Save a copy</MenuItem>
+            <MenuItem onClick={handleShareProject}>Share this project</MenuItem>
           </SubMenu>
         </MenuItemWithSub>
         <MenuItemWithSub>
           Edit
           <SubMenu>
-            <MenuItem>Undo</MenuItem>
-            <MenuItem>Redo</MenuItem>
-            <MenuItem>Cut</MenuItem>
-            <MenuItem>Copy</MenuItem>
-            <MenuItem>Paste</MenuItem>
-            <MenuItem>Delete</MenuItem>
+            <MenuItem onClick={() => { undo(); setIsMenuOpen(false); }}>Undo</MenuItem>
+            <MenuItem onClick={() => { redo(); setIsMenuOpen(false); }}>Redo</MenuItem>
+            <MenuItem onClick={() => { cut(); setIsMenuOpen(false); }}>Cut</MenuItem>
+            <MenuItem onClick={() => { copy(); setIsMenuOpen(false); }}>Copy</MenuItem>
+            <MenuItem onClick={() => { paste(); setIsMenuOpen(false); }}>Paste</MenuItem>
+            <MenuItem onClick={() => { deleteItem(); setIsMenuOpen(false); }}>Delete</MenuItem>
           </SubMenu>
         </MenuItemWithSub>
         <MenuItemWithSub>
           View
           <SubMenu>
-            <MenuItem>Zoom In</MenuItem>
-            <MenuItem>Zoom Out</MenuItem>
-            <MenuItem>Reset View</MenuItem>
-            <MenuItem>Toggle Grid</MenuItem>
-            <MenuItem>Toggle Labels</MenuItem>
+            <MenuItem onClick={() => { zoomIn(); setIsMenuOpen(false); }}>Zoom In</MenuItem>
+            <MenuItem onClick={() => { zoomOut(); setIsMenuOpen(false); }}>Zoom Out</MenuItem>
+            <MenuItem onClick={() => { resetView(); setIsMenuOpen(false); }}>Reset View</MenuItem>
+            <MenuItem onClick={handleToggleGrid}>
+              {showGrid ? "Hide Grid" : "Show Grid"}
+            </MenuItem>
+            <MenuItem onClick={() => { toggleLabels(); setIsMenuOpen(false); }}>Toggle Labels</MenuItem>
           </SubMenu>
         </MenuItemWithSub>
         <MenuItemWithSub>
           Export
           <SubMenu>
-            <MenuItem>Export as Image</MenuItem>
-            <MenuItem>Export as 3D Model</MenuItem>
-            <MenuItem>Export Plant List</MenuItem>
+            <MenuItem onClick={() => { exportAsImage(); setIsMenuOpen(false); }}>Export as Image</MenuItem>
+            <MenuItem onClick={() => { exportAs3DModel(); setIsMenuOpen(false); }}>Export as 3D Model</MenuItem>
+            <MenuItem onClick={() => { exportPlantList(); setIsMenuOpen(false); }}>Export Plant List</MenuItem>
           </SubMenu>
         </MenuItemWithSub>
         <MenuItemWithSub>
           Preferences
           <SubMenu>
-            <MenuItem>General Settings</MenuItem>
-            <MenuItem>Appearance</MenuItem>
-            <MenuItem>Keyboard Shortcuts</MenuItem>
-            <MenuItem>Plant Database</MenuItem>
+            <MenuItem onClick={() => { openGeneralSettings(); setIsMenuOpen(false); }}>General Settings</MenuItem>
+            <MenuItem onClick={() => { openAppearanceSettings(); setIsMenuOpen(false); }}>Appearance</MenuItem>
+            <MenuItem onClick={() => { openKeyboardShortcuts(); setIsMenuOpen(false); }}>Keyboard Shortcuts</MenuItem>
+            <MenuItem onClick={() => { openPlantDatabase(); setIsMenuOpen(false); }}>Plant Database</MenuItem>
           </SubMenu>
         </MenuItemWithSub>
       </MenuDropdown>
+
+      <Dialog open={isConfirmDialogOpen} onClose={() => setIsConfirmDialogOpen(false)}>
+        <DialogTitle>Clear current project?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Creating a new project will clear your current project and any unsaved changes will be lost. Are you sure you want to continue?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsConfirmDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleConfirmNewProject} variant="contained" color="primary">
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={isNewProjectDialogOpen} onClose={() => setIsNewProjectDialogOpen(false)}>
+        <DialogTitle>Create New Project</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Project Name"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={newProjectName}
+            onChange={(e) => setNewProjectName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsNewProjectDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleCreateNewProject} variant="contained" color="primary">
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+        accept=".json"
+      />
     </MenuContainer>
   );
 };
