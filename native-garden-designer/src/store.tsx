@@ -2,6 +2,13 @@ import { StateCreator, create } from "zustand";
 import { PlantData, Plant, ProjectPage } from "./types";
 import { persist, createJSONStorage } from "zustand/middleware";
 
+export type ToolType =
+  | "select"
+  | "move"
+  | "add"
+  | "delete"
+  | "edit"
+  | "terrain";
 interface AppState {
   allPlants: PlantData[];
   selectedPlant: PlantData | null;
@@ -26,8 +33,8 @@ interface AppState {
     name: string;
     pages: ProjectPage[];
   } | null;
-  currentPage: number | null;
-  currentTool: string;
+  currentPageIdx: number | null;
+  currentTool: ToolType;
   setTooltipPlant: (plant: PlantData | null) => void;
   setSelectedPlant: (plant: PlantData | null) => void;
   setHoveredPlant: (plant: PlantData | null) => void;
@@ -47,8 +54,8 @@ interface AppState {
   setErrorMessage: (message: string | null) => void;
   setShowPlantSelector: (show: boolean) => void;
   setEditMode: (edit: boolean) => void;
-  setCurrentPage: (pageIndex: number) => void;
-  setCurrentTool: (tool: string) => void;
+  setcurrentPageIdx: (pageIndex: number) => void;
+  setCurrentTool: (tool: ToolType) => void;
   addNewPage: () => void;
 
   placePlant: (position: [number, number, number]) => void;
@@ -126,7 +133,7 @@ export const useAppStore = create<AppState>(
       showPlantSelector: false,
       editMode: false,
       currentProject: null,
-      currentPage: null,
+      currentPageIdx: null,
       currentTool: "select",
       setTooltipPlant: (plant) => set({ tooltipPlant: plant }),
       setSelectedPlant: (plant) => set({ selectedPlant: plant }),
@@ -154,7 +161,7 @@ export const useAppStore = create<AppState>(
       setErrorMessage: (message) => set({ errorMessage: message }),
       setShowPlantSelector: (show) => set({ showPlantSelector: show }),
       setEditMode: (edit) => set({ editMode: edit }),
-      setCurrentPage: (pageIndex) => set({ currentPage: pageIndex }),
+      setcurrentPageIdx: (pageIndex) => set({ currentPageIdx: pageIndex }),
       setCurrentTool: (tool) => set({ currentTool: tool }),
       addNewPage: () =>
         set((state) => {
@@ -168,7 +175,7 @@ export const useAppStore = create<AppState>(
                 ...state.currentProject,
                 pages: [...state.currentProject.pages, newPage],
               },
-              currentPage: state.currentProject.pages.length,
+              currentPageIdx: state.currentProject.pages.length,
             };
           }
           return state;
@@ -179,7 +186,7 @@ export const useAppStore = create<AppState>(
           if (
             state.selectedPlant &&
             state.currentProject &&
-            state.currentPage !== null
+            state.currentPageIdx !== null
           ) {
             const newPlant: Plant = {
               ...state.selectedPlant,
@@ -192,9 +199,9 @@ export const useAppStore = create<AppState>(
               selected: false,
             };
             const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPage] = {
-              ...updatedPages[state.currentPage],
-              plants: [...updatedPages[state.currentPage].plants, newPlant],
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: [...updatedPages[state.currentPageIdx].plants, newPlant],
             };
             return {
               currentProject: {
@@ -209,11 +216,11 @@ export const useAppStore = create<AppState>(
 
       updatePlantPosition: (id, newPosition) =>
         set((state) => {
-          if (state.currentProject && state.currentPage !== null) {
+          if (state.currentProject && state.currentPageIdx !== null) {
             const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPage] = {
-              ...updatedPages[state.currentPage],
-              plants: updatedPages[state.currentPage].plants.map((plant) =>
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
                 plant.id === id ? { ...plant, position: newPosition } : plant
               ),
             };
@@ -232,11 +239,11 @@ export const useAppStore = create<AppState>(
 
       removePlant: (id) =>
         set((state) => {
-          if (state.currentProject && state.currentPage !== null) {
+          if (state.currentProject && state.currentPageIdx !== null) {
             const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPage] = {
-              ...updatedPages[state.currentPage],
-              plants: updatedPages[state.currentPage].plants.filter(
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPages[state.currentPageIdx].plants.filter(
                 (plant) => plant.id !== id
               ),
             };
@@ -253,11 +260,11 @@ export const useAppStore = create<AppState>(
 
       customizePlant: (id, customizations) =>
         set((state) => {
-          if (state.currentProject && state.currentPage !== null) {
+          if (state.currentProject && state.currentPageIdx !== null) {
             const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPage] = {
-              ...updatedPages[state.currentPage],
-              plants: updatedPages[state.currentPage].plants.map((plant) =>
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
                 plant.id === id ? { ...plant, ...customizations } : plant
               ),
             };
@@ -366,7 +373,7 @@ export const useAppStore = create<AppState>(
             name: "Untitled Project",
             pages: [{ plants: [] as Plant[], name: "Untitled Page" }],
           },
-          currentPage: 0,
+          currentPageIdx: 0,
           plants: [],
           showPlantSelector: false,
           editMode: false,
@@ -395,11 +402,11 @@ export const useAppStore = create<AppState>(
 
       updateSelectedPlantsPosition: (newPosition) =>
         set((state) => {
-          if (state.currentProject && state.currentPage !== null) {
+          if (state.currentProject && state.currentPageIdx !== null) {
             const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPage] = {
-              ...updatedPages[state.currentPage],
-              plants: updatedPages[state.currentPage].plants.map((plant) =>
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
                 state.selectedPlantIds.includes(plant.id)
                   ? { ...plant, position: newPosition }
                   : plant
@@ -422,11 +429,11 @@ export const useAppStore = create<AppState>(
 
       removeSelectedPlants: () =>
         set((state) => {
-          if (state.currentProject && state.currentPage !== null) {
+          if (state.currentProject && state.currentPageIdx !== null) {
             const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPage] = {
-              ...updatedPages[state.currentPage],
-              plants: updatedPages[state.currentPage].plants.filter(
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPages[state.currentPageIdx].plants.filter(
                 (plant) => !state.selectedPlantIds.includes(plant.id)
               ),
             };
@@ -446,11 +453,11 @@ export const useAppStore = create<AppState>(
 
       customizeSelectedPlants: (customizations) =>
         set((state) => {
-          if (state.currentProject && state.currentPage !== null) {
+          if (state.currentProject && state.currentPageIdx !== null) {
             const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPage] = {
-              ...updatedPages[state.currentPage],
-              plants: updatedPages[state.currentPage].plants.map((plant) =>
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
                 state.selectedPlantIds.includes(plant.id)
                   ? { ...plant, ...customizations }
                   : plant

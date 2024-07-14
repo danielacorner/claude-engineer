@@ -6,7 +6,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import TerrainIcon from "@mui/icons-material/Terrain";
-import { useAppStore } from "../store";
+import { ToolType, useAppStore } from "../store";
 import { RxCursorArrow } from "react-icons/rx";
 
 const ToolbarContainer = styled.div`
@@ -40,7 +40,7 @@ const StyledIconButton = styled(IconButton)<{ $active: boolean }>`
   }
 `;
 
-const tools = [
+const tools: { name: ToolType; icon: any; tooltip: string }[] = [
   { name: "select", icon: RxCursorArrow, tooltip: "Select" },
   { name: "move", icon: PanToolIcon, tooltip: "Move" },
   { name: "add", icon: AddCircleOutlineIcon, tooltip: "Add Plant" },
@@ -52,7 +52,7 @@ const tools = [
 const BottomToolbar: React.FC = () => {
   const { currentTool, setCurrentTool } = useAppStore();
 
-  const handleToolClick = (toolName: string) => {
+  const handleToolClick = (toolName: ToolType) => {
     setCurrentTool(toolName);
   };
 

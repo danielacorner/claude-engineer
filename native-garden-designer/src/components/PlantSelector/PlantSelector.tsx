@@ -20,13 +20,13 @@ const PlantSelector: React.FC = () => {
   const [[searchTerm, isFirstLetterOnly], setSearchTerm] = useState<
     [string, boolean]
   >(["", false]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageIdx, setcurrentPageIdx] = useState(1);
   const [customColor, setCustomColor] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setCurrentPage(1);
+    setcurrentPageIdx(1);
   }, [searchTerm, selectedCategory]);
 
   const categories = useMemo(() => {
@@ -66,8 +66,8 @@ const PlantSelector: React.FC = () => {
     firstLetterFilteredPlants.length / ITEMS_PER_PAGE
   );
   const paginatedPlants = firstLetterFilteredPlants.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (currentPageIdx - 1) * ITEMS_PER_PAGE,
+    currentPageIdx * ITEMS_PER_PAGE
   );
 
   const handleColorChange = (color: string) => {
@@ -137,10 +137,10 @@ const PlantSelector: React.FC = () => {
               <button
                 key={i}
                 onClick={() => {
-                  setCurrentPage(i + 1);
+                  setcurrentPageIdx(i + 1);
                   // setSearchTerm([searchTerm[0], false]);
                 }}
-                className={currentPage === i + 1 ? "activePage" : ""}
+                className={currentPageIdx === i + 1 ? "activePage" : ""}
               >
                 {i + 1}
               </button>
@@ -157,7 +157,7 @@ const PlantSelector: React.FC = () => {
                       String.fromCharCode(65 + i).toLowerCase(),
                       true,
                     ]);
-                    setCurrentPage(1);
+                    setcurrentPageIdx(1);
                   }}
                   className={
                     isFirstLetterOnly &&
@@ -172,7 +172,7 @@ const PlantSelector: React.FC = () => {
               );
             })}
             <button onClick={() => setSearchTerm(["", false])}>Clear</button>
-            <button onClick={() => setCurrentPage(1)}>Reset</button>
+            <button onClick={() => setcurrentPageIdx(1)}>Reset</button>
             <button onClick={() => setSelectedPlant(null)}>Deselect</button>
           </div>
           {selectedPlant && (

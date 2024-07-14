@@ -9,7 +9,7 @@ export function PlantsInstances({
 }: {
   groundRef: React.RefObject<any>;
 }) {
-  const { plants, selectedPlant, hoveredPosition } = useAppStore();
+  const { plants, selectedPlant, hoveredPosition, currentTool } = useAppStore();
   return (
     <Suspense fallback={null}>
       {plants.map((plant) => (
@@ -20,7 +20,7 @@ export function PlantsInstances({
           groundRef={groundRef}
         />
       ))}
-      {selectedPlant && hoveredPosition && (
+      {selectedPlant && hoveredPosition && currentTool === "add" && (
         <PlantPreview
           plant={selectedPlant}
           cursorPosition={

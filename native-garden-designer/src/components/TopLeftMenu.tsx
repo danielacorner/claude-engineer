@@ -36,6 +36,15 @@ const MenuContainer = styled.div`
   background: #ffffff73;
   padding: 4px;
   padding-left: 16px;
+  * {
+    font-size: 16px !important;
+  }
+  .MuiSelect-select {
+    padding: 12px;
+  }
+  .MuiInputBase-root {
+    height: 32px;
+  }
 `;
 
 const MenuDropdown = styled.div<{ isOpen: boolean }>`
@@ -142,8 +151,8 @@ const TopLeftMenu: React.FC = () => {
     openAppearanceSettings,
     openKeyboardShortcuts,
     openPlantDatabase,
-    currentPage,
-    setCurrentPage,
+    currentPageIdx,
+    setcurrentPageIdx,
     addNewPage,
   } = useAppStore();
 
@@ -155,11 +164,11 @@ const TopLeftMenu: React.FC = () => {
     if (
       currentProject &&
       currentProject.pages.length > 0 &&
-      currentPage === null
+      currentPageIdx === null
     ) {
-      setCurrentPage(0);
+      setcurrentPageIdx(0);
     }
-  }, [currentProject, currentPage, setCurrentPage]);
+  }, [currentProject, currentPageIdx, setcurrentPageIdx]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -255,7 +264,7 @@ const TopLeftMenu: React.FC = () => {
   const modKeySymbol = isMac ? "⌘" : "Ctrl";
 
   const handlePageChange = (event: SelectChangeEvent<unknown>) => {
-    setCurrentPage(event.target.value as number);
+    setcurrentPageIdx(event.target.value as number);
   };
 
   const handleAddNewPage = () => {
@@ -384,12 +393,17 @@ const TopLeftMenu: React.FC = () => {
       <PageSelectContainer>
         <PageSelect>
           <StyledSelect
-            value={currentPage}
+            value={currentPageIdx}
             onChange={handlePageChange}
             renderValue={() => "Pages"}
           >
             <PageMenuTitle>
-              Pages
+              {currentPageIdx === -1
+                ? "No pages"
+                : `${
+                    currentProject?.pages[currentPageIdx ?? 0]?.name ??
+                    `Page ${(currentPageIdx ?? 0) + 1}`
+                  }`}
               <div>
                 <IconButton size="small" onClick={handleEditPages}>
                   <EditIcon fontSize="small" />
@@ -402,7 +416,7 @@ const TopLeftMenu: React.FC = () => {
             {currentProject?.pages.map((_page, index) => (
               <PageMenuItem key={index} value={index}>
                 <ListItemIcon>
-                  {index === currentPage ? <CheckIcon /> : null}
+                  {index === currentPageIdx ? <CheckIcon /> : null}
                 </ListItemIcon>
                 <ListItemText>Page {index + 1}</ListItemText>
               </PageMenuItem>

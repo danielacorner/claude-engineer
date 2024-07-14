@@ -21,6 +21,7 @@ export const GardenScene: React.FC = () => {
     placePlant,
     isDragging,
     isHovered,
+    currentTool,
   } = useAppStore();
 
   const orbitControlsRef = useRef<any>();
@@ -37,7 +38,7 @@ export const GardenScene: React.FC = () => {
     } else {
       orbitControlsRef.current.enabled = true;
     }
-  }, [isDragging]);
+  }, [isDragging, isHovered]);
 
   const fogColor = useMemo(() => {
     const color = new THREE.Color();
@@ -91,7 +92,7 @@ export const GardenScene: React.FC = () => {
         castShadow
       />
       <Sky sunPosition={sunPosition} />
-      <OrbitControls ref={orbitControlsRef} />
+      <OrbitControls ref={orbitControlsRef} enabled={currentTool === "move"} />
       <Ground
         ref={groundRef}
         onPlantPlace={placePlant}

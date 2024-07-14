@@ -1,13 +1,16 @@
-import React from 'react';
-import { useThree } from '@react-three/fiber';
-import * as THREE from 'three';
+import React from "react";
+import { useThree } from "@react-three/fiber";
+import * as THREE from "three";
 
 interface SelectionRectangleProps {
   start: [number, number] | null;
   end: [number, number] | null;
 }
 
-const SelectionRectangle: React.FC<SelectionRectangleProps> = ({ start, end }) => {
+const SelectionRectangle: React.FC<SelectionRectangleProps> = ({
+  start,
+  end,
+}) => {
   const { camera, size } = useThree();
 
   if (!start || !end) return null;
@@ -35,15 +38,19 @@ const SelectionRectangle: React.FC<SelectionRectangleProps> = ({ start, end }) =
     <line>
       <bufferGeometry>
         <bufferAttribute
-          attachObject={['attributes', 'position']}
+          {...({
+            attachObject: ["attributes", "position"],
+          } as any)}
           count={5}
-          array={new Float32Array([
-            ...points[0].toArray(),
-            ...points[1].toArray(),
-            ...points[2].toArray(),
-            ...points[3].toArray(),
-            ...points[0].toArray(),
-          ])}
+          array={
+            new Float32Array([
+              ...points[0].toArray(),
+              ...points[1].toArray(),
+              ...points[2].toArray(),
+              ...points[3].toArray(),
+              ...points[0].toArray(),
+            ])
+          }
           itemSize={3}
         />
       </bufferGeometry>

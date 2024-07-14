@@ -1,17 +1,9 @@
-import React, { useMemo, useRef, useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Sky } from "@react-three/drei";
-import Ground from "./components/Ground";
+import React, { useRef, useEffect, useState } from "react";
 import PlantSelector from "./components/PlantSelector/PlantSelector";
-import RainEffect from "./components/RainEffect";
-import WindEffect from "./components/WindEffect";
-import GridSystem from "./components/GridSystem";
 import { Plant } from "./types";
 import ErrorBoundary from "./components/ErrorBoundary";
-import * as THREE from "three";
 import { getAllPlants } from "./data/plantDatabase";
 import { useAppStore } from "./store";
-import { PlantsInstances } from "./components/PlantsInstances";
 import BottomToolbar from "./components/BottomToolbar";
 import TopLeftMenu from "./components/TopLeftMenu"; // Import the new TopLeftMenu component
 import { GardenScene } from "./components/GardenScene";
@@ -20,21 +12,14 @@ const App: React.FC = () => {
   const {
     setTooltipPlant,
     showPlantInfo,
-    rainIntensity,
-    windSpeed,
-    cloudCover,
-    showGrid,
     setSelectedPlant,
-    setHoveredPosition,
-    placePlant,
     setShowPlantInfo,
     isDragging,
     isHovered,
   } = useAppStore();
 
   const orbitControlsRef = useRef<any>();
-  const groundRef = useRef<any>(null);
-  const [heightMap, setHeightMap] = useState<number[][]>([]);
+  const [_heightMap, setHeightMap] = useState<number[][]>([]);
 
   // disable orbitControls while dragging
   useEffect(() => {
@@ -47,15 +32,6 @@ const App: React.FC = () => {
       orbitControlsRef.current.enabled = true;
     }
   }, [isDragging]);
-
-  const fogColor = useMemo(() => {
-    const color = new THREE.Color();
-    color.setHSL(0.6, 0.7, 0.9);
-    return color;
-  }, []);
-
-  const lightIntensity = 1.5;
-  const sunPosition = new THREE.Vector3(0, 10, 0);
 
   useEffect(() => {
     // Load initial plant data
@@ -71,14 +47,6 @@ const App: React.FC = () => {
       .map(() => Array(size).fill(0));
     setHeightMap(initialHeightMap);
   }, [setSelectedPlant]);
-
-  const handleGroundHeightChange = (x: number, y: number, height: number) => {
-    setHeightMap((prevHeightMap) => {
-      const newHeightMap = [...prevHeightMap];
-      newHeightMap[x][y] = height;
-      return newHeightMap;
-    });
-  };
 
   return (
     <div
