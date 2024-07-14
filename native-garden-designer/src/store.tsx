@@ -90,6 +90,16 @@ interface AppState {
   createNewProject: () => void;
   shareProject: () => void;
   showLabels: boolean;
+
+  selectedPlantIds: number[];
+  setSelectedPlantIds: (ids: number[]) => void;
+  addToSelection: (id: number) => void;
+  removeFromSelection: (id: number) => void;
+  clearSelection: () => void;
+
+  updateSelectedPlantsPosition: (newPosition: [number, number, number]) => void;
+  removeSelectedPlants: () => void;
+  customizeSelectedPlants: (customizations: Partial<Plant>) => void;
 }
 
 export const useAppStore = create<AppState>(
@@ -117,7 +127,7 @@ export const useAppStore = create<AppState>(
       editMode: false,
       currentProject: null,
       currentPage: null,
-      currentTool: 'select',
+      currentTool: "select",
       setTooltipPlant: (plant) => set({ tooltipPlant: plant }),
       setSelectedPlant: (plant) => set({ selectedPlant: plant }),
       setHoveredPlant: (plant) => set({ hoveredPlant: plant }),
@@ -146,23 +156,31 @@ export const useAppStore = create<AppState>(
       setEditMode: (edit) => set({ editMode: edit }),
       setCurrentPage: (pageIndex) => set({ currentPage: pageIndex }),
       setCurrentTool: (tool) => set({ currentTool: tool }),
-      addNewPage: () => set((state) => {
-        if (state.currentProject) {
-          const newPage: ProjectPage = { plants: [] };
-          return {
-            currentProject: {
-              ...state.currentProject,
-              pages: [...state.currentProject.pages, newPage],
-            },
-            currentPage: state.currentProject.pages.length,
-          };
-        }
-        return state;
-      }),
+      addNewPage: () =>
+        set((state) => {
+          if (state.currentProject) {
+            const newPage: ProjectPage = {
+              plants: [],
+              name: "Page " + state.currentProject.pages.length,
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: [...state.currentProject.pages, newPage],
+              },
+              currentPage: state.currentProject.pages.length,
+            };
+          }
+          return state;
+        }),
 
       placePlant: (position) =>
         set((state) => {
-          if (state.selectedPlant && state.currentProject && state.currentPage !== null) {
+          if (
+            state.selectedPlant &&
+            state.currentProject &&
+            state.currentPage !== null
+          ) {
             const newPlant: Plant = {
               ...state.selectedPlant,
               id: state.plants.length + 1,
@@ -171,6 +189,7 @@ export const useAppStore = create<AppState>(
               scale: state.selectedPlant.scale.map(
                 (s) => s * (0.8 + Math.random() * 0.4)
               ) as [number, number, number],
+              selected: false,
             };
             const updatedPages = [...state.currentProject.pages];
             updatedPages[state.currentPage] = {
@@ -217,7 +236,9 @@ export const useAppStore = create<AppState>(
             const updatedPages = [...state.currentProject.pages];
             updatedPages[state.currentPage] = {
               ...updatedPages[state.currentPage],
-              plants: updatedPages[state.currentPage].plants.filter((plant) => plant.id !== id),
+              plants: updatedPages[state.currentPage].plants.filter(
+                (plant) => plant.id !== id
+              ),
             };
             return {
               currentProject: {
@@ -343,7 +364,7 @@ export const useAppStore = create<AppState>(
         set({
           currentProject: {
             name: "Untitled Project",
-            pages: [{ plants: [] }],
+            pages: [{ plants: [] as Plant[], name: "Untitled Page" }],
           },
           currentPage: 0,
           plants: [],
@@ -360,6 +381,95 @@ export const useAppStore = create<AppState>(
       shareProject: () => {
         console.log("Share Project functionality to be implemented");
       },
+      selectedPlantIds: [],
+      setSelectedPlantIds: (ids) => set({ selectedPlantIds: ids }),
+      addToSelection: (id) =>
+        set((state) => ({ selectedPlantIds: [...state.selectedPlantIds, id] })),
+      removeFromSelection: (id) =>
+        set((state) => ({
+          selectedPlantIds: state.selectedPlantIds.filter(
+            (plantId) => plantId !== id
+          ),
+        })),
+      clearSelection: () => set({ selectedPlantIds: [] }),
+
+      updateSelectedPlantsPosition: (newPosition) =>
+        set((state) => {
+          if (state.currentProject && state.currentPage !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPage] = {
+              ...updatedPages[state.currentPage],
+              plants: updatedPages[state.currentPage].plants.map((plant) =>
+                state.selectedPlantIds.includes(plant.id)
+                  ? { ...plant, position: newPosition }
+                  : plant
+              ),
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: state.plants.map((plant) =>
+                state.selectedPlantIds.includes(plant.id)
+                  ? { ...plant, position: newPosition }
+                  : plant
+              ),
+            };
+          }
+          return state;
+        }),
+
+      removeSelectedPlants: () =>
+        set((state) => {
+          if (state.currentProject && state.currentPage !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPage] = {
+              ...updatedPages[state.currentPage],
+              plants: updatedPages[state.currentPage].plants.filter(
+                (plant) => !state.selectedPlantIds.includes(plant.id)
+              ),
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: state.plants.filter(
+                (plant) => !state.selectedPlantIds.includes(plant.id)
+              ),
+              selectedPlantIds: [],
+            };
+          }
+          return state;
+        }),
+
+      customizeSelectedPlants: (customizations) =>
+        set((state) => {
+          if (state.currentProject && state.currentPage !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPage] = {
+              ...updatedPages[state.currentPage],
+              plants: updatedPages[state.currentPage].plants.map((plant) =>
+                state.selectedPlantIds.includes(plant.id)
+                  ? { ...plant, ...customizations }
+                  : plant
+              ),
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: state.plants.map((plant) =>
+                state.selectedPlantIds.includes(plant.id)
+                  ? { ...plant, ...customizations }
+                  : plant
+              ),
+            };
+          }
+          return state;
+        }),
     }),
     {
       name: "app",

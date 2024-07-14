@@ -396,7 +396,7 @@ const TopLeftMenu: React.FC = () => {
                 </IconButton>
               </div>
             </PageMenuTitle>
-            {currentProject?.pages.map((page, index) => (
+            {currentProject?.pages.map((_page, index) => (
               <PageMenuItem key={index} value={index}>
                 <ListItemIcon>
                   {index === currentPage ? <CheckIcon /> : null}
