@@ -134,7 +134,7 @@ export const useAppStore = create<AppState>(
       editMode: false,
       currentProject: null,
       currentPageIdx: null,
-      currentTool: "select",
+      currentTool: "add",
       setTooltipPlant: (plant) => set({ tooltipPlant: plant }),
       setSelectedPlant: (plant) => set({ selectedPlant: plant }),
       setHoveredPlant: (plant) => set({ hoveredPlant: plant }),
@@ -186,7 +186,8 @@ export const useAppStore = create<AppState>(
           if (
             state.selectedPlant &&
             state.currentProject &&
-            state.currentPageIdx !== null
+            state.currentPageIdx !== null &&
+            state.currentTool === "add"
           ) {
             const newPlant: Plant = {
               ...state.selectedPlant,

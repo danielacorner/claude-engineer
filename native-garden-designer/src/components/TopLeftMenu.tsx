@@ -25,6 +25,7 @@ import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { isMac } from "../constants";
 
 const MenuContainer = styled.div`
   position: absolute;
@@ -122,7 +123,6 @@ const ActionButtonsContainer = styled.div`
 const TopLeftMenu: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNewProjectDialogOpen, setIsNewProjectDialogOpen] = useState(false);
-  const [isMac, setIsMac] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -154,11 +154,8 @@ const TopLeftMenu: React.FC = () => {
     currentPageIdx,
     setcurrentPageIdx,
     addNewPage,
+    setCurrentTool,
   } = useAppStore();
-
-  useEffect(() => {
-    setIsMac(navigator.platform.toUpperCase().indexOf("MAC") >= 0);
-  }, []);
 
   useEffect(() => {
     if (
@@ -259,7 +256,7 @@ const TopLeftMenu: React.FC = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [undo, redo, cut, copy, paste, deleteItem, isMac]);
+  }, [undo, redo, cut, copy, paste, deleteItem, setCurrentTool]);
 
   const modKeySymbol = isMac ? "⌘" : "Ctrl";
 

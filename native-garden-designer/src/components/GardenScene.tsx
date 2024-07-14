@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { getAllPlants } from "../data/plantDatabase";
 import { useAppStore } from "../store";
 import { PlantsInstances } from "./PlantsInstances";
-
+const { DOLLY, PAN, ROTATE } = THREE.MOUSE;
 export const GardenScene: React.FC = () => {
   const {
     rainIntensity,
@@ -92,7 +92,14 @@ export const GardenScene: React.FC = () => {
         castShadow
       />
       <Sky sunPosition={sunPosition} />
-      <OrbitControls ref={orbitControlsRef} enabled={currentTool === "move"} />
+      <OrbitControls
+        ref={orbitControlsRef}
+        mouseButtons={{
+          LEFT: currentTool === "select" ? undefined : ROTATE,
+          MIDDLE: currentTool === "select" ? DOLLY : PAN,
+          RIGHT: currentTool === "select" ? ROTATE : PAN,
+        }}
+      />
       <Ground
         ref={groundRef}
         onPlantPlace={placePlant}

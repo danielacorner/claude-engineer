@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { IconButton, Tooltip } from "@mui/material";
 import PanToolIcon from "@mui/icons-material/PanTool";
@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import TerrainIcon from "@mui/icons-material/Terrain";
 import { ToolType, useAppStore } from "../store";
 import { RxCursorArrow } from "react-icons/rx";
+import { isMac } from "../constants";
 
 const ToolbarContainer = styled.div`
   position: fixed;
@@ -40,13 +41,18 @@ const StyledIconButton = styled(IconButton)<{ $active: boolean }>`
   }
 `;
 
-const tools: { name: ToolType; icon: any; tooltip: string }[] = [
-  { name: "select", icon: RxCursorArrow, tooltip: "Select" },
-  { name: "move", icon: PanToolIcon, tooltip: "Move" },
-  { name: "add", icon: AddCircleOutlineIcon, tooltip: "Add Plant" },
-  { name: "delete", icon: DeleteIcon, tooltip: "Delete Plant" },
-  { name: "edit", icon: EditIcon, tooltip: "Edit Plant" },
-  { name: "terrain", icon: TerrainIcon, tooltip: "Edit Terrain" },
+const tools: { kbd: string; name: ToolType; icon: any; tooltip: string }[] = [
+  { kbd: "s", name: "select", icon: RxCursorArrow, tooltip: "Select (S)" },
+  { kbd: "m", name: "move", icon: PanToolIcon, tooltip: "Move (M)" },
+  {
+    kbd: "a",
+    name: "add",
+    icon: AddCircleOutlineIcon,
+    tooltip: "Add Plant (A)",
+  },
+  { kbd: "d", name: "delete", icon: DeleteIcon, tooltip: "Delete Plant (D)" },
+  { kbd: "e", name: "edit", icon: EditIcon, tooltip: "Edit Plant (E)" },
+  { kbd: "t", name: "terrain", icon: TerrainIcon, tooltip: "Edit Terrain (T)" },
 ];
 
 const BottomToolbar: React.FC = () => {
@@ -55,6 +61,44 @@ const BottomToolbar: React.FC = () => {
   const handleToolClick = (toolName: ToolType) => {
     setCurrentTool(toolName);
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const modKey = isMac ? event.metaKey : event.ctrlKey;
+      if (modKey) {
+        switch (event.key.toLowerCase()) {
+          case "m":
+            setCurrentTool("move");
+            event.preventDefault();
+            break;
+          case "s":
+            setCurrentTool("select");
+            event.preventDefault();
+            break;
+          case "a":
+            setCurrentTool("add");
+            event.preventDefault();
+            break;
+          case "d":
+            setCurrentTool("delete");
+            event.preventDefault();
+            break;
+          case "e":
+            setCurrentTool("edit");
+            event.preventDefault();
+            break;
+          case "t":
+            setCurrentTool("terrain");
+            event.preventDefault();
+            break;
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [setCurrentTool]);
 
   return (
     <ToolbarContainer>

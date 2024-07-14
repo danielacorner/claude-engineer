@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PlantSelector from "./components/PlantSelector/PlantSelector";
 import { Plant } from "./types";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -9,29 +9,10 @@ import TopLeftMenu from "./components/TopLeftMenu"; // Import the new TopLeftMen
 import { GardenScene } from "./components/GardenScene";
 
 const App: React.FC = () => {
-  const {
-    setTooltipPlant,
-    showPlantInfo,
-    setSelectedPlant,
-    setShowPlantInfo,
-    isDragging,
-    isHovered,
-  } = useAppStore();
+  const { setTooltipPlant, showPlantInfo, setSelectedPlant, setShowPlantInfo } =
+    useAppStore();
 
-  const orbitControlsRef = useRef<any>();
   const [_heightMap, setHeightMap] = useState<number[][]>([]);
-
-  // disable orbitControls while dragging
-  useEffect(() => {
-    if (!orbitControlsRef.current) {
-      return;
-    }
-    if (isDragging || isHovered) {
-      orbitControlsRef.current.enabled = false;
-    } else {
-      orbitControlsRef.current.enabled = true;
-    }
-  }, [isDragging]);
 
   useEffect(() => {
     // Load initial plant data
