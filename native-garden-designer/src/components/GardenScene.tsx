@@ -1,15 +1,13 @@
 import React, { useMemo, useRef, useEffect, useState } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sky } from "@react-three/drei";
 import Ground from "./Ground";
 import RainEffect from "./RainEffect";
 import WindEffect from "./WindEffect";
 import GridSystem from "./GridSystem";
 import * as THREE from "three";
-import { getAllPlants } from "../data/plantDatabase";
 import { useAppStore } from "../store";
 import { PlantsInstances } from "./PlantsInstances";
-import SelectionRectangle from "./SelectionRectangle";
 
 export const GardenScene: React.FC = () => {
   const {
@@ -72,8 +70,8 @@ export const GardenScene: React.FC = () => {
       shadows
       camera={{ position: [0, 5, 10], fov: 50 }}
       onContextMenu={(e) => e.preventDefault()}
+      style={{ height: "100vh" }}
     >
-      <HandleSelectPlants />
       <fog attach="fog" args={[fogColor, 10, 100]} />
       <ambientLight intensity={lightIntensity * 0.5 * (1 - cloudCover * 0.5)} />
       <pointLight
@@ -112,100 +110,3 @@ export const GardenScene: React.FC = () => {
     </Canvas>
   );
 };
-
-function HandleSelectPlants() {
-  const {
-    setSelectedPlant,
-
-    currentTool,
-
-    setSelectedPlantIds,
-  } = useAppStore();
-
-  const [selectionStart, setSelectionStart] = useState<[number, number] | null>(
-    null
-  );
-  const [selectionEnd, setSelectionEnd] = useState<[number, number] | null>(
-    null
-  );
-
-  const { camera, scene } = useThree();
-
-  useEffect(() => {
-    // Load initial plant data
-    const allPlants = getAllPlants();
-    if (allPlants.length > 0) {
-      setSelectedPlant(allPlants[0]);
-    }
-  }, [setSelectedPlant]);
-
-  const handlePointerDown = (event: PointerEvent) => {
-    if (currentTool === "select" && event.button === 0) {
-      setSelectionStart([event.clientX, event.clientY]);
-      setSelectionEnd(null);
-    }
-  };
-
-  const handlePointerMove = (event: PointerEvent) => {
-    if (currentTool === "select" && selectionStart) {
-      setSelectionEnd([event.clientX, event.clientY]);
-    }
-  };
-
-  const handlePointerUp = (_event: PointerEvent) => {
-    if (currentTool === "select" && selectionStart && selectionEnd) {
-      const selectedPlants = getSelectedPlants(selectionStart, selectionEnd);
-      setSelectedPlantIds(selectedPlants.map((plant) => plant.id));
-      setSelectionStart(null);
-      setSelectionEnd(null);
-    }
-  };
-
-  const getSelectedPlants = (
-    start: [number, number],
-    end: [number, number]
-  ) => {
-    const selectedPlants = [];
-    const plants = scene.children.filter((child) => child.userData.isPlant);
-
-    for (const plant of plants) {
-      const screenPosition = new THREE.Vector3();
-      screenPosition.setFromMatrixPosition(plant.matrixWorld);
-      screenPosition.project(camera);
-
-      const x = ((screenPosition.x + 1) * window.innerWidth) / 2;
-      const y = ((-screenPosition.y + 1) * window.innerHeight) / 2;
-
-      if (
-        x >= Math.min(start[0], end[0]) &&
-        x <= Math.max(start[0], end[0]) &&
-        y >= Math.min(start[1], end[1]) &&
-        y <= Math.max(start[1], end[1])
-      ) {
-        selectedPlants.push(plant);
-      }
-    }
-
-    return selectedPlants;
-  };
-
-  // handle mouse events if mouse is hovered over the canvas
-  // (attach the handler to the window, and just detect when the mouse is over the canvas)
-  useEffect(() => {
-    const canvas = document.getElementById("canvas");
-    if (!canvas) {
-      return;
-    }
-    window.addEventListener("pointerdown", handlePointerDown);
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerup", handlePointerUp);
-
-    return () => {
-      window.removeEventListener("pointerdown", handlePointerDown);
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", handlePointerUp);
-    };
-  }, [handlePointerDown, handlePointerMove, handlePointerUp]);
-
-  return <SelectionRectangle start={selectionStart} end={selectionEnd} />;
-}

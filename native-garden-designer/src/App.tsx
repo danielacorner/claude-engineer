@@ -1,99 +1,58 @@
-import React, { useEffect } from "react";
-import PlantSelector from "./components/PlantSelector/PlantSelector";
-import { Plant } from "./types";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { getAllPlants } from "./data/plantDatabase";
-import { useAppStore } from "./store";
-import BottomToolbar from "./components/BottomToolbar";
-import TopLeftMenu from "./components/TopLeftMenu"; // Import the new TopLeftMenu component
+import React, { useState } from "react";
 import { GardenScene } from "./components/GardenScene";
+import BottomToolbar from "./components/BottomToolbar";
+import TopLeftMenu from "./components/TopLeftMenu";
+import PlantSelector from "./components/PlantSelector/PlantSelector";
+import SelectionRectangle from "./components/SelectionRectangle";
+import { useAppStore } from "./store";
 
-const App: React.FC = () => {
-  const { setTooltipPlant, showPlantInfo, setSelectedPlant, setShowPlantInfo } =
-    useAppStore();
-
-  useEffect(() => {
-    // Load initial plant data
-    const allPlants = getAllPlants();
-    if (allPlants.length > 0) {
-      setSelectedPlant(allPlants[0]);
-    }
-  }, [setSelectedPlant]);
-
-  return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        position: "relative",
-        zIndex: 1,
-      }}
-      onClick={() => {
-        setTooltipPlant(null);
-      }}
-    >
-      <TopLeftMenu /> {/* Add the TopLeftMenu component here */}
-      <GardenScene />
-      <ErrorBoundary>
-        <PlantSelector />
-      </ErrorBoundary>
-      {showPlantInfo && (
-        <PlantInfoModal
-          plant={showPlantInfo}
-          onClose={() => setShowPlantInfo(null)}
-        />
-      )}
-      <BottomToolbar />
-    </div>
+function App() {
+  const { currentTool } = useAppStore();
+  const [selectionStart, setSelectionStart] = useState<[number, number] | null>(
+    null
   );
-};
+  const [selectionEnd, setSelectionEnd] = useState<[number, number] | null>(
+    null
+  );
 
-export default App;
+  const handlePointerDown = (event: React.PointerEvent) => {
+    if (currentTool === "select" && event.button === 0) {
+      setSelectionStart([event.clientX, event.clientY]);
+      setSelectionEnd(null);
+    }
+  };
 
-function PlantInfoModal({
-  plant,
-  onClose,
-}: {
-  plant: Plant;
-  onClose: () => void;
-}) {
+  const handlePointerMove = (event: React.PointerEvent) => {
+    if (currentTool === "select" && selectionStart) {
+      setSelectionEnd([event.clientX, event.clientY]);
+    }
+  };
+
+  const handlePointerUp = (_event: React.PointerEvent) => {
+    if (currentTool === "select" && selectionStart && selectionEnd) {
+      // Here you would implement the logic to determine which plants are within the selection rectangle
+      // and call setSelectedPlantIds with the array of selected plant IDs
+      // For now, we'll just log the selection coordinates
+      console.log("Selection from", selectionStart, "to", selectionEnd);
+      setSelectionStart(null);
+      setSelectionEnd(null);
+    }
+  };
+
   return (
     <div
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        background: "white",
-        padding: "20px",
-        borderRadius: "10px",
-        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-        zIndex: 1000,
-      }}
+      className="App"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
     >
-      <h2>{plant.name}</h2>
-      <p>
-        <strong>Scientific Name:</strong> {plant.scientificName || "N/A"}
-      </p>
-      <p>
-        <strong>Model URL:</strong> {plant.modelUrl}
-      </p>
-      <p>
-        <strong>Scale:</strong> {plant.scale.join(", ")}
-      </p>
-      <p>
-        <strong>Height:</strong> {plant.height || "N/A"}m
-      </p>
-      <p>
-        <strong>Spread:</strong> {plant.spread || "N/A"}m
-      </p>
-      <p>
-        <strong>Description:</strong> {plant.description || "N/A"}
-      </p>
-      <p>
-        <strong>Color:</strong> {plant.color || "Default"}
-      </p>
-      <button onClick={onClose}>Close</button>
+      <GardenScene />
+      <BottomToolbar />
+      <TopLeftMenu />
+      <PlantSelector />
+      <SelectionRectangle start={selectionStart} end={selectionEnd} />
     </div>
   );
 }
+
+export default App;
