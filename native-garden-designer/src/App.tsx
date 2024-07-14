@@ -2,7 +2,6 @@ import { GardenScene } from "./components/GardenScene";
 import BottomToolbar from "./components/BottomToolbar";
 import TopLeftMenu from "./components/TopLeftMenu";
 import PlantSelector from "./components/PlantSelector/PlantSelector";
-import SelectionRectangle from "./components/SelectionRectangle";
 
 function App() {
   return (
@@ -11,7 +10,7 @@ function App() {
       <BottomToolbar />
       <TopLeftMenu />
       <PlantSelector />
-      <SelectionRectangle />
+      {/* <SelectionRectangle /> */}
     </div>
   );
 }

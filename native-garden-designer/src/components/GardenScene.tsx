@@ -93,9 +93,11 @@ export const GardenScene: React.FC = () => {
           mouseButtons={{
             LEFT: currentTool === "select" ? undefined : THREE.MOUSE.ROTATE,
             MIDDLE:
-              currentTool === "select" ? THREE.MOUSE.DOLLY : THREE.MOUSE.PAN,
+              /* currentTool === "select" ? THREE.MOUSE.DOLLY : */ THREE.MOUSE
+                .PAN,
             RIGHT:
-              currentTool === "select" ? THREE.MOUSE.ROTATE : THREE.MOUSE.PAN,
+              /* currentTool === "select" ? THREE.MOUSE.ROTATE : */ THREE.MOUSE
+                .PAN,
           }}
         />
         <Ground

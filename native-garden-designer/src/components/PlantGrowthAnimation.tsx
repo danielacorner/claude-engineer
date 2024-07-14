@@ -4,26 +4,25 @@ import * as THREE from "three";
 
 interface PlantGrowthAnimationProps {
   scale: [number, number, number];
-  rotation: [number, number, number];
   growthDuration: number;
   onGrowthComplete: () => void;
   children?: React.ReactNode;
+  id: number;
 }
 
 const SCALE = 2;
 
 const PlantGrowthAnimation: React.FC<PlantGrowthAnimationProps> = ({
   scale,
-  rotation,
   growthDuration,
   onGrowthComplete,
   children,
+  id,
 }) => {
   const finalScale = new THREE.Vector3(...scale.map((n) => n * SCALE));
 
   const [springs, api] = useSpring(() => ({
     scale: [0.1, 0.1, 0.1],
-    rotation: rotation,
     config: {
       ...config.wobbly,
       duration: undefined,
@@ -44,7 +43,10 @@ const PlantGrowthAnimation: React.FC<PlantGrowthAnimationProps> = ({
   return (
     <animated.group
       scale={springs.scale as unknown as SpringValue<[number, number, number]>}
-      rotation={springs.rotation as unknown as [number, number, number]}
+      userData={{
+        id,
+      }}
+      name={`growth-animation-${id}`}
     >
       {children}
     </animated.group>

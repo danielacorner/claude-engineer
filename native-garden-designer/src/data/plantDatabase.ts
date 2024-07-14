@@ -10,7 +10,7 @@ export const plantDatabase: PlantData[] = [
     height: 1.5,
     spread: 0.3,
     description: "Tall perennial herb with nodding yellow to red flowers",
-    color: "orange",
+    // color: "orange",
   },
   {
     id: 2,

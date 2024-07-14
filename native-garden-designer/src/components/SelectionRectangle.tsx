@@ -28,7 +28,7 @@ const SelectionRectangle: React.FC<{}> = () => {
   };
 
   const handlePointerMove = (event: PointerEvent) => {
-    if (currentTool === "select" && start) {
+    if (currentTool === "select") {
       setSelectionEnd([event.clientX, event.clientY]);
     }
   };
@@ -74,6 +74,7 @@ const SelectionRectangle: React.FC<{}> = () => {
         newSelectedPlantIds.push(plant.id);
       }
     }
+    console.log("⭐� ~ useEffect ~ newSelectedPlantIds:", newSelectedPlantIds);
     setSelectedPlantIds(newSelectedPlantIds);
   }, [start, end]);
   if (!start || !end) return null;

@@ -129,7 +129,7 @@ const PlantSelector: React.FC = () => {
           </div>
           <div className={"plantList"}>
             {paginatedPlants.map((plant, idx) => (
-              <PlantSelectorItem {...{ plant, idx }} />
+              <PlantSelectorItem key={plant.name} {...{ plant, idx }} />
             ))}
           </div>
           <div className={"pagination"}>

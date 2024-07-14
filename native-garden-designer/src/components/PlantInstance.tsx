@@ -1,6 +1,13 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
-import { Html, useGLTF } from "@react-three/drei";
+import {
+  Dodecahedron,
+  Edges,
+  Html,
+  Sphere,
+  useGLTF,
+  useSelect,
+} from "@react-three/drei";
 import { Plant } from "../types";
 import {
   Group,
@@ -16,6 +23,7 @@ import PlantGrowthAnimation from "./PlantGrowthAnimation";
 import { useAppStore } from "../store";
 import { HEIGHT_SCALE } from "../constants";
 import { useEvent } from "react-use";
+import * as THREE from "three";
 
 const GRID_SIZE = 1; // Size of each grid cell
 const HOVER_SCALE = 1.05; // Scale factor for hover effect
@@ -24,23 +32,22 @@ const PlantInstance = ({
   plant,
   id,
   groundRef,
+  index = 0,
 }: {
   plant: Plant;
   id: number;
   groundRef: React.RefObject<Object3D>;
+  index?: number;
 }) => {
   const {
     windSpeed,
     rainIntensity,
     updatePlantPosition,
-    removePlant,
     customizePlant,
-    openPlantInfo,
     isDragging,
     setIsDragging,
     isHovered,
     setIsHovered,
-    showContextMenu,
     setShowContextMenu,
   } = useAppStore();
 
@@ -56,8 +63,8 @@ const PlantInstance = ({
   );
   const { scene } = useGLTF(plant.modelUrl);
 
-  const { size, viewport, camera, gl, raycaster } = useThree();
-  const aspect = size.width / viewport.width;
+  const { camera, gl, raycaster } = useThree();
+  // const aspect = size.width / viewport.width;
   const [isGrowing] = useState(true); // not used until we need animation
 
   // LOD system
@@ -154,14 +161,6 @@ const PlantInstance = ({
     setShowContextMenu(plant.id);
   };
 
-  const handleCustomize = () => {
-    customizePlant(id, {
-      color: "red",
-      description: "TODO customize - A beautiful red rose bush",
-    });
-    setShowContextMenu(false);
-  };
-
   const handleGrowthComplete = () => {
     // setIsGrowing(false);
   };
@@ -169,11 +168,58 @@ const PlantInstance = ({
     setIsDragging(false);
     gl.domElement.style.cursor = "auto";
   });
+
+  // Create outline material
+  const outlineMaterial = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        color: { value: new THREE.Color(0x00ff00) },
+        time: { value: 0 },
+      },
+      vertexShader: `
+        varying vec3 vNormal;
+        void main() {
+          vNormal = normalize(normalMatrix * normal);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 color;
+        uniform float time;
+        varying vec3 vNormal;
+        void main() {
+          float intensity = pow(0.7 - dot(vNormal, vec3(0, 0, 1.0)), 2.0);
+          float glow = sin(time * 2.0) * 0.5 + 0.5;
+          gl_FragColor = vec4(color, 1.0) * intensity * glow;
+        }
+      `,
+      side: THREE.FrontSide,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+    });
+  }, []);
+
+  const ref = useRef<THREE.Group>(null);
+  const { selectedPlantIds } = useAppStore();
+  const isSelected = selectedPlantIds.includes(plant.id);
+
+  // Simulate wind effect and update outline glow
+  useFrame((state) => {
+    if (ref.current) {
+      const time = state.clock.getElapsedTime();
+      // const windEffect = Math.sin(time * 2 + index) * 0.02 * windSpeed;
+      // ref.current.position.x = plant.position[0] + windEffect;
+
+      if (isSelected && outlineMaterial.uniforms) {
+        outlineMaterial.uniforms.time.value = time;
+      }
+    }
+  });
+
   return (
     <a.group
       ref={groupRef}
       position={position}
-      rotation={rotation}
       onPointerDown={(e) => {
         e.stopPropagation();
         setIsDragging(plant.id);
@@ -195,79 +241,40 @@ const PlantInstance = ({
       onContextMenu={isDragging ? () => {} : handleContextMenu}
       {...spring}
     >
-      <PlantGrowthAnimation
-        scale={plant.scale || [1, 1, 1]}
-        rotation={rotation}
-        growthDuration={1}
-        onGrowthComplete={handleGrowthComplete}
-      >
-        <primitive object={lodMeshes[lodLevel]} />
-      </PlantGrowthAnimation>
-
-      {isDragging && isDragging === plant.id && (
-        <mesh position={[0, 0.01, 0]}>
-          <planeGeometry args={[1, 1]} />
-          <meshBasicMaterial color="yellow" opacity={0.5} transparent />
-        </mesh>
-      )}
-      <Html distanceFactor={10}>
-        <div
-          style={{
-            background: "rgba(0, 0, 0, 0.7)",
-            color: "white",
-            padding: "5px 10px",
-            borderRadius: "5px",
-            fontSize: "12px",
-            fontWeight: "bold",
-            transform: `scale(${1 / aspect})`,
-          }}
+      {isSelected && <SelectedIndicator />}
+      <mesh rotation={rotation}>
+        <PlantGrowthAnimation
+          scale={plant.scale || [1, 1, 1]}
+          growthDuration={1}
+          onGrowthComplete={handleGrowthComplete}
+          id={plant.id}
         >
-          {plant.name}
-        </div>
-        {showContextMenu && showContextMenu === plant.id && (
-          <div
-            style={{
-              position: "absolute",
-              background: "white",
-              border: "1px solid #ccc",
-              padding: "5px",
-              borderRadius: "5px",
-              zIndex: 1000,
-            }}
+          <primitive
+            ref={ref}
+            object={lodMeshes[lodLevel]}
+            userData-id={plant.id}
           >
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                removePlant(id);
-                setShowContextMenu(false);
-              }}
-            >
-              Remove Plant
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                openPlantInfo(plant);
-                setShowContextMenu(false);
-              }}
-            >
-              Plant Info
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCustomize();
-              }}
-            >
-              Customize
-            </button>
-          </div>
-        )}
-      </Html>
+            {isDragging && isDragging === plant.id && (
+              <mesh position={[0, 0.01, 0]}>
+                <planeGeometry args={[1, 1]} />
+                <meshBasicMaterial color="yellow" opacity={0.5} transparent />
+              </mesh>
+            )}
+          </primitive>
+        </PlantGrowthAnimation>
+      </mesh>
     </a.group>
   );
 };
 
+function SelectedIndicator() {
+  return (
+    <mesh>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshBasicMaterial color="yellow" opacity={0.3} transparent />
+    </mesh>
+  );
+}
 function simplifyModel(model: Object3D, factor: number) {
   model.traverse((child) => {
     if (child instanceof InstancedMesh) {

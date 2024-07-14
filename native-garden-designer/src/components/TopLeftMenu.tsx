@@ -48,8 +48,8 @@ const MenuContainer = styled.div`
   }
 `;
 
-const MenuDropdown = styled.div<{ isOpen: boolean }>`
-  display: ${(props) => (props.isOpen ? "block" : "none")};
+const MenuDropdown = styled.div<{ $isOpen: boolean }>`
+  display: ${(props) => (props.$isOpen ? "block" : "none")};
   position: absolute;
   top: 100%;
   left: 0;
@@ -289,7 +289,7 @@ const TopLeftMenu: React.FC = () => {
       >
         <MenuIcon />
       </IconButton>
-      <MenuDropdown isOpen={isMenuOpen}>
+      <MenuDropdown $isOpen={isMenuOpen}>
         <MenuItemWithSub>
           File
           <SubMenu>
