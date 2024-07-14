@@ -27,6 +27,7 @@ interface AppState {
     pages: ProjectPage[];
   } | null;
   currentPage: number | null;
+  currentTool: string;
   setTooltipPlant: (plant: PlantData | null) => void;
   setSelectedPlant: (plant: PlantData | null) => void;
   setHoveredPlant: (plant: PlantData | null) => void;
@@ -47,6 +48,7 @@ interface AppState {
   setShowPlantSelector: (show: boolean) => void;
   setEditMode: (edit: boolean) => void;
   setCurrentPage: (pageIndex: number) => void;
+  setCurrentTool: (tool: string) => void;
   addNewPage: () => void;
 
   placePlant: (position: [number, number, number]) => void;
@@ -115,6 +117,7 @@ export const useAppStore = create<AppState>(
       editMode: false,
       currentProject: null,
       currentPage: null,
+      currentTool: 'select',
       setTooltipPlant: (plant) => set({ tooltipPlant: plant }),
       setSelectedPlant: (plant) => set({ selectedPlant: plant }),
       setHoveredPlant: (plant) => set({ hoveredPlant: plant }),
@@ -142,31 +145,24 @@ export const useAppStore = create<AppState>(
       setShowPlantSelector: (show) => set({ showPlantSelector: show }),
       setEditMode: (edit) => set({ editMode: edit }),
       setCurrentPage: (pageIndex) => set({ currentPage: pageIndex }),
-      addNewPage: () =>
-        set((state) => {
-          if (state.currentProject) {
-            const newPage: ProjectPage = {
-              plants: [],
-              name: `Page ${state.currentProject.pages.length + 1}`,
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: [...state.currentProject.pages, newPage],
-              },
-              currentPage: state.currentProject.pages.length,
-            };
-          }
-          return state;
-        }),
+      setCurrentTool: (tool) => set({ currentTool: tool }),
+      addNewPage: () => set((state) => {
+        if (state.currentProject) {
+          const newPage: ProjectPage = { plants: [] };
+          return {
+            currentProject: {
+              ...state.currentProject,
+              pages: [...state.currentProject.pages, newPage],
+            },
+            currentPage: state.currentProject.pages.length,
+          };
+        }
+        return state;
+      }),
 
       placePlant: (position) =>
         set((state) => {
-          if (
-            state.selectedPlant &&
-            state.currentProject &&
-            state.currentPage !== null
-          ) {
+          if (state.selectedPlant && state.currentProject && state.currentPage !== null) {
             const newPlant: Plant = {
               ...state.selectedPlant,
               id: state.plants.length + 1,
@@ -175,7 +171,6 @@ export const useAppStore = create<AppState>(
               scale: state.selectedPlant.scale.map(
                 (s) => s * (0.8 + Math.random() * 0.4)
               ) as [number, number, number],
-              selected: false,
             };
             const updatedPages = [...state.currentProject.pages];
             updatedPages[state.currentPage] = {
@@ -222,9 +217,7 @@ export const useAppStore = create<AppState>(
             const updatedPages = [...state.currentProject.pages];
             updatedPages[state.currentPage] = {
               ...updatedPages[state.currentPage],
-              plants: updatedPages[state.currentPage].plants.filter(
-                (plant) => plant.id !== id
-              ),
+              plants: updatedPages[state.currentPage].plants.filter((plant) => plant.id !== id),
             };
             return {
               currentProject: {
@@ -350,7 +343,7 @@ export const useAppStore = create<AppState>(
         set({
           currentProject: {
             name: "Untitled Project",
-            pages: [{ plants: [], name: "Page 1" }],
+            pages: [{ plants: [] }],
           },
           currentPage: 0,
           plants: [],
