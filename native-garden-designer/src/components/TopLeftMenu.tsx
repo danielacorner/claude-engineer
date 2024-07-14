@@ -14,17 +14,22 @@ import {
   MenuItem as MuiMenuItem,
   ListItemIcon,
   ListItemText,
+  Tooltip,
   SelectChangeEvent,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
+import UndoIcon from "@mui/icons-material/Undo";
+import RedoIcon from "@mui/icons-material/Redo";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const MenuContainer = styled.div`
   position: absolute;
   top: 10px;
-  left: 10px;
+  left: 20px;
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -77,9 +82,7 @@ const PageSelectContainer = styled.div`
   margin-left: 10px;
 `;
 
-const PageSelect = styled(FormControl)`
-  min-width: 150px;
-`;
+const PageSelect = styled(FormControl)``;
 
 const StyledSelect = styled(Select)`
   height: 40px;
@@ -96,6 +99,12 @@ const PageMenuTitle = styled(MuiMenuItem)`
 
 const PageMenuItem = styled(MuiMenuItem)`
   padding-left: 32px;
+`;
+
+const ActionButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
 `;
 
 const TopLeftMenu: React.FC = () => {
@@ -255,6 +264,11 @@ const TopLeftMenu: React.FC = () => {
     console.log("Edit pages");
   };
 
+  const handleDuplicate = () => {
+    // Implement duplicate functionality
+    console.log("Duplicate");
+  };
+
   return (
     <MenuContainer>
       <IconButton
@@ -262,7 +276,7 @@ const TopLeftMenu: React.FC = () => {
         color="inherit"
         aria-label="menu"
         onClick={toggleMenu}
-        sx={{ width: 40, height: 40, marginLeft: 0 }}
+        sx={{ width: 40, height: 40 }}
       >
         <MenuIcon />
       </IconButton>
@@ -369,9 +383,7 @@ const TopLeftMenu: React.FC = () => {
           <StyledSelect
             value={currentPage}
             onChange={handlePageChange}
-            renderValue={() =>
-              `${currentProject?.pages[currentPage ?? 0]?.name}`
-            }
+            renderValue={() => "Pages"}
           >
             <PageMenuTitle>
               Pages
@@ -389,12 +401,35 @@ const TopLeftMenu: React.FC = () => {
                 <ListItemIcon>
                   {index === currentPage ? <CheckIcon /> : null}
                 </ListItemIcon>
-                <ListItemText>{page.name}</ListItemText>
+                <ListItemText>Page {index + 1}</ListItemText>
               </PageMenuItem>
             ))}
           </StyledSelect>
         </PageSelect>
       </PageSelectContainer>
+
+      <ActionButtonsContainer>
+        <Tooltip title="Undo">
+          <IconButton onClick={undo} size="small">
+            <UndoIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Redo">
+          <IconButton onClick={redo} size="small">
+            <RedoIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Delete">
+          <IconButton onClick={deleteItem} size="small">
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Duplicate">
+          <IconButton onClick={handleDuplicate} size="small">
+            <ContentCopyIcon />
+          </IconButton>
+        </Tooltip>
+      </ActionButtonsContainer>
 
       <Dialog
         open={isNewProjectDialogOpen}
