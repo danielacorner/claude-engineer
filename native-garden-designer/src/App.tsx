@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PlantSelector from "./components/PlantSelector/PlantSelector";
 import { Plant } from "./types";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -12,21 +12,12 @@ const App: React.FC = () => {
   const { setTooltipPlant, showPlantInfo, setSelectedPlant, setShowPlantInfo } =
     useAppStore();
 
-  const [_heightMap, setHeightMap] = useState<number[][]>([]);
-
   useEffect(() => {
     // Load initial plant data
     const allPlants = getAllPlants();
     if (allPlants.length > 0) {
       setSelectedPlant(allPlants[0]);
     }
-
-    // Initialize height map
-    const size = 100;
-    const initialHeightMap = Array(size)
-      .fill(null)
-      .map(() => Array(size).fill(0));
-    setHeightMap(initialHeightMap);
   }, [setSelectedPlant]);
 
   return (
