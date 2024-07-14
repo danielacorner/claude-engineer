@@ -65,48 +65,52 @@ export const GardenScene: React.FC = () => {
   };
 
   return (
-    <Canvas
-      id="canvas"
-      shadows
-      camera={{ position: [0, 5, 10], fov: 50 }}
-      onContextMenu={(e) => e.preventDefault()}
-      style={{ height: "100vh" }}
-    >
-      <fog attach="fog" args={[fogColor, 10, 100]} />
-      <ambientLight intensity={lightIntensity * 0.5 * (1 - cloudCover * 0.5)} />
-      <pointLight
-        position={sunPosition}
-        intensity={lightIntensity * (1 - cloudCover * 0.5)}
-        castShadow
-      />
-      <directionalLight
-        position={new THREE.Vector3(0, 1, 0)}
-        intensity={lightIntensity * (1 - cloudCover * 0.5)}
-        castShadow
-      />
-      <Sky sunPosition={sunPosition} />
-      <OrbitControls
-        ref={orbitControlsRef}
-        mouseButtons={{
-          LEFT: currentTool === "select" ? undefined : THREE.MOUSE.ROTATE,
-          MIDDLE:
-            currentTool === "select" ? THREE.MOUSE.DOLLY : THREE.MOUSE.PAN,
-          RIGHT:
-            currentTool === "select" ? THREE.MOUSE.ROTATE : THREE.MOUSE.PAN,
-        }}
-      />
-      <Ground
-        ref={groundRef}
-        onPlantPlace={placePlant}
-        onHover={setHoveredPosition}
-        heightMap={heightMap}
-        onHeightChange={handleGroundHeightChange}
-        setHeightmap={setHeightMap}
-      />
-      {showGrid && <GridSystem size={20} divisions={20} />}
-      <PlantsInstances groundRef={groundRef} />
-      <RainEffect intensity={rainIntensity} />
-      <WindEffect speed={windSpeed} />
-    </Canvas>
+    <div className="scene-wrapper">
+      <Canvas
+        id="canvas"
+        shadows
+        camera={{ position: [0, 5, 10], fov: 50 }}
+        onContextMenu={(e) => e.preventDefault()}
+        style={{ height: "100vh" }}
+      >
+        <fog attach="fog" args={[fogColor, 10, 100]} />
+        <ambientLight
+          intensity={lightIntensity * 0.5 * (1 - cloudCover * 0.5)}
+        />
+        <pointLight
+          position={sunPosition}
+          intensity={lightIntensity * (1 - cloudCover * 0.5)}
+          castShadow
+        />
+        <directionalLight
+          position={new THREE.Vector3(0, 1, 0)}
+          intensity={lightIntensity * (1 - cloudCover * 0.5)}
+          castShadow
+        />
+        <Sky sunPosition={sunPosition} />
+        <OrbitControls
+          ref={orbitControlsRef}
+          mouseButtons={{
+            LEFT: currentTool === "select" ? undefined : THREE.MOUSE.ROTATE,
+            MIDDLE:
+              currentTool === "select" ? THREE.MOUSE.DOLLY : THREE.MOUSE.PAN,
+            RIGHT:
+              currentTool === "select" ? THREE.MOUSE.ROTATE : THREE.MOUSE.PAN,
+          }}
+        />
+        <Ground
+          ref={groundRef}
+          onPlantPlace={placePlant}
+          onHover={setHoveredPosition}
+          heightMap={heightMap}
+          onHeightChange={handleGroundHeightChange}
+          setHeightmap={setHeightMap}
+        />
+        {showGrid && <GridSystem size={20} divisions={20} />}
+        <PlantsInstances groundRef={groundRef} />
+        <RainEffect intensity={rainIntensity} />
+        <WindEffect speed={windSpeed} />
+      </Canvas>
+    </div>
   );
 };

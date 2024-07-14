@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useAppStore } from "../store";
 
@@ -16,17 +16,51 @@ const SelectionRect = styled.div<{
   height: ${(props) => Math.abs(props.end[1] - props.start[1])}px;
 `;
 
-interface SelectionRectangleProps {
-  start: [number, number] | null;
-  end: [number, number] | null;
-}
+const SelectionRectangle: React.FC<{}> = () => {
+  const [end, setSelectionEnd] = useState<[number, number] | null>(null);
+  const [start, setSelectionStart] = useState<[number, number] | null>(null);
+  const { currentTool } = useAppStore();
+  const handlePointerDown = (event: PointerEvent) => {
+    if (currentTool === "select" && event.button === 0) {
+      setSelectionStart([event.clientX, event.clientY]);
+      setSelectionEnd(null);
+    }
+  };
 
-const SelectionRectangle: React.FC<SelectionRectangleProps> = ({
-  start,
-  end,
-}) => {
+  const handlePointerMove = (event: PointerEvent) => {
+    if (currentTool === "select" && start) {
+      setSelectionEnd([event.clientX, event.clientY]);
+    }
+  };
+
+  const handlePointerUp = (_event: PointerEvent) => {
+    if (currentTool === "select") {
+      // Here you would implement the logic to determine which plants are within the selection rectangle
+      // and call setSelectedPlantIds with the array of selected plant IDs
+      // For now, we'll just log the selection coordinates
+      console.log("Selection from", start, "to", end);
+      setSelectionStart(null);
+      setSelectionEnd(null);
+    }
+  };
+
+  useEffect(() => {
+    const sceneWrapper = document.querySelector<HTMLDivElement>("body");
+    if (!sceneWrapper) return;
+    sceneWrapper.addEventListener("pointerdown", handlePointerDown);
+    sceneWrapper.addEventListener("pointermove", handlePointerMove);
+    sceneWrapper.addEventListener("pointerup", handlePointerUp);
+    return () => {
+      sceneWrapper.removeEventListener("pointerdown", handlePointerDown);
+      sceneWrapper.removeEventListener("pointermove", handlePointerMove);
+      sceneWrapper.removeEventListener("pointerup", handlePointerUp);
+    };
+  }, []);
+
   const { plants, setSelectedPlantIds } = useAppStore();
+
   // in a performant way, when start and end change, change selected plants according to the rectangle's position on the viewport vs the plant's position on the scene
+  // TODO BROKEN
   useEffect(() => {
     if (!start || !end) return;
     const newSelectedPlantIds: number[] = [];
