@@ -19,7 +19,6 @@ export const GardenScene: React.FC = () => {
     placePlant,
     isDragging,
     isHovered,
-    currentTool,
   } = useAppStore();
 
   const orbitControlsRef = useRef<any>();
@@ -63,7 +62,7 @@ export const GardenScene: React.FC = () => {
       return newHeightMap;
     });
   };
-
+  const isShiftPressed = useIsShiftPressed();
   return (
     <div className="scene-wrapper">
       <Canvas
@@ -91,7 +90,7 @@ export const GardenScene: React.FC = () => {
         <OrbitControls
           ref={orbitControlsRef}
           mouseButtons={{
-            LEFT: currentTool === "select" ? undefined : THREE.MOUSE.ROTATE,
+            LEFT: isShiftPressed ? undefined : THREE.MOUSE.ROTATE,
             MIDDLE:
               /* currentTool === "select" ? THREE.MOUSE.DOLLY : */ THREE.MOUSE
                 .PAN,
@@ -116,3 +115,27 @@ export const GardenScene: React.FC = () => {
     </div>
   );
 };
+
+function useIsShiftPressed() {
+  const [isShiftPressed, setisShiftPressed] = useState(false);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Shift") {
+        setisShiftPressed(true);
+      }
+    };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === "Shift") {
+        setisShiftPressed(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
+  return isShiftPressed;
+}

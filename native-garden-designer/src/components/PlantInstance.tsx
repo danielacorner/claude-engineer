@@ -1,13 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
-import {
-  Dodecahedron,
-  Edges,
-  Html,
-  Sphere,
-  useGLTF,
-  useSelect,
-} from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { Plant } from "../types";
 import {
   Group,
@@ -32,18 +25,15 @@ const PlantInstance = ({
   plant,
   id,
   groundRef,
-  index = 0,
 }: {
   plant: Plant;
   id: number;
   groundRef: React.RefObject<Object3D>;
-  index?: number;
 }) => {
   const {
     windSpeed,
     rainIntensity,
     updatePlantPosition,
-    customizePlant,
     isDragging,
     setIsDragging,
     isHovered,
