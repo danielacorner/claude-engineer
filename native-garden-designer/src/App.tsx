@@ -14,6 +14,7 @@ import { useAppStore } from "./store";
 import { PlantsInstances } from "./components/PlantsInstances";
 import BottomToolbar from "./components/BottomToolbar";
 import TopLeftMenu from "./components/TopLeftMenu"; // Import the new TopLeftMenu component
+import { GardenScene } from "./components/GardenScene";
 
 const App: React.FC = () => {
   const {
@@ -92,41 +93,7 @@ const App: React.FC = () => {
       }}
     >
       <TopLeftMenu /> {/* Add the TopLeftMenu component here */}
-      <Canvas
-        id="canvas"
-        shadows
-        camera={{ position: [0, 5, 10], fov: 50 }}
-        onContextMenu={(e) => e.preventDefault()}
-      >
-        <fog attach="fog" args={[fogColor, 10, 100]} />
-        <ambientLight
-          intensity={lightIntensity * 0.5 * (1 - cloudCover * 0.5)}
-        />
-        <pointLight
-          position={sunPosition}
-          intensity={lightIntensity * (1 - cloudCover * 0.5)}
-          castShadow
-        />
-        <directionalLight
-          position={new THREE.Vector3(0, 1, 0)}
-          intensity={lightIntensity * (1 - cloudCover * 0.5)}
-          castShadow
-        />
-        <Sky sunPosition={sunPosition} />
-        <OrbitControls ref={orbitControlsRef} />
-        <Ground
-          ref={groundRef}
-          onPlantPlace={placePlant}
-          onHover={setHoveredPosition}
-          heightMap={heightMap}
-          onHeightChange={handleGroundHeightChange}
-          setHeightmap={setHeightMap}
-        />
-        {showGrid && <GridSystem size={20} divisions={20} />}
-        <PlantsInstances groundRef={groundRef} />
-        <RainEffect intensity={rainIntensity} />
-        <WindEffect speed={windSpeed} />
-      </Canvas>
+      <GardenScene />
       <ErrorBoundary>
         <PlantSelector />
       </ErrorBoundary>

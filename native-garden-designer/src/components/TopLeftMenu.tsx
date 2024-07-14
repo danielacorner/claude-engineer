@@ -28,11 +28,14 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const MenuContainer = styled.div`
   position: absolute;
-  top: 10px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
   z-index: 1000;
   display: flex;
   align-items: center;
+  background: #ffffff73;
+  padding: 4px;
+  padding-left: 16px;
 `;
 
 const MenuDropdown = styled.div<{ isOpen: boolean }>`
