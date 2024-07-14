@@ -1,6 +1,11 @@
 import React, { useMemo, useRef, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Sky } from "@react-three/drei";
+import {
+  GizmoHelper,
+  GizmoViewport,
+  OrbitControls,
+  Sky,
+} from "@react-three/drei";
 import Ground from "./Ground";
 import RainEffect from "./RainEffect";
 import WindEffect from "./WindEffect";
@@ -111,6 +116,20 @@ export const GardenScene: React.FC = () => {
         <PlantsInstances groundRef={groundRef} />
         <RainEffect intensity={rainIntensity} />
         <WindEffect speed={windSpeed} />
+
+        <GizmoHelper
+          alignment="bottom-right" // widget alignment within scene
+          margin={[80, 80]} // widget margins (X, Y)
+          // onUpdate={/* called during camera animation  */}
+          // onTarget={/* return current camera target (e.g. from orbit controls) to center animation */}
+          // renderPriority={/* use renderPriority to prevent the helper from disappearing if there is another useFrame(..., 1)*/}
+        >
+          <GizmoViewport
+          // axisColors={["red", "green", "blue"]}
+          // labelColor="black"
+          />
+          {/* alternative: <GizmoViewcube /> */}
+        </GizmoHelper>
       </Canvas>
     </div>
   );
