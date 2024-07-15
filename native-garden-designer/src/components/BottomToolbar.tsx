@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { IconButton, Tooltip } from "@mui/material";
 import PanToolIcon from "@mui/icons-material/PanTool";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import TerrainIcon from "@mui/icons-material/Terrain";
 import { ToolType, useAppStore } from "../store";
@@ -50,55 +49,17 @@ const tools: { kbd: string; name: ToolType; icon: any; tooltip: string }[] = [
     icon: AddCircleOutlineIcon,
     tooltip: "Add Plant (A)",
   },
-  { kbd: "d", name: "delete", icon: DeleteIcon, tooltip: "Delete Plant (D)" },
+  // { kbd: "d", name: "delete", icon: DeleteIcon, tooltip: "Delete Plant (D)" },
   { kbd: "e", name: "edit", icon: EditIcon, tooltip: "Edit Plant (E)" },
   { kbd: "t", name: "terrain", icon: TerrainIcon, tooltip: "Edit Terrain (T)" },
 ];
 
 const BottomToolbar: React.FC = () => {
   const { currentTool, setCurrentTool } = useAppStore();
-
+  useKeyboardShortcuts();
   const handleToolClick = (toolName: ToolType) => {
     setCurrentTool(toolName);
   };
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const modKey = isMac ? event.metaKey : event.ctrlKey;
-      if (modKey) {
-        switch (event.key.toLowerCase()) {
-          case "m":
-            setCurrentTool("move");
-            event.preventDefault();
-            break;
-          case "s":
-            setCurrentTool("select");
-            event.preventDefault();
-            break;
-          case "a":
-            setCurrentTool("add");
-            event.preventDefault();
-            break;
-          case "d":
-            setCurrentTool("delete");
-            event.preventDefault();
-            break;
-          case "e":
-            setCurrentTool("edit");
-            event.preventDefault();
-            break;
-          case "t":
-            setCurrentTool("terrain");
-            event.preventDefault();
-            break;
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [setCurrentTool]);
 
   return (
     <ToolbarContainer>
@@ -122,3 +83,54 @@ const BottomToolbar: React.FC = () => {
 };
 
 export default BottomToolbar;
+
+function useKeyboardShortcuts() {
+  const { setCurrentTool, deleteSelectedPlants } = useAppStore();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const modKey = isMac ? event.metaKey : event.ctrlKey;
+      console.log(
+        "⭐� ~ handleKeyDown ~ event.key.toLowerCase():",
+        event.key.toLowerCase()
+      );
+      const lowerKey = event.key.toLowerCase();
+      if (modKey) {
+        switch (lowerKey) {
+          case "m":
+            setCurrentTool("move");
+            event.preventDefault();
+            break;
+          case "s":
+            setCurrentTool("select");
+            event.preventDefault();
+            break;
+          case "a":
+            setCurrentTool("add");
+            event.preventDefault();
+            break;
+          case "e":
+            setCurrentTool("edit");
+            event.preventDefault();
+            break;
+          case "t":
+            setCurrentTool("terrain");
+            event.preventDefault();
+            break;
+        }
+      } else {
+        switch (lowerKey) {
+          case "delete":
+            deleteSelectedPlants();
+            event.preventDefault();
+            break;
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [setCurrentTool]);
+}

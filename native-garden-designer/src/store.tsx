@@ -57,7 +57,7 @@ interface AppState {
   setcurrentPageIdx: (pageIndex: number) => void;
   setCurrentTool: (tool: ToolType) => void;
   addNewPage: () => void;
-
+  deleteSelectedPlants: () => void;
   placePlant: (position: [number, number, number]) => void;
   updatePlantPosition: (
     instanceId: number,
@@ -80,7 +80,8 @@ interface AppState {
   cut: () => void;
   copy: () => void;
   paste: () => void;
-  delete: () => void;
+  deletePlant: (id: number) => void;
+  deletePlants: (ids: number[]) => void;
   zoomIn: () => void;
   zoomOut: () => void;
   resetView: () => void;
@@ -287,6 +288,29 @@ export const useAppStore = create<AppState>(
           showPlantInfo: plant,
           customizingPlant: null,
         })),
+      deleteSelectedPlants: () => {
+        set((state) => {
+          if (state.currentProject && state.currentPageIdx !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPages[state.currentPageIdx].plants.filter(
+                (plant) => !state.selectedPlantIds.includes(plant.id)
+              ),
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: state.plants.filter(
+                (plant) => !state.selectedPlantIds.includes(plant.id)
+              ),
+            };
+          }
+          return state;
+        });
+      },
       showEnvironmentControls: false,
       setShowEnvironmentControls: (show) =>
         set({ showEnvironmentControls: show }),
@@ -312,8 +336,47 @@ export const useAppStore = create<AppState>(
       paste: () => {
         console.log("Paste functionality to be implemented");
       },
-      delete: () => {
-        console.log("Delete functionality to be implemented");
+      deletePlant: (id: number) => {
+        set((state) => {
+          if (state.currentProject && state.currentPageIdx !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPages[state.currentPageIdx].plants.filter(
+                (plant) => plant.id !== id
+              ),
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: state.plants.filter((plant) => plant.id !== id),
+            };
+          }
+          return state;
+        });
+      },
+      deletePlants: (ids: number[]) => {
+        set((state) => {
+          if (state.currentProject && state.currentPageIdx !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPages[state.currentPageIdx].plants.filter(
+                (plant) => !ids.includes(plant.id)
+              ),
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: state.plants.filter((plant) => !ids.includes(plant.id)),
+            };
+          }
+          return state;
+        });
       },
       zoomIn: () => {
         console.log("Zoom In functionality to be implemented");

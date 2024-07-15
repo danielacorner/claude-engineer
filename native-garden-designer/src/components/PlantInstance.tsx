@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
-import { PivotControls, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { Plant } from "../types";
 import {
   Group,

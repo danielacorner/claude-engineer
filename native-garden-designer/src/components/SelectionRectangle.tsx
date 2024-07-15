@@ -60,7 +60,6 @@ const SelectionRectangle: React.FC<{}> = () => {
   const { plants, setSelectedPlantIds } = useAppStore();
 
   // in a performant way, when start and end change, change selected plants according to the rectangle's position on the viewport vs the plant's position on the scene
-  // TODO BROKEN
   useEffect(() => {
     if (!start || !end) return;
     const newSelectedPlantIds: number[] = [];
@@ -74,7 +73,6 @@ const SelectionRectangle: React.FC<{}> = () => {
         newSelectedPlantIds.push(plant.id);
       }
     }
-    console.log("⭐� ~ useEffect ~ newSelectedPlantIds:", newSelectedPlantIds);
     setSelectedPlantIds(newSelectedPlantIds);
   }, [start, end]);
   if (!start || !end) return null;

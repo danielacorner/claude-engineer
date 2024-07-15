@@ -138,7 +138,7 @@ const TopLeftMenu: React.FC = () => {
     cut,
     copy,
     paste,
-    delete: deleteItem,
+    deletePlant: deleteItem,
     zoomIn,
     zoomOut,
     resetView,
@@ -155,6 +155,7 @@ const TopLeftMenu: React.FC = () => {
     setcurrentPageIdx,
     addNewPage,
     setCurrentTool,
+    deleteSelectedPlants,
   } = useAppStore();
 
   useEffect(() => {
@@ -247,7 +248,7 @@ const TopLeftMenu: React.FC = () => {
         }
       }
       if (event.key === "Delete" || (isMac && event.key === "Backspace")) {
-        deleteItem();
+        // deleteItem();
         event.preventDefault();
       }
     };
@@ -322,7 +323,7 @@ const TopLeftMenu: React.FC = () => {
               Paste
               <ShortcutIndicator>{modKeySymbol}+V</ShortcutIndicator>
             </MenuItem>
-            <MenuItem onClick={() => handleMenuItemClick(deleteItem)}>
+            <MenuItem onClick={deleteSelectedPlants}>
               Delete
               <ShortcutIndicator>{isMac ? "⌫" : "Del"}</ShortcutIndicator>
             </MenuItem>
@@ -434,7 +435,7 @@ const TopLeftMenu: React.FC = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Delete">
-          <IconButton onClick={deleteItem} size="small">
+          <IconButton onClick={deleteSelectedPlants} size="small">
             <DeleteIcon />
           </IconButton>
         </Tooltip>
