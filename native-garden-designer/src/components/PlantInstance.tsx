@@ -75,7 +75,7 @@ const PlantInstance = ({
 
   const [spring, api] = useSpring(() => ({
     scale: plant.scale[0] ?? 1,
-    config: { tension: 300, friction: 10 },
+    // config: { tension: 300, friction: 17 },
   }));
 
   useEffect(() => {

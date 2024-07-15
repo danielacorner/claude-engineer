@@ -1,5 +1,5 @@
 import React from "react";
-import { useSpring, animated, config, SpringValue } from "@react-spring/three";
+import { useSpring, animated, SpringValue } from "@react-spring/three";
 
 export const PlantShrinkAnimation: React.FC<{
   shrink: boolean;
@@ -8,12 +8,12 @@ export const PlantShrinkAnimation: React.FC<{
   const [springs] = useSpring(
     () => ({
       scale: shrink ? [0, 0, 0] : [1, 1, 1],
-      config: {
-        ...config.wobbly,
-        duration: undefined,
-        friction: 12,
-        tension: 170,
-      },
+      // config: {
+      //   ...config.wobbly,
+      //   duration: undefined,
+      //   friction: 12,
+      //   tension: 170,
+      // },
     }),
     [shrink]
   );

@@ -7,7 +7,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import TerrainIcon from "@mui/icons-material/Terrain";
 import { ToolType, useAppStore } from "../store";
 import { RxCursorArrow } from "react-icons/rx";
-import { isMac } from "../constants";
 
 const ToolbarContainer = styled.div`
   position: fixed;
@@ -89,43 +88,36 @@ function useKeyboardShortcuts() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const modKey = isMac ? event.metaKey : event.ctrlKey;
-      console.log(
-        "⭐� ~ handleKeyDown ~ event.key.toLowerCase():",
-        event.key.toLowerCase()
-      );
+      // const modKey = isMac ? event.metaKey : event.ctrlKey;
       const lowerKey = event.key.toLowerCase();
-      if (modKey) {
-        switch (lowerKey) {
-          case "m":
-            setCurrentTool("move");
-            event.preventDefault();
-            break;
-          case "s":
-            setCurrentTool("select");
-            event.preventDefault();
-            break;
-          case "a":
-            setCurrentTool("add");
-            event.preventDefault();
-            break;
-          case "e":
-            setCurrentTool("edit");
-            event.preventDefault();
-            break;
-          case "t":
-            setCurrentTool("terrain");
-            event.preventDefault();
-            break;
-        }
-      } else {
-        switch (lowerKey) {
-          case "delete":
-            deleteSelectedPlants();
-            event.preventDefault();
-            break;
-        }
+      // if (modKey) {
+      switch (lowerKey) {
+        case "m":
+          setCurrentTool("move");
+          event.preventDefault();
+          break;
+        case "s":
+          setCurrentTool("select");
+          event.preventDefault();
+          break;
+        case "a":
+          setCurrentTool("add");
+          event.preventDefault();
+          break;
+        case "e":
+          setCurrentTool("edit");
+          event.preventDefault();
+          break;
+        case "t":
+          setCurrentTool("terrain");
+          event.preventDefault();
+          break;
+        case "delete":
+          deleteSelectedPlants();
+          event.preventDefault();
+          break;
       }
+      // }
     };
 
     window.addEventListener("keydown", handleKeyDown);

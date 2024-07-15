@@ -55,11 +55,16 @@ const PlantPreview: React.FC<PlantPreviewProps> = ({
   useFrame((state) => {
     if (groupRef.current) {
       // make the plant slowly rotate
-      groupRef.current.rotation.y += 0.01;
+      groupRef.current.rotation.y -=
+        Math.cos(state.clock.getElapsedTime() * 1.5) * 0.001;
+      groupRef.current.rotation.z -=
+        Math.cos(state.clock.getElapsedTime() * 0.5) * 0.001;
+      groupRef.current.rotation.x -=
+        Math.cos(state.clock.getElapsedTime() * 0.25) * 0.001;
 
       // make the plant bob up and down
       groupRef.current.position.y +=
-        0.3 + Math.cos(state.clock.getElapsedTime()) * 0.05;
+        0.35 + Math.cos(state.clock.getElapsedTime() * 0.75) * 0.03;
     }
   });
 
