@@ -1,11 +1,13 @@
+import MillionLint from '@million/lint';
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 // import path from 'path'
-
+const _plugins = [react(), tsconfigPaths()];
+_plugins.unshift(MillionLint.vite())
 export default defineConfig({
   base: "./",
-  plugins: [react(), tsconfigPaths()],
+  plugins: _plugins,
   resolve: {
     // alias: {
     //   '@': path.resolve(__dirname, './src'),
@@ -14,8 +16,8 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      "/api": "http://localhost:8080",
-    },
+      "/api": "http://localhost:8080"
+    }
   },
   build: {
     outDir: "build",
@@ -24,11 +26,13 @@ export default defineConfig({
     terserOptions: {
       compress: {
         drop_console: true,
-        drop_debugger: true,
-      },
-    },
+        drop_debugger: true
+      }
+    }
   },
   esbuild: {
-    logOverride: { "this-is-undefined-in-esm": "silent" },
-  },
+    logOverride: {
+      "this-is-undefined-in-esm": "silent"
+    }
+  }
 });

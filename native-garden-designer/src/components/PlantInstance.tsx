@@ -39,6 +39,8 @@ const PlantInstance = ({
     isHovered,
     setIsHovered,
     setShowContextMenu,
+    gridMode,
+    currentTool,
   } = useAppStore();
 
   const groupRef = useRef<Group>(null);
@@ -110,10 +112,17 @@ const PlantInstance = ({
   };
 
   useFrame((state) => {
-    if (isDragging && isDragging === plant.id && groupRef.current) {
+    if (
+      currentTool !== "select" &&
+      isDragging &&
+      isDragging === plant.id &&
+      groupRef.current
+    ) {
       const intersection = new Vector3();
       raycaster.ray.intersectPlane(dragPlane, intersection);
-      const snappedPosition = snapToGrid(intersection);
+      const snappedPosition = gridMode
+        ? snapToGrid(intersection)
+        : intersection;
       const y = getGroundHeight(snappedPosition.x, snappedPosition.z);
       setPosition([snappedPosition.x, y + plantHeight, snappedPosition.z]);
       updatePlantPosition(id, [
@@ -212,10 +221,16 @@ const PlantInstance = ({
       position={position}
       onPointerDown={(e) => {
         e.stopPropagation();
+        if (currentTool === "select") {
+          return;
+        }
         setIsDragging(plant.id);
         gl.domElement.style.cursor = "grabbing";
       }}
       onPointerUp={() => {
+        if (currentTool === "select") {
+          return;
+        }
         setIsDragging(false);
         gl.domElement.style.cursor = "auto";
       }}
