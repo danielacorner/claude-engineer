@@ -221,7 +221,6 @@ const PlantInstance = ({
       position={position}
       onPointerDown={(e) => {
         e.stopPropagation();
-        console.log("⭐� ~ currentTool:", currentTool);
         if (currentTool === "select") {
           return;
         }

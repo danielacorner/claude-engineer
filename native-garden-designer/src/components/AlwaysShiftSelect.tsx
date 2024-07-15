@@ -19,21 +19,17 @@ export function AlwaysShiftSelect({
   filter: customFilter = (item) => item,
   ...props
 }) {
-  console.log("⭐� ~ requireShift:", requireShift);
   const [downed, down] = React.useState(false);
   const { setEvents, camera, raycaster, gl, controls, size, get } = useThree();
   const [hovered, hover] = React.useState(false);
-  const [active, dispatch] = React.useReducer(
-    (state, { object, shift }) => {
-      if (object === undefined) return [];
-      else if (Array.isArray(object)) return object;
-      else if (!shift && requireShift)
-        return state[0] === object ? [] : [object];
-      else if (state.includes(object)) return state.filter((o) => o !== object);
-      else return [object, ...state];
-    },
-    [requireShift]
-  );
+  const [active, dispatch] = React.useReducer((state, { object, shift }) => {
+    if (object === undefined) return [];
+    else if (Array.isArray(object)) return object;
+    else if (!shift && !requireShift)
+      return state[0] === object ? [] : [object];
+    else if (state.includes(object)) return state.filter((o) => o !== object);
+    else return [object, ...state];
+  }, []);
   React.useEffect(() => {
     if (downed) onChange == null || onChange(active);
     else onChangePointerUp == null || onChangePointerUp(active);
@@ -111,7 +107,11 @@ export function AlwaysShiftSelect({
       }
     }
     function pointerDown(event) {
-      if (event.shiftKey) {
+      const rightClick = event.button === 2;
+      if (rightClick) {
+        return;
+      }
+      if (!requireShift || event.shiftKey) {
         onSelectStart(event);
         prepareRay(event, selBox.startPoint);
       }
@@ -151,7 +151,7 @@ export function AlwaysShiftSelect({
       document.removeEventListener("pointermove", pointerMove, true);
       document.removeEventListener("pointerup", pointerUp);
     };
-  }, [size.width, size.height, raycaster, camera, controls, gl]);
+  }, [size.width, size.height, raycaster, camera, controls, gl, requireShift]);
   return /*#__PURE__*/ React.createElement(
     "group",
     _extends(
@@ -174,9 +174,6 @@ export function AlwaysShiftSelect({
   );
 }
 
-// The return type is explicitly declared here because otherwise TypeScript will emit `THREE.Object3D<THREE.Event>[]`.
-// The meaning of the generic parameter for `Object3D` was changed in r156, so it should not be included so that it
-// works with all versions of @types/three.
 export function useSelect() {
   return React.useContext(context);
 }
