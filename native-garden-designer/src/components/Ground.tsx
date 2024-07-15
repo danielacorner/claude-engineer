@@ -25,6 +25,7 @@ const HEIGHTMAP_RESOLUTION = 128; // Resolution of the heightmap
 
 const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
   ({ onPlantPlace, onHover, heightMap, setHeightmap }, ref) => {
+    const { gridMode } = useAppStore();
     const meshRef = useRef<THREE.Mesh>(null);
     const [mousePosition, setMousePosition] = useState({
       x: 0,
@@ -118,7 +119,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         const intersects = raycaster.intersectObject(meshRef.current);
         if (intersects.length > 0) {
           const { point } = intersects[0];
-          const snappedPosition = snapToGrid(point);
+          const snappedPosition = gridMode ? snapToGrid(point) : point;
           const height = getHeightAtPosition(
             snappedPosition.x,
             snappedPosition.z
@@ -154,7 +155,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         }));
         if (intersects.length > 0) {
           const { point } = intersects[0];
-          const snappedPosition = snapToGrid(point);
+          const snappedPosition = gridMode ? snapToGrid(point) : point;
           const height = getHeightAtPosition(
             snappedPosition.x,
             snappedPosition.z
@@ -263,10 +264,12 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         >
           <primitive object={groundMaterial} attach="material" />
         </Plane>
-        <gridHelper
-          args={[GROUND_SIZE, GROUND_SIZE / GRID_SIZE, "#888888", "#444444"]}
-          position={[0, 0.01, 0]}
-        />
+        {gridMode ? (
+          <gridHelper
+            args={[GROUND_SIZE, GROUND_SIZE / GRID_SIZE, "#888888", "#444444"]}
+            position={[0, 0.01, 0]}
+          />
+        ) : null}
         {hoverPoint && (
           <>
             <mesh position={hoverPoint}>

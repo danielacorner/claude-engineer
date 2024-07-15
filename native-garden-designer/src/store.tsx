@@ -115,7 +115,7 @@ interface AppState {
 export const useAppStore = create<AppState>(
   persist(
     (set, get) => ({
-      gridMode: true,
+      gridMode: false,
       toggleGridMode: () => set((state) => ({ gridMode: !state.gridMode })),
       allPlants: [],
       selectedPlant: null,
