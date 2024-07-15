@@ -108,11 +108,15 @@ interface AppState {
   updateSelectedPlantsPosition: (newPosition: [number, number, number]) => void;
   removeSelectedPlants: () => void;
   customizeSelectedPlants: (customizations: Partial<Plant>) => void;
+  gridMode: boolean;
+  toggleGridMode: () => void;
 }
 
 export const useAppStore = create<AppState>(
   persist(
     (set, get) => ({
+      gridMode: true,
+      toggleGridMode: () => set((state) => ({ gridMode: !state.gridMode })),
       allPlants: [],
       selectedPlant: null,
       hoveredPlant: null,

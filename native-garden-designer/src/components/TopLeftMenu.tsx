@@ -26,6 +26,8 @@ import RedoIcon from "@mui/icons-material/Redo";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { isMac } from "../constants";
+import GridOnIcon from "@mui/icons-material/GridOn";
+import GridOffIcon from "@mui/icons-material/GridOff";
 
 const MenuContainer = styled.div`
   position: absolute;
@@ -156,6 +158,8 @@ const TopLeftMenu: React.FC = () => {
     addNewPage,
     setCurrentTool,
     deleteSelectedPlants,
+    gridMode,
+    toggleGridMode,
   } = useAppStore();
 
   useEffect(() => {
@@ -442,6 +446,11 @@ const TopLeftMenu: React.FC = () => {
         <Tooltip title="Duplicate">
           <IconButton onClick={handleDuplicate} size="small">
             <ContentCopyIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={gridMode ? "Disable Grid" : "Enable Grid"}>
+          <IconButton onClick={toggleGridMode} size="small">
+            {gridMode ? <GridOnIcon /> : <GridOffIcon />}
           </IconButton>
         </Tooltip>
       </ActionButtonsContainer>
