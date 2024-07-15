@@ -3,8 +3,8 @@ import PlantInstance from "./PlantInstance";
 import PlantPreview from "./PlantSelector/PlantPreview";
 import { useAppStore } from "../store";
 import * as THREE from "three";
-import { Select } from "@react-three/drei";
-import { uniq } from "lodash";
+import { uniq, uniqBy } from "lodash";
+import { AlwaysShiftSelect } from "./AlwaysShiftSelect";
 
 export function PlantsInstances({
   groundRef,
@@ -19,23 +19,25 @@ export function PlantsInstances({
     currentTool,
   } = useAppStore();
   const selectionEnabled = currentTool === "select";
+  const uniqPlants = uniqBy(plants, "id");
   return (
-    <Select
-      multiple
+    <AlwaysShiftSelect
+      requireShift={!selectionEnabled}
+      multiple={true}
       box={selectionEnabled}
-      onChange={(selectedMeshes) => {
+      onChange={(selectedMeshes: any) => {
         if (!selectionEnabled) {
           return;
         }
         const selectedIds = selectedMeshes.map(
-          (mesh) => mesh.parent?.userData.id
+          (mesh: any) => mesh.parent?.userData.id
         );
         const uniqIds = uniq(selectedIds);
-        setSelectedPlantIds(uniqIds);
+        setSelectedPlantIds(uniqIds as any);
       }}
     >
       <Suspense fallback={null}>
-        {plants.map((plant) => (
+        {uniqPlants.map((plant) => (
           <PlantInstance
             key={plant.id}
             id={plant.id}
@@ -56,6 +58,6 @@ export function PlantsInstances({
           />
         )}
       </Suspense>
-    </Select>
+    </AlwaysShiftSelect>
   );
 }

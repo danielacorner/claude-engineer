@@ -24,6 +24,7 @@ export const GardenScene: React.FC = () => {
     placePlant,
     isDragging,
     isHovered,
+    currentTool,
   } = useAppStore();
 
   const orbitControlsRef = useRef<any>();
@@ -95,7 +96,10 @@ export const GardenScene: React.FC = () => {
         <OrbitControls
           ref={orbitControlsRef}
           mouseButtons={{
-            LEFT: isShiftPressed ? undefined : THREE.MOUSE.ROTATE,
+            LEFT:
+              isShiftPressed || currentTool === "select"
+                ? undefined
+                : THREE.MOUSE.ROTATE,
             MIDDLE:
               /* currentTool === "select" ? THREE.MOUSE.DOLLY : */ THREE.MOUSE
                 .PAN,
