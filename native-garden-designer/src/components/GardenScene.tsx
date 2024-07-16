@@ -97,7 +97,9 @@ export const GardenScene: React.FC = () => {
           ref={orbitControlsRef}
           mouseButtons={{
             LEFT:
-              isShiftPressed || currentTool === "select"
+              isShiftPressed ||
+              currentTool === "select" ||
+              currentTool === "add"
                 ? undefined
                 : THREE.MOUSE.ROTATE,
             MIDDLE:

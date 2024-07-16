@@ -59,6 +59,7 @@ interface AppState {
   addNewPage: () => void;
   deleteSelectedPlants: () => void;
   placePlant: (position: [number, number, number]) => void;
+  duplicateSelectedPlants: () => void;
   updatePlantPosition: (
     instanceId: number,
     newPosition: [number, number, number]
@@ -111,7 +112,10 @@ interface AppState {
   gridMode: boolean;
   toggleGridMode: () => void;
 }
-
+const OFFSET_NEW_PLANT = {
+  x: 0.25,
+  y: 0.25,
+};
 export const useAppStore = create<AppState>(
   persist(
     (set, get) => ({
@@ -137,7 +141,15 @@ export const useAppStore = create<AppState>(
       tooltipPlant: null,
       showPlantSelector: false,
       editMode: false,
-      currentProject: null,
+      currentProject: {
+        name: "Project 1",
+        pages: [
+          {
+            plants: [],
+            name: "Page 1",
+          },
+        ],
+      },
       currentPageIdx: null,
       currentTool: "add",
       setTooltipPlant: (plant) => set({ tooltipPlant: plant }),
@@ -215,6 +227,61 @@ export const useAppStore = create<AppState>(
                 pages: updatedPages,
               },
               plants: [...state.plants, newPlant],
+            };
+          }
+          return state;
+        }),
+      duplicateSelectedPlants: () =>
+        set((state) => {
+          if (
+            state.selectedPlantIds &&
+            state.currentProject &&
+            state.currentPageIdx !== null
+          ) {
+            const selectedPlants = state.plants.filter((plant) =>
+              state.selectedPlantIds.includes(plant.id)
+            );
+            console.log("⭐🎈  set  selectedPlants:", selectedPlants);
+
+            const duplicatePlants: Plant[] = selectedPlants.map(
+              (plant, idx) => ({
+                ...plant,
+                id: state.plants.length + 1 + idx,
+                position: [
+                  plant.position[0] + OFFSET_NEW_PLANT.x,
+                  plant.position[1],
+                  plant.position[2] + OFFSET_NEW_PLANT.y,
+                ],
+                rotation: [0, Math.random() * 360, 0],
+                scale: plant.scale.map(
+                  (s) => s * (0.8 + Math.random() * 0.4)
+                ) as [number, number, number],
+                selected: true,
+              })
+            );
+            console.log(
+              "⭐🎈  constduplicatePlants:Plant[]=selectedPlants.map  duplicatePlants:",
+              duplicatePlants
+            );
+
+            const updatedPages = [...state.currentProject.pages];
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: [
+                ...updatedPages[state.currentPageIdx].plants.map((p) => ({
+                  ...p,
+                  selected: false,
+                })),
+                ...duplicatePlants,
+              ],
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
+              plants: [...state.plants, ...duplicatePlants],
+              selectedPlantIds: duplicatePlants.map((p) => p.id),
             };
           }
           return state;
@@ -436,10 +503,10 @@ export const useAppStore = create<AppState>(
         }
       },
       createNewProject: () => {
-        set({
+        set(() => ({
           currentProject: {
-            name: "Untitled Project",
-            pages: [{ plants: [] as Plant[], name: "Untitled Page" }],
+            name: `Untitled Project`,
+            pages: [{ plants: [] as Plant[], name: "Page 1" }],
           },
           currentPageIdx: 0,
           plants: [],
@@ -451,7 +518,7 @@ export const useAppStore = create<AppState>(
           isDragging: false,
           isHovered: false,
           showContextMenu: false,
-        });
+        }));
       },
       shareProject: () => {
         console.log("Share Project functionality to be implemented");

@@ -160,6 +160,7 @@ const TopLeftMenu: React.FC = () => {
     deleteSelectedPlants,
     gridMode,
     toggleGridMode,
+    duplicateSelectedPlants,
   } = useAppStore();
 
   useEffect(() => {
@@ -278,11 +279,25 @@ const TopLeftMenu: React.FC = () => {
     console.log("Edit pages");
   };
 
-  const handleDuplicate = () => {
-    // Implement duplicate functionality
-    console.log("Duplicate");
-  };
+  // handle duplicate on modKey + D
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const modKey = isMac ? event.metaKey : event.ctrlKey;
+      console.log("⭐🎈  handleKeyDown  modKey:", modKey, event.key);
+      if (modKey && event.key === "d") {
+        duplicateSelectedPlants();
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [duplicateSelectedPlants]);
 
+  const pageNameDisplay =
+    currentProject?.pages[currentPageIdx ?? 0]?.name ??
+    `Page ${(currentPageIdx ?? 0) + 1}`;
   return (
     <MenuContainer>
       <IconButton
@@ -397,15 +412,10 @@ const TopLeftMenu: React.FC = () => {
           <StyledSelect
             value={currentPageIdx ?? ""}
             onChange={handlePageChange}
-            renderValue={() => "Pages"}
+            renderValue={() => pageNameDisplay}
           >
             <PageMenuTitle>
-              {currentPageIdx === -1
-                ? "No pages"
-                : `${
-                    currentProject?.pages[currentPageIdx ?? 0]?.name ??
-                    `Page ${(currentPageIdx ?? 0) + 1}`
-                  }`}
+              {currentPageIdx === -1 ? "No pages" : `${pageNameDisplay}`}
               <div>
                 <IconButton size="small" onClick={handleEditPages}>
                   <EditIcon fontSize="small" />
@@ -443,8 +453,8 @@ const TopLeftMenu: React.FC = () => {
             <DeleteIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Duplicate">
-          <IconButton onClick={handleDuplicate} size="small">
+        <Tooltip title={`Duplicate (${modKeySymbol}+D)`}>
+          <IconButton onClick={duplicateSelectedPlants} size="small">
             <ContentCopyIcon />
           </IconButton>
         </Tooltip>

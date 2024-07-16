@@ -34,12 +34,12 @@ const Model: React.FC<{
 }> = ({ plant, setError }) => {
   const [model, setModel] = useState<THREE.Group | null>(null);
 
+  const { scene } = useGLTF(plant.modelUrl);
   useEffect(() => {
     let isMounted = true;
 
     const loadModel = async () => {
       try {
-        const { scene } = await useGLTF(plant.modelUrl);
         if (isMounted) {
           setModel(scene);
         }
@@ -56,7 +56,7 @@ const Model: React.FC<{
     return () => {
       isMounted = false;
     };
-  }, [plant.modelUrl, setError]);
+  }, [plant.modelUrl, setError, scene]);
 
   if (!model) {
     return null;
