@@ -8,6 +8,7 @@ import shallow from "zustand/shallow";
 
 const context = /* @__PURE__ */ React.createContext([]);
 export function AlwaysShiftSelect({
+  enabled = true,
   box,
   multiple,
   children,
@@ -36,13 +37,14 @@ export function AlwaysShiftSelect({
   }, [active, downed]);
   const onClick = React.useCallback(
     (e) => {
+      if (!enabled) return;
       e.stopPropagation();
       dispatch({
         object: customFilter([e.object])[0],
         shift: requireShift ? multiple && e.shiftKey : true,
       });
     },
-    [requireShift]
+    [requireShift, enabled]
   );
   const onPointerMissed = React.useCallback(
     (e) => !hovered && dispatch({}),
@@ -50,7 +52,7 @@ export function AlwaysShiftSelect({
   );
   const ref = React.useRef(null);
   React.useEffect(() => {
-    if (!box || !multiple) return;
+    if (!box || !multiple || !enabled) return;
     const selBox = new SelectionBox(camera, ref.current);
     const element = document.createElement("div");
     element.style.pointerEvents = "none";
@@ -151,7 +153,16 @@ export function AlwaysShiftSelect({
       document.removeEventListener("pointermove", pointerMove, true);
       document.removeEventListener("pointerup", pointerUp);
     };
-  }, [size.width, size.height, raycaster, camera, controls, gl, requireShift]);
+  }, [
+    size.width,
+    size.height,
+    raycaster,
+    camera,
+    controls,
+    gl,
+    requireShift,
+    enabled,
+  ]);
   return /*#__PURE__*/ React.createElement(
     "group",
     _extends(

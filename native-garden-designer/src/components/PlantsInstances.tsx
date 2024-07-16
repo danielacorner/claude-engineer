@@ -17,12 +17,23 @@ export function PlantsInstances({
     setSelectedPlantIds,
     hoveredPosition,
     currentTool,
+    isHovered,
+    hoveredPlant,
+    selectedPlantIds,
   } = useAppStore();
   const selectionEnabled = currentTool === "select";
   // in currenttool select mode, select with left mouse without requiring shift
   const uniqPlants = uniqBy(plants, "id");
+
+  const isHoveredOverSelectedPlant =
+    isHovered &&
+    hoveredPlant &&
+    selectedPlant &&
+    selectedPlantIds.includes(hoveredPlant.id);
+
   return (
     <AlwaysShiftSelect
+      enabled={!isHoveredOverSelectedPlant}
       requireShift={!selectionEnabled}
       multiple={true}
       box={selectionEnabled}

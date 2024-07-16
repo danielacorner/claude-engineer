@@ -455,7 +455,7 @@ const TopLeftMenu: React.FC = () => {
         </Tooltip>
         <Tooltip title={`Duplicate (${modKeySymbol}+D)`}>
           <IconButton
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent) => {
               e.preventDefault();
               e.stopPropagation();
               duplicateSelectedPlants();

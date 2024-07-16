@@ -38,6 +38,8 @@ const PlantInstance = ({
     setIsDragging,
     isHovered,
     setIsHovered,
+    hoveredPlant,
+    setHoveredPlant,
     setShowContextMenu,
     gridMode,
     currentTool,
@@ -260,7 +262,10 @@ const PlantInstance = ({
       }
     }
   });
-
+  const isPlantHovered = hoveredPlant && hoveredPlant.id === id;
+  if (isPlantHovered) {
+    console.log("⭐� ~ isPlantHovered:", isPlantHovered);
+  }
   return (
     <a.group
       ref={groupRef}
@@ -286,16 +291,18 @@ const PlantInstance = ({
       onPointerOut={() => {
         // setIsDragging(false);
         setIsHovered(false);
+        setHoveredPlant(null);
         gl.domElement.style.cursor = "auto";
       }}
       onPointerOver={() => {
         setIsHovered(plant.id);
+        setHoveredPlant(plant);
         gl.domElement.style.cursor = "grab";
       }}
       onContextMenu={isDragging ? () => {} : handleContextMenu}
       {...spring}
     >
-      {isSelected && <SelectedIndicator />}
+      {isSelected && <SelectedIndicator hovered={Boolean(isPlantHovered)} />}
       <mesh rotation={rotation}>
         <PlantGrowthAnimation
           scale={plant.scale || [1, 1, 1]}
@@ -322,11 +329,15 @@ const PlantInstance = ({
   );
 };
 
-function SelectedIndicator() {
+function SelectedIndicator({ hovered }: { hovered: boolean }) {
   return (
     <mesh>
       <boxGeometry args={[1, 1, 1]} />
-      <meshBasicMaterial color="yellow" opacity={0.3} transparent />
+      <meshBasicMaterial
+        color="yellow"
+        opacity={hovered ? 0.5 : 0.25}
+        transparent
+      />
     </mesh>
   );
 }
