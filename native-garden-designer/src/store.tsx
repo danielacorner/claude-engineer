@@ -10,9 +10,11 @@ export type ToolType =
   | "edit"
   | "terrain";
 interface AppState {
+  /** plants in the catalogue */
   allPlants: PlantData[];
   selectedPlant: PlantData | null;
   hoveredPlant: PlantData | null;
+  /** plants visible in the current project current page */
   plants: Plant[];
   hoveredPosition: [number, number, number] | null;
   timeOfDay: number;
@@ -107,9 +109,7 @@ interface AppState {
   clearSelection: () => void;
 
   updateSelectedPlantsPosition: (newPosition: [number, number, number]) => void;
-  updateSelectedPlantsPositions: (
-    newPositions: [number, number, number][]
-  ) => void;
+  updateSelectedPlantsPositions: (offset: [number, number, number]) => void;
   removeSelectedPlants: () => void;
   customizeSelectedPlants: (customizations: Partial<Plant>) => void;
   gridMode: boolean;
@@ -565,14 +565,17 @@ export const useAppStore = create<AppState>(
           }
           return state;
         }),
-      updateSelectedPlantsPositions: (newPositions) =>
+      updateSelectedPlantsPositions: (offset) =>
         set((state) => {
           if (state.currentProject && state.currentPageIdx !== null) {
             const updatedPages = [...state.currentProject.pages];
             const currentPagePlants = updatedPages[state.currentPageIdx].plants;
             const updatedPlants = currentPagePlants.map((plant) => {
-              const newPosition =
-                newPositions[state.selectedPlantIds.indexOf(plant.id)];
+              const newPosition = [
+                plant.position[0] + offset[0],
+                plant.position[1] + offset[1],
+                plant.position[2] + offset[2],
+              ] as [number, number, number];
               return newPosition ? { ...plant, position: newPosition } : plant;
             });
             updatedPages[state.currentPageIdx] = {

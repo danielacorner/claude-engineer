@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { DragControls, useGLTF } from "@react-three/drei";
 import { Plant } from "../types";
 import {
   Group,
@@ -33,7 +33,6 @@ const PlantInstance = ({
   const {
     windSpeed,
     rainIntensity,
-    updatePlantPosition,
     isDragging,
     setIsDragging,
     isHovered,
@@ -45,7 +44,6 @@ const PlantInstance = ({
     currentTool,
     selectedPlantIds,
     updateSelectedPlantsPositions,
-    plants,
   } = useAppStore();
 
   const groupRef = useRef<Group>(null);
@@ -130,30 +128,6 @@ const PlantInstance = ({
     return 0;
   };
 
-  const updateSelectedPlants = (newPosition: [number, number, number]) => {
-    const offset = [
-      newPosition[0] - position[0],
-      newPosition[1] - position[1],
-      newPosition[2] - position[2],
-    ];
-
-    const updatedPositions: [number, number, number][] = selectedPlantIds.map(
-      (id) => {
-        const plant = plants.find((p) => p.id === id);
-        if (plant) {
-          return [
-            plant.position[0] + offset[0],
-            plant.position[1] + offset[1],
-            plant.position[2] + offset[2],
-          ] as [number, number, number];
-        }
-        return [0, 0, 0];
-      }
-    );
-
-    updateSelectedPlantsPositions(updatedPositions);
-  };
-
   useFrame((state) => {
     if (
       currentTool !== "select" &&
@@ -173,12 +147,6 @@ const PlantInstance = ({
         snappedPosition[2],
       ] as [number, number, number];
       setPosition(newPosition);
-
-      if (selectedPlantIds.includes(plant.id)) {
-        updateSelectedPlants(newPosition);
-      } else {
-        updatePlantPosition(id, newPosition);
-      }
     }
 
     // Enhanced wind and rain animation
@@ -266,66 +234,96 @@ const PlantInstance = ({
   if (isPlantHovered) {
     console.log("⭐� ~ isPlantHovered:", isPlantHovered);
   }
+
   return (
-    <a.group
-      ref={groupRef}
-      position={position}
-      onPointerDown={(e) => {
-        e.stopPropagation();
-        if (currentTool === "select") {
-          return;
-        }
+    <DragControls
+      onDragStart={(e) => {
+        console.log("⭐� ~ e:", e);
         setIsDragging(plant.id);
-        gl.domElement.style.cursor = "grabbing";
-        if (!selectedPlantIds.includes(plant.id)) {
-          useAppStore.getState().setSelectedPlantIds([plant.id]);
-        }
       }}
-      onPointerUp={() => {
-        if (currentTool === "select") {
-          return;
-        }
-        setIsDragging(false);
-        gl.domElement.style.cursor = "auto";
+      onDrag={(e) => {
+        console.log("⭐� ~ e:", e);
+        const intersection = new Vector3();
+        raycaster.ray.intersectPlane(dragPlane, intersection);
+        const snappedPosition = gridMode
+          ? snapToGrid(intersection)
+          : [intersection.x, intersection.y, intersection.z];
+        const y = getGroundHeight(snappedPosition[0], snappedPosition[2]);
+        const newPosition = [
+          snappedPosition[0],
+          y + plantHeight,
+          snappedPosition[2],
+        ] as [number, number, number];
+        setPosition(newPosition);
+        const offset = new Vector3(...position).sub(
+          new Vector3(...newPosition)
+        );
+        updateSelectedPlantsPositions([offset.x, offset.y, offset.z]);
       }}
-      onPointerOut={() => {
-        // setIsDragging(false);
-        setIsHovered(false);
-        setHoveredPlant(null);
-        gl.domElement.style.cursor = "auto";
+      onDragEnd={() => {
+        console.log("⭐ ~ onDragEnd");
       }}
-      onPointerOver={() => {
-        setIsHovered(plant.id);
-        setHoveredPlant(plant);
-        gl.domElement.style.cursor = "grab";
-      }}
-      onContextMenu={isDragging ? () => {} : handleContextMenu}
-      {...spring}
     >
-      {isSelected && <SelectedIndicator hovered={Boolean(isPlantHovered)} />}
-      <mesh rotation={rotation}>
-        <PlantGrowthAnimation
-          scale={plant.scale || [1, 1, 1]}
-          growthDuration={1}
-          onGrowthComplete={handleGrowthComplete}
-          id={plant.id}
-        >
-          <primitive
-            ref={ref}
-            object={lodMeshes[lodLevel]}
-            userData-id={plant.id}
+      <a.group
+        ref={groupRef}
+        position={position}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          if (currentTool === "select") {
+            return;
+          }
+          setIsDragging(plant.id);
+          gl.domElement.style.cursor = "grabbing";
+          if (!selectedPlantIds.includes(plant.id)) {
+            useAppStore.getState().setSelectedPlantIds([plant.id]);
+          }
+        }}
+        onPointerUp={() => {
+          if (currentTool === "select") {
+            return;
+          }
+          setIsDragging(false);
+          gl.domElement.style.cursor = "auto";
+        }}
+        onPointerOut={() => {
+          // setIsDragging(false);
+          setIsHovered(false);
+          setHoveredPlant(null);
+          gl.domElement.style.cursor = "auto";
+        }}
+        onPointerOver={() => {
+          setIsHovered(plant.id);
+          setHoveredPlant(plant);
+          gl.domElement.style.cursor = "grab";
+        }}
+        onContextMenu={isDragging ? () => {} : handleContextMenu}
+        {...spring}
+      >
+        {isSelected && <SelectedIndicator hovered={Boolean(isPlantHovered)} />}
+        <mesh rotation={rotation}>
+          <PlantGrowthAnimation
+            scale={plant.scale || [1, 1, 1]}
+            growthDuration={1}
+            onGrowthComplete={handleGrowthComplete}
+            id={plant.id}
           >
-            {(isDragging === plant.id ||
-              selectedPlantIds.includes(plant.id)) && (
-              <mesh position={[0, 0.01, 0]}>
-                <planeGeometry args={[1, 1]} />
-                <meshBasicMaterial color="yellow" opacity={0.5} transparent />
-              </mesh>
-            )}
-          </primitive>
-        </PlantGrowthAnimation>
-      </mesh>
-    </a.group>
+            <primitive
+              ref={ref}
+              object={lodMeshes[lodLevel]}
+              userData-id={plant.id}
+            >
+              {(isDragging === plant.id ||
+                selectedPlantIds.includes(plant.id)) && (
+                <mesh position={[0, 0.01, 0]}>
+                  <planeGeometry args={[1, 1]} />
+                  <meshBasicMaterial color="yellow" opacity={0.5} transparent />
+                </mesh>
+              )}
+            </primitive>
+          </PlantGrowthAnimation>
+        </mesh>
+      </a.group>
+    </DragControls>
   );
 };
 

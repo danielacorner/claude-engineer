@@ -38,7 +38,6 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
 
     const { camera, raycaster, mouse } = useThree();
     const [hoverPoint, setHoverPoint] = useState<THREE.Vector3 | null>(null);
-
     // Load a grass texture
     const texture = useTexture("/textures/grass.jpg");
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -108,7 +107,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
 
     const { plants, setShowContextMenu } = useAppStore();
 
-    const handleClick = () => {
+    const handleClick = (_e: any) => {
       const draggedBetweenMouseDownMouseUp =
         mouse.x !== mousePosition.prev.x || mouse.y !== mousePosition.prev.y;
       if (draggedBetweenMouseDownMouseUp) {
@@ -141,7 +140,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
       }
     };
 
-    const handlePointerMove = () => {
+    const handlePointerMove = (_e: any) => {
       if (meshRef.current) {
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObject(meshRef.current);
@@ -251,7 +250,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
           ]}
           onClick={handleClick}
           onPointerMove={handlePointerMove}
-          onPointerDown={(event) => {
+          onPointerDown={(event: any) => {
             setMousePosition((prev) => ({
               x: event.clientX,
               y: event.clientY,
