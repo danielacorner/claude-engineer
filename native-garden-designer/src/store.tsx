@@ -238,10 +238,11 @@ export const useAppStore = create<AppState>(
             state.currentProject &&
             state.currentPageIdx !== null
           ) {
-            const selectedPlants = state.plants.filter((plant) =>
+            const currentPage =
+              state.currentProject.pages[state.currentPageIdx];
+            const selectedPlants = currentPage.plants.filter((plant) =>
               state.selectedPlantIds.includes(plant.id)
             );
-            console.log("⭐🎈  set  selectedPlants:", selectedPlants);
 
             const duplicatePlants: Plant[] = selectedPlants.map(
               (plant, idx) => ({
