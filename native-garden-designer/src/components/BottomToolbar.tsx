@@ -54,10 +54,20 @@ const tools: { kbd: string; name: ToolType; icon: any; tooltip: string }[] = [
 ];
 
 const BottomToolbar: React.FC = () => {
-  const { currentTool, setCurrentTool } = useAppStore();
+  const {
+    setShowPlantSelector,
+    currentTool,
+    setCurrentTool,
+    showPlantSelector,
+  } = useAppStore();
   useKeyboardShortcuts();
   const handleToolClick = (toolName: ToolType) => {
     setCurrentTool(toolName);
+    if (toolName === "add") {
+      setShowPlantSelector(true);
+    } else if (showPlantSelector) {
+      setShowPlantSelector(false);
+    }
   };
 
   return (

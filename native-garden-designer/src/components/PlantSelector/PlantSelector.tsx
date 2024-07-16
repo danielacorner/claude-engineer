@@ -16,7 +16,8 @@ const PlantSelector: React.FC = () => {
   const addPlant = useAppStore((state) => state.addPlant);
   const setSelectedPlant = useAppStore((state) => state.setSelectedPlant);
   const setHoveredPlant = useAppStore((state) => state.setHoveredPlant);
-  const { showPlantSelector, setShowPlantSelector } = useAppStore();
+  const { showPlantSelector, setShowPlantSelector, setCurrentTool } =
+    useAppStore();
   const [[searchTerm, isFirstLetterOnly], setSearchTerm] = useState<
     [string, boolean]
   >(["", false]);
@@ -94,7 +95,10 @@ const PlantSelector: React.FC = () => {
       <div className={"plantSelectorWrapper"}>
         <div className={"plantSelector"}>
           <IconButton
-            onClick={() => setShowPlantSelector(!showPlantSelector)}
+            onClick={() => {
+              setShowPlantSelector(false);
+              setCurrentTool("select");
+            }}
             style={{
               position: "absolute",
               top: "1rem",

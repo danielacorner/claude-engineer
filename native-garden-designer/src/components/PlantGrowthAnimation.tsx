@@ -19,8 +19,6 @@ const PlantGrowthAnimation: React.FC<PlantGrowthAnimationProps> = ({
   children,
   id,
 }) => {
-  const finalScale = new THREE.Vector3(...scale.map((n) => n * SCALE));
-
   const [springs, api] = useSpring(() => ({
     scale: [0.1, 0.1, 0.1],
     config: {
@@ -35,10 +33,11 @@ const PlantGrowthAnimation: React.FC<PlantGrowthAnimationProps> = ({
   }));
 
   useEffect(() => {
+    const finalScale = new THREE.Vector3(...scale.map((n) => n * SCALE));
     api.start({
       scale: [finalScale.x, finalScale.y, finalScale.z],
     });
-  }, [api, finalScale]);
+  }, [api, scale]);
 
   return (
     <animated.group

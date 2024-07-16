@@ -395,7 +395,7 @@ const TopLeftMenu: React.FC = () => {
       <PageSelectContainer>
         <PageSelect>
           <StyledSelect
-            value={currentPageIdx}
+            value={currentPageIdx ?? ""}
             onChange={handlePageChange}
             renderValue={() => "Pages"}
           >
