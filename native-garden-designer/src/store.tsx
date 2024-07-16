@@ -107,6 +107,9 @@ interface AppState {
   clearSelection: () => void;
 
   updateSelectedPlantsPosition: (newPosition: [number, number, number]) => void;
+  updateSelectedPlantsPositions: (
+    newPositions: [number, number, number][]
+  ) => void;
   removeSelectedPlants: () => void;
   customizeSelectedPlants: (customizations: Partial<Plant>) => void;
   gridMode: boolean;
@@ -558,6 +561,29 @@ export const useAppStore = create<AppState>(
                   ? { ...plant, position: newPosition }
                   : plant
               ),
+            };
+          }
+          return state;
+        }),
+      updateSelectedPlantsPositions: (newPositions) =>
+        set((state) => {
+          if (state.currentProject && state.currentPageIdx !== null) {
+            const updatedPages = [...state.currentProject.pages];
+            const currentPagePlants = updatedPages[state.currentPageIdx].plants;
+            const updatedPlants = currentPagePlants.map((plant) => {
+              const newPosition =
+                newPositions[state.selectedPlantIds.indexOf(plant.id)];
+              return newPosition ? { ...plant, position: newPosition } : plant;
+            });
+            updatedPages[state.currentPageIdx] = {
+              ...updatedPages[state.currentPageIdx],
+              plants: updatedPlants,
+            };
+            return {
+              currentProject: {
+                ...state.currentProject,
+                pages: updatedPages,
+              },
             };
           }
           return state;

@@ -41,6 +41,9 @@ const PlantInstance = ({
     setShowContextMenu,
     gridMode,
     currentTool,
+    selectedPlantIds,
+    updateSelectedPlantsPositions,
+    plants,
   } = useAppStore();
 
   const groupRef = useRef<Group>(null);
@@ -87,12 +90,26 @@ const PlantInstance = ({
     });
   }, [isHovered, api, plant.id, plant.scale]);
 
-  const snapToGrid = (point: Vector3): Vector3 => {
-    return new Vector3(
-      Math.round(point.x / GRID_SIZE) * GRID_SIZE,
-      point.y,
-      Math.round(point.z / GRID_SIZE) * GRID_SIZE
-    );
+  const snapToGrid = (
+    point: Vector3 | [number, number, number]
+  ): [number, number, number] => {
+    const x =
+      typeof (point as any).x === "number"
+        ? (point as any).x
+        : (point as any)[0];
+    const y =
+      typeof (point as any).y === "number"
+        ? (point as any).y
+        : (point as any)[1];
+    const z =
+      typeof (point as any).z === "number"
+        ? (point as any).z
+        : (point as any)[2];
+    return [
+      Math.round(x / GRID_SIZE) * GRID_SIZE,
+      y,
+      Math.round(z / GRID_SIZE) * GRID_SIZE,
+    ];
   };
 
   const dragPlane = useMemo(() => new Plane(new Vector3(0, 1, 0), 0), []);
@@ -111,25 +128,55 @@ const PlantInstance = ({
     return 0;
   };
 
+  const updateSelectedPlants = (newPosition: [number, number, number]) => {
+    const offset = [
+      newPosition[0] - position[0],
+      newPosition[1] - position[1],
+      newPosition[2] - position[2],
+    ];
+
+    const updatedPositions: [number, number, number][] = selectedPlantIds.map(
+      (id) => {
+        const plant = plants.find((p) => p.id === id);
+        if (plant) {
+          return [
+            plant.position[0] + offset[0],
+            plant.position[1] + offset[1],
+            plant.position[2] + offset[2],
+          ] as [number, number, number];
+        }
+        return [0, 0, 0];
+      }
+    );
+
+    updateSelectedPlantsPositions(updatedPositions);
+  };
+
   useFrame((state) => {
     if (
       currentTool !== "select" &&
       isDragging &&
-      isDragging === plant.id &&
+      (isDragging === plant.id || selectedPlantIds.includes(plant.id)) &&
       groupRef.current
     ) {
       const intersection = new Vector3();
       raycaster.ray.intersectPlane(dragPlane, intersection);
       const snappedPosition = gridMode
         ? snapToGrid(intersection)
-        : intersection;
-      const y = getGroundHeight(snappedPosition.x, snappedPosition.z);
-      setPosition([snappedPosition.x, y + plantHeight, snappedPosition.z]);
-      updatePlantPosition(id, [
-        snappedPosition.x,
+        : [intersection.x, intersection.y, intersection.z];
+      const y = getGroundHeight(snappedPosition[0], snappedPosition[2]);
+      const newPosition = [
+        snappedPosition[0],
         y + plantHeight,
-        snappedPosition.z,
-      ]);
+        snappedPosition[2],
+      ] as [number, number, number];
+      setPosition(newPosition);
+
+      if (selectedPlantIds.includes(plant.id)) {
+        updateSelectedPlants(newPosition);
+      } else {
+        updatePlantPosition(id, newPosition);
+      }
     }
 
     // Enhanced wind and rain animation
@@ -199,7 +246,6 @@ const PlantInstance = ({
   }, []);
 
   const ref = useRef<THREE.Group>(null);
-  const { selectedPlantIds } = useAppStore();
   const isSelected = selectedPlantIds.includes(plant.id);
 
   // Simulate wind effect and update outline glow
@@ -226,6 +272,9 @@ const PlantInstance = ({
         }
         setIsDragging(plant.id);
         gl.domElement.style.cursor = "grabbing";
+        if (!selectedPlantIds.includes(plant.id)) {
+          useAppStore.getState().setSelectedPlantIds([plant.id]);
+        }
       }}
       onPointerUp={() => {
         if (currentTool === "select") {
@@ -259,7 +308,8 @@ const PlantInstance = ({
             object={lodMeshes[lodLevel]}
             userData-id={plant.id}
           >
-            {isDragging && isDragging === plant.id && (
+            {(isDragging === plant.id ||
+              selectedPlantIds.includes(plant.id)) && (
               <mesh position={[0, 0.01, 0]}>
                 <planeGeometry args={[1, 1]} />
                 <meshBasicMaterial color="yellow" opacity={0.5} transparent />
@@ -280,6 +330,7 @@ function SelectedIndicator() {
     </mesh>
   );
 }
+
 function simplifyModel(model: Object3D, factor: number) {
   model.traverse((child) => {
     if (child instanceof InstancedMesh) {
