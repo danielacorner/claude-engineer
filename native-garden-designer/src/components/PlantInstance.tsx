@@ -53,6 +53,13 @@ const PlantInstance = ({
     plant.position[1] + plantHeight,
     plant.position[2],
   ]);
+  useEffect(() => {
+    setPosition([
+      plant.position[0],
+      plant.position[1] + plantHeight,
+      plant.position[2],
+    ]);
+  }, [plant.position, plantHeight]);
   const [rotation] = useState<[number, number, number]>(
     plant.rotation ?? [0, 0, 0]
   );
@@ -129,25 +136,25 @@ const PlantInstance = ({
   };
 
   useFrame((state) => {
-    if (
-      currentTool !== "select" &&
-      isDragging &&
-      (isDragging === plant.id || selectedPlantIds.includes(plant.id)) &&
-      groupRef.current
-    ) {
-      const intersection = new Vector3();
-      raycaster.ray.intersectPlane(dragPlane, intersection);
-      const snappedPosition = gridMode
-        ? snapToGrid(intersection)
-        : [intersection.x, intersection.y, intersection.z];
-      const y = getGroundHeight(snappedPosition[0], snappedPosition[2]);
-      const newPosition = [
-        snappedPosition[0],
-        y + plantHeight,
-        snappedPosition[2],
-      ] as [number, number, number];
-      setPosition(newPosition);
-    }
+    // if (
+    //   // currentTool !== "select" &&
+    //   isDragging &&
+    //   (isDragging === plant.id || selectedPlantIds.includes(plant.id)) &&
+    //   groupRef.current
+    // ) {
+    //   const intersection = new Vector3();
+    //   raycaster.ray.intersectPlane(dragPlane, intersection);
+    //   const snappedPosition = gridMode
+    //     ? snapToGrid(intersection)
+    //     : [intersection.x, intersection.y, intersection.z];
+    //   const y = getGroundHeight(snappedPosition[0], snappedPosition[2]);
+    //   const newPosition = [
+    //     snappedPosition[0],
+    //     y + plantHeight,
+    //     snappedPosition[2],
+    //   ] as [number, number, number];
+    //   setPosition(newPosition);
+    // }
 
     // Enhanced wind and rain animation
     if (groupRef.current && !isGrowing) {
@@ -231,34 +238,36 @@ const PlantInstance = ({
     }
   });
   const isPlantHovered = hoveredPlant && hoveredPlant.id === id;
-  if (isPlantHovered) {
-    console.log("⭐� ~ isPlantHovered:", isPlantHovered);
-  }
-
+  const prevDragOffset = useRef(new Vector3(0, 0, 0));
   return (
     <DragControls
-      onDragStart={(e) => {
-        console.log("⭐� ~ e:", e);
+      axisLock="y"
+      onDragStart={(_e) => {
         setIsDragging(plant.id);
       }}
-      onDrag={(e) => {
-        console.log("⭐� ~ e:", e);
+      onDrag={(_e) => {
         const intersection = new Vector3();
         raycaster.ray.intersectPlane(dragPlane, intersection);
         const snappedPosition = gridMode
           ? snapToGrid(intersection)
           : [intersection.x, intersection.y, intersection.z];
-        const y = getGroundHeight(snappedPosition[0], snappedPosition[2]);
+        const groundHeight = getGroundHeight(
+          snappedPosition[0],
+          snappedPosition[2]
+        );
         const newPosition = [
           snappedPosition[0],
-          y + plantHeight,
+          groundHeight + plantHeight,
           snappedPosition[2],
         ] as [number, number, number];
-        setPosition(newPosition);
+        // setPosition(newPosition);
         const offset = new Vector3(...position).sub(
           new Vector3(...newPosition)
         );
-        updateSelectedPlantsPositions([offset.x, offset.y, offset.z]);
+        const [x, y, z] = prevDragOffset.current;
+        const [dx, dy, dz] = [x - offset.x, y - offset.y, z - offset.z];
+        updateSelectedPlantsPositions([dx, dy, dz]);
+        prevDragOffset.current = offset;
       }}
       onDragEnd={() => {
         console.log("⭐ ~ onDragEnd");
@@ -267,8 +276,8 @@ const PlantInstance = ({
       <a.group
         ref={groupRef}
         position={position}
-        onPointerDown={(e) => {
-          e.stopPropagation();
+        onPointerDown={(_e) => {
+          // e.stopPropagation();
           if (currentTool === "select") {
             return;
           }

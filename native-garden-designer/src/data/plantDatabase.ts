@@ -21,7 +21,7 @@ export const plantDatabase: PlantData[] = [
     height: 0.4,
     spread: 0.3,
     description: "Spring ephemeral with three-petaled white flowers",
-    color: "white",
+    // color: "white",
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ export const plantDatabase: PlantData[] = [
     height: 0.6,
     spread: 0.3,
     description: "Delicate perennial with distinctive red and yellow flowers",
-    color: "red",
+    // color: "red",
   },
   {
     id: 4,
@@ -43,7 +43,7 @@ export const plantDatabase: PlantData[] = [
     height: 0.5,
     spread: 0.3,
     description: "Unique woodland plant with hooded flower structure",
-    color: "green",
+    // color: "green",
   },
   {
     id: 5,
@@ -54,7 +54,7 @@ export const plantDatabase: PlantData[] = [
     height: 0.2,
     spread: 0.2,
     description: "Early spring wildflower with white petals and orange sap",
-    color: "white",
+    // color: "white",
   },
   {
     id: 6,

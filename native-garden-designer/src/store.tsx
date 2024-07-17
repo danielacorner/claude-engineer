@@ -570,17 +570,39 @@ export const useAppStore = create<AppState>(
           if (state.currentProject && state.currentPageIdx !== null) {
             const updatedPages = [...state.currentProject.pages];
             const currentPagePlants = updatedPages[state.currentPageIdx].plants;
-            const updatedPlants = currentPagePlants.map((plant) => {
-              const newPosition = [
-                plant.position[0] + offset[0],
-                plant.position[1] + offset[1],
-                plant.position[2] + offset[2],
-              ] as [number, number, number];
-              return newPosition ? { ...plant, position: newPosition } : plant;
-            });
+            const { currentPageSelectedPlants, currentPageUnselectedPlants } =
+              currentPagePlants.reduce(
+                (acc, plant) => {
+                  if (state.selectedPlantIds.includes(plant.id)) {
+                    acc.currentPageSelectedPlants.push(plant);
+                  } else {
+                    acc.currentPageUnselectedPlants.push(plant);
+                  }
+                  return acc;
+                },
+                {
+                  currentPageSelectedPlants: [] as Plant[],
+                  currentPageUnselectedPlants: [] as Plant[],
+                }
+              );
+            const updatedSelectedPlants = currentPageSelectedPlants.map(
+              (plant) => {
+                const newPosition = [
+                  plant.position[0] + offset[0],
+                  plant.position[1] + offset[1],
+                  plant.position[2] + offset[2],
+                ] as [number, number, number];
+                return newPosition
+                  ? { ...plant, position: newPosition }
+                  : plant;
+              }
+            );
             updatedPages[state.currentPageIdx] = {
               ...updatedPages[state.currentPageIdx],
-              plants: updatedPlants,
+              plants: [
+                ...updatedSelectedPlants,
+                ...currentPageUnselectedPlants,
+              ],
             };
             return {
               currentProject: {

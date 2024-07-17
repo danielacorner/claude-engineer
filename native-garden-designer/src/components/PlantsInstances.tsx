@@ -12,7 +12,8 @@ export function PlantsInstances({
   groundRef: React.RefObject<any>;
 }) {
   const {
-    plants,
+    currentProject,
+    currentPageIdx,
     selectedPlant,
     setSelectedPlantIds,
     hoveredPosition,
@@ -22,8 +23,11 @@ export function PlantsInstances({
     selectedPlantIds,
   } = useAppStore();
   const selectionEnabled = currentTool === "select";
-  // in currenttool select mode, select with left mouse without requiring shift
-  const uniqPlants = uniqBy(plants, "id");
+  const currentPagePlants =
+    currentPageIdx !== null
+      ? currentProject?.pages[currentPageIdx].plants ?? []
+      : [];
+  const uniqPlants = uniqBy(currentPagePlants, "id");
 
   const isHoveredOverSelectedPlant =
     isHovered &&
