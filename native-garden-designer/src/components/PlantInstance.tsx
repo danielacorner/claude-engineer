@@ -16,7 +16,6 @@ import { useAppStore } from "../store";
 import { HEIGHT_SCALE } from "../constants";
 import { useEvent } from "react-use";
 import * as THREE from "three";
-import DraggablePreview from "./DraggablePreview";
 
 const GRID_SIZE = 1; // Size of each grid cell
 const HOVER_SCALE = 1.05; // Scale factor for hover effect
@@ -44,7 +43,6 @@ const PlantInstance = ({
     currentTool,
     selectedPlantIds,
     updateSelectedPlantsPositions,
-    plants,
   } = useAppStore();
 
   const [isDraggingPreview, setIsDraggingPreview] = useState<false | Vector3>(
@@ -232,6 +230,7 @@ const PlantInstance = ({
         const totalDragOffset = intersection.sub(
           new THREE.Vector3(...position)
         );
+        console.log("⭐� ~ totalDragOffset:", totalDragOffset);
         setIsDraggingPreview(totalDragOffset);
       }}
       onDrag={(_e) => {
@@ -240,6 +239,10 @@ const PlantInstance = ({
       }}
       onDragEnd={() => {
         setIsDragging(false);
+        // only update the position using the dragged plant (we're in PlantInstance here)
+        if (!isPlantHovered) {
+          return;
+        }
         // Final position update is handled in the store
 
         const intersection = new THREE.Vector3();
@@ -252,6 +255,7 @@ const PlantInstance = ({
         const snappedPosition = gridMode
           ? snapToGrid(intersection)
           : [intersection.x, intersection.y, intersection.z];
+        console.log("⭐� ~ snappedPosition:", snappedPosition);
         const groundHeight = getGroundHeight(
           snappedPosition[0],
           snappedPosition[2]
@@ -261,9 +265,12 @@ const PlantInstance = ({
           groundHeight + plantHeight,
           snappedPosition[2],
         ] as [number, number, number];
+        console.log("⭐� ~ newPosition:", newPosition);
         const offset = new Vector3(...position).sub(
           new Vector3(...newPosition)
         );
+        console.log("⭐� ~ offset:", offset);
+
         if (!isDraggingPreview) {
           return;
         }
@@ -324,13 +331,6 @@ const PlantInstance = ({
           </PlantGrowthAnimation>
         </mesh>
       </a.group>
-
-      {isDraggingPreview && selectedPlantIds.includes(plant.id) && (
-        <DraggablePreview
-          plants={plants.filter((p) => selectedPlantIds.includes(p.id))}
-          groundRef={groundRef}
-        />
-      )}
     </DragControls>
   );
 };

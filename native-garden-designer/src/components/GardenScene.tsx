@@ -13,6 +13,7 @@ import GridSystem from "./GridSystem";
 import * as THREE from "three";
 import { useAppStore } from "../store";
 import { PlantsInstances } from "./PlantsInstances";
+import DraggablePreview from "./DraggablePreview";
 
 export const GardenScene: React.FC = () => {
   const {
@@ -120,6 +121,8 @@ export const GardenScene: React.FC = () => {
         />
         {showGrid && <GridSystem size={20} divisions={20} />}
         <PlantsInstances groundRef={groundRef} />
+        <DraggablePreview />
+
         <RainEffect intensity={rainIntensity} />
         <WindEffect speed={windSpeed} />
 

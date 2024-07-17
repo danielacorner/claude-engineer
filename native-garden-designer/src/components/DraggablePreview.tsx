@@ -2,22 +2,24 @@ import React, { useRef } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
 import { useSpring, a } from "@react-spring/three";
 import { Plant } from "../types";
-import { useAppStore } from "../store";
+import { useAppStore, useSelectedPlants } from "../store";
 import * as THREE from "three";
 
 interface DraggablePreviewProps {
   plants: Plant[];
-  groundRef: React.RefObject<THREE.Object3D>;
 }
 
 const GROUND_PLANE = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-const DraggablePreview: React.FC<DraggablePreviewProps> = ({
+const DraggablePreview = () => {
+  const selectedPlants = useSelectedPlants();
+  return <DraggablePreviewContent plants={selectedPlants} />;
+};
+const DraggablePreviewContent: React.FC<DraggablePreviewProps> = ({
   plants,
-  groundRef: _groundRef,
 }) => {
   const { raycaster, camera } = useThree();
   const groupRef = useRef<THREE.Group>(null);
-  const { gridMode, updateSelectedPlantsPositions } = useAppStore();
+  const { gridMode } = useAppStore();
 
   const [spring, api] = useSpring<{
     position: THREE.Vector3;
@@ -43,16 +45,6 @@ const DraggablePreview: React.FC<DraggablePreviewProps> = ({
           snappedPosition[2]
         ),
       });
-      if (!spring.position) {
-        return;
-      }
-      const offset = [
-        snappedPosition[0] - (spring.position as any).get()[0],
-        snappedPosition[1] - (spring.position as any).get()[1],
-        snappedPosition[2] - (spring.position as any).get()[2],
-      ];
-
-      updateSelectedPlantsPositions(offset as [number, number, number]);
     }
   });
 

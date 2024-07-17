@@ -671,3 +671,19 @@ export const useAppStore = create<AppState>(
     }
   ) as StateCreator<AppState, [], []>
 );
+
+export function useCurrentPagePlants() {
+  const { currentProject, currentPageIdx } = useAppStore();
+  const currentPagePlants =
+    currentPageIdx !== null
+      ? currentProject?.pages[currentPageIdx].plants ?? []
+      : [];
+  return currentPagePlants;
+}
+export function useSelectedPlants() {
+  const { selectedPlantIds } = useAppStore();
+  const currentPagePlants = useCurrentPagePlants();
+  return currentPagePlants.filter((plant) =>
+    selectedPlantIds.includes(plant.id)
+  );
+}
