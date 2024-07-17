@@ -16,8 +16,17 @@ const PlantSelector: React.FC = () => {
   const addPlant = useAppStore((state) => state.addPlant);
   const setSelectedPlant = useAppStore((state) => state.setSelectedPlant);
   const setHoveredPlant = useAppStore((state) => state.setHoveredPlant);
-  const { showPlantSelector, setShowPlantSelector, setCurrentTool } =
-    useAppStore();
+  const {
+    showPlantSelector,
+    setShowPlantSelector,
+    currentTool,
+    setCurrentTool,
+  } = useAppStore();
+  useEffect(() => {
+    if (currentTool !== "add") {
+      setShowPlantSelector(false);
+    }
+  }, [currentTool]);
   const [[searchTerm, isFirstLetterOnly], setSearchTerm] = useState<
     [string, boolean]
   >(["", false]);

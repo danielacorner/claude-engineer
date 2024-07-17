@@ -8,7 +8,6 @@ import {
   InstancedMesh,
   MeshStandardMaterial,
   Raycaster,
-  Plane,
   Object3D,
 } from "three";
 import { useSpring, a } from "@react-spring/three";
@@ -17,6 +16,7 @@ import { useAppStore } from "../store";
 import { HEIGHT_SCALE } from "../constants";
 import { useEvent } from "react-use";
 import * as THREE from "three";
+import DraggablePreview from "./DraggablePreview";
 
 const GRID_SIZE = 1; // Size of each grid cell
 const HOVER_SCALE = 1.05; // Scale factor for hover effect
@@ -44,7 +44,12 @@ const PlantInstance = ({
     currentTool,
     selectedPlantIds,
     updateSelectedPlantsPositions,
+    plants,
   } = useAppStore();
+
+  const [isDraggingPreview, setIsDraggingPreview] = useState<false | Vector3>(
+    false
+  );
 
   const groupRef = useRef<Group>(null);
   const plantHeight = (plant.height ?? 0) * HEIGHT_SCALE;
@@ -66,8 +71,7 @@ const PlantInstance = ({
   const { scene } = useGLTF(plant.modelUrl);
 
   const { camera, gl, raycaster } = useThree();
-  // const aspect = size.width / viewport.width;
-  const [isGrowing] = useState(true); // not used until we need animation
+  const [isGrowing] = useState(true);
 
   // LOD system
   const [lodLevel, setLodLevel] = useState(0);
@@ -87,7 +91,6 @@ const PlantInstance = ({
 
   const [spring, api] = useSpring(() => ({
     scale: plant.scale[0] ?? 1,
-    // config: { tension: 300, friction: 17 },
   }));
 
   useEffect(() => {
@@ -119,7 +122,7 @@ const PlantInstance = ({
     ];
   };
 
-  const dragPlane = useMemo(() => new Plane(new Vector3(0, 1, 0), 0), []);
+  // const dragPlane = useMemo(() => new Plane(new Vector3(0, 1, 0), 0), []);
 
   const getGroundHeight = (x: number, z: number): number => {
     if (groundRef.current) {
@@ -136,29 +139,7 @@ const PlantInstance = ({
   };
 
   useFrame((state) => {
-    // if (
-    //   // currentTool !== "select" &&
-    //   isDragging &&
-    //   (isDragging === plant.id || selectedPlantIds.includes(plant.id)) &&
-    //   groupRef.current
-    // ) {
-    //   const intersection = new Vector3();
-    //   raycaster.ray.intersectPlane(dragPlane, intersection);
-    //   const snappedPosition = gridMode
-    //     ? snapToGrid(intersection)
-    //     : [intersection.x, intersection.y, intersection.z];
-    //   const y = getGroundHeight(snappedPosition[0], snappedPosition[2]);
-    //   const newPosition = [
-    //     snappedPosition[0],
-    //     y + plantHeight,
-    //     snappedPosition[2],
-    //   ] as [number, number, number];
-    //   setPosition(newPosition);
-    // }
-
-    // Enhanced wind and rain animation
     if (groupRef.current && !isGrowing) {
-      // ! disabled for now
       animatePlant(
         groupRef.current,
         state.clock.elapsedTime,
@@ -229,9 +210,6 @@ const PlantInstance = ({
   useFrame((state) => {
     if (ref.current) {
       const time = state.clock.getElapsedTime();
-      // const windEffect = Math.sin(time * 2 + index) * 0.02 * windSpeed;
-      // ref.current.position.x = plant.position[0] + windEffect;
-
       if (isSelected && outlineMaterial.uniforms) {
         outlineMaterial.uniforms.time.value = time;
       }
@@ -244,10 +222,33 @@ const PlantInstance = ({
       axisLock="y"
       onDragStart={(_e) => {
         setIsDragging(plant.id);
+
+        const intersection = new THREE.Vector3();
+        raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+        raycaster.ray.intersectPlane(
+          new THREE.Plane(new THREE.Vector3(0, 1, 0), 0),
+          intersection
+        );
+        const totalDragOffset = intersection.sub(
+          new THREE.Vector3(...position)
+        );
+        setIsDraggingPreview(totalDragOffset);
       }}
       onDrag={(_e) => {
-        const intersection = new Vector3();
-        raycaster.ray.intersectPlane(dragPlane, intersection);
+        if (!isDraggingPreview) return;
+        // The actual drag logic is now handled in the DraggablePreview component
+      }}
+      onDragEnd={() => {
+        setIsDragging(false);
+        // Final position update is handled in the store
+
+        const intersection = new THREE.Vector3();
+        raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+        raycaster.ray.intersectPlane(
+          new THREE.Plane(new THREE.Vector3(0, 1, 0), 0),
+          intersection
+        );
+
         const snappedPosition = gridMode
           ? snapToGrid(intersection)
           : [intersection.x, intersection.y, intersection.z];
@@ -260,29 +261,30 @@ const PlantInstance = ({
           groundHeight + plantHeight,
           snappedPosition[2],
         ] as [number, number, number];
-        // setPosition(newPosition);
         const offset = new Vector3(...position).sub(
           new Vector3(...newPosition)
         );
-        const [x, y, z] = prevDragOffset.current;
+        if (!isDraggingPreview) {
+          return;
+        }
+        const [x, y, z] = [
+          isDraggingPreview.x,
+          isDraggingPreview.y,
+          isDraggingPreview.z,
+        ];
         const [dx, dy, dz] = [x - offset.x, y - offset.y, z - offset.z];
         updateSelectedPlantsPositions([dx, dy, dz]);
         prevDragOffset.current = offset;
-      }}
-      onDragEnd={() => {
-        console.log("⭐ ~ onDragEnd");
+        setIsDraggingPreview(false);
       }}
     >
       <a.group
         ref={groupRef}
         position={position}
         onPointerDown={(_e) => {
-          // e.stopPropagation();
           if (currentTool === "select") {
             return;
           }
-          setIsDragging(plant.id);
-          gl.domElement.style.cursor = "grabbing";
           if (!selectedPlantIds.includes(plant.id)) {
             useAppStore.getState().setSelectedPlantIds([plant.id]);
           }
@@ -291,11 +293,9 @@ const PlantInstance = ({
           if (currentTool === "select") {
             return;
           }
-          setIsDragging(false);
           gl.domElement.style.cursor = "auto";
         }}
         onPointerOut={() => {
-          // setIsDragging(false);
           setIsHovered(false);
           setHoveredPlant(null);
           gl.domElement.style.cursor = "auto";
@@ -320,22 +320,20 @@ const PlantInstance = ({
               ref={ref}
               object={lodMeshes[lodLevel]}
               userData-id={plant.id}
-            >
-              {(isDragging === plant.id ||
-                selectedPlantIds.includes(plant.id)) && (
-                <mesh position={[0, 0.01, 0]}>
-                  <planeGeometry args={[1, 1]} />
-                  <meshBasicMaterial color="yellow" opacity={0.5} transparent />
-                </mesh>
-              )}
-            </primitive>
+            />
           </PlantGrowthAnimation>
         </mesh>
       </a.group>
+
+      {isDraggingPreview && selectedPlantIds.includes(plant.id) && (
+        <DraggablePreview
+          plants={plants.filter((p) => selectedPlantIds.includes(p.id))}
+          groundRef={groundRef}
+        />
+      )}
     </DragControls>
   );
 };
-
 function SelectedIndicator({ hovered }: { hovered: boolean }) {
   return (
     <mesh>
