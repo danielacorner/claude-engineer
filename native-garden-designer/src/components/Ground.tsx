@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {
   useRef,
   useMemo,
@@ -9,7 +10,7 @@ import React, {
 import { Plane, useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { useAppStore } from "../store";
+import { ToolType, useAppStore } from "../store";
 
 interface GroundProps {
   onPlantPlace: (position: [number, number, number]) => void;
@@ -25,7 +26,7 @@ const HEIGHTMAP_RESOLUTION = 128; // Resolution of the heightmap
 
 const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
   ({ onPlantPlace, onHover, heightMap, setHeightmap }, ref) => {
-    const { gridMode } = useAppStore();
+    const { gridMode, currentTool } = useAppStore();
     const meshRef = useRef<THREE.Mesh>(null);
     const [mousePosition, setMousePosition] = useState({
       x: 0,
@@ -251,6 +252,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
           onClick={handleClick}
           onPointerMove={handlePointerMove}
           onPointerDown={(event: any) => {
+            handleGrabStart(currentTool);
             setMousePosition((prev) => ({
               x: event.clientX,
               y: event.clientY,
@@ -259,6 +261,9 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
                 y: prev.y,
               },
             }));
+          }}
+          onPointerUp={() => {
+            handleGrabEnd(currentTool);
           }}
         >
           <primitive object={groundMaterial} attach="material" />
@@ -272,13 +277,13 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         {hoverPoint && (
           <>
             <mesh position={hoverPoint}>
-              <boxGeometry args={[GRID_SIZE, 0.1, GRID_SIZE]} />
+              {currentTool === "move" ? null : currentTool === "select" ? (
+                <sphereGeometry args={[0.05, 16, 16]} />
+              ) : (
+                <boxGeometry args={[GRID_SIZE, 0.1, GRID_SIZE]} />
+              )}
               <meshBasicMaterial color="yellow" opacity={0.5} transparent />
             </mesh>
-            {/* <mesh position={[hoverPoint.x, hoverPoint.y + 0.5, hoverPoint.z]}>
-              <sphereGeometry args={[0.1, 16, 16]} />
-              <meshBasicMaterial color="red" />
-            </mesh> */}
           </>
         )}
       </group>
@@ -287,3 +292,25 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
 );
 
 export default Ground;
+
+function handleGrabStart(currentTool: ToolType) {
+  const canvasEl = document.querySelector<HTMLCanvasElement>("canvas");
+  if (!canvasEl) {
+    return;
+  }
+  if (currentTool === "move") {
+    canvasEl.style.cursor = "grabbing";
+  }
+}
+
+function handleGrabEnd(currentTool: ToolType) {
+  const canvasEl = document.querySelector<HTMLCanvasElement>("canvas");
+  if (!canvasEl) {
+    return;
+  }
+  if (currentTool === "move") {
+    canvasEl.style.cursor = "grab";
+  } else {
+    canvasEl.style.cursor = "auto";
+  }
+}

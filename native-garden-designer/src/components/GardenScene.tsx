@@ -71,7 +71,11 @@ export const GardenScene: React.FC = () => {
   };
   const isShiftPressed = useIsShiftPressed();
   return (
-    <div className="scene-wrapper">
+    <div
+      className={`scene-wrapper currentTool-${currentTool} ${
+        isDragging ? " isDragging" : ""
+      }`}
+    >
       <Canvas
         id="canvas"
         shadows
