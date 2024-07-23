@@ -25,18 +25,18 @@ import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { isMac } from "../constants";
+import { isMac, TOP_MENU_HEIGHT } from "../constants";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import GridOffIcon from "@mui/icons-material/GridOff";
-
 const MenuContainer = styled.div`
   position: absolute;
+  height: ${TOP_MENU_HEIGHT}px;
   top: 0px;
   left: 0px;
   z-index: 1000;
   display: flex;
   align-items: center;
-  background: #ffffff73;
+  background: #ffffff;
   padding: 4px;
   padding-left: 16px;
   * {

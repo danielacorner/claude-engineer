@@ -9,6 +9,7 @@ import { IconButton } from "@mui/material";
 import { ArrowBackIos } from "@mui/icons-material";
 import { PlantSelectionPreview } from "./PlantSelectionPreview";
 import styled from "styled-components";
+import { TOP_MENU_HEIGHT } from "../../constants";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -97,7 +98,8 @@ const PlantSelector: React.FC = () => {
       <div className="tooltip-wrapper" onClick={(e) => e.stopPropagation()}>
         <HtmlTooltip />
       </div>
-      <PanelWrapper>
+
+      <PanelWrapper $open={showPlantSelector} className="plantSelectorWrapper">
         <CloseButton
           onClick={() => {
             setShowPlantSelector(false);
@@ -212,28 +214,45 @@ const PlantSelector: React.FC = () => {
 export default PlantSelector;
 
 const CloseButton = styled(IconButton)`
-  position: absolute;
-  top: 50%;
-  right: -24px;
-  transform: translateY(-50%);
-  background-color: #f0f0f0;
-  border-radius: 4px 0 0 4px;
-  padding: 4px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  &&& {
+    position: absolute;
+    top: 64px;
+    right: -20px;
+    background-color: #f0f0f0;
+    border-radius: 0 4px 4px 0;
+    padding: 4px 2px;
+    height: 80px;
+    width: 20px;
+    z-index: -1;
+    cursor: pointer;
 
-  &:hover {
-    background-color: #e0e0e0;
+    &:hover {
+      background-color: #e0e0e0;
+    }
+
+    .MuiSvgIcon-root {
+      font-size: 18px;
+    }
   }
 `;
 
-const PanelWrapper = styled.div`
+const PanelWrapper = styled.div<{ $open: boolean }>`
   position: relative;
   height: 100%;
   width: 342px;
-
+  transition: transform 0.2s ease-in-out;
+  transform: translateX(calc(${({ $open }) => ($open ? 0 : -100)}%));
+  ${CloseButton} {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    pointer-events: all;
+    &:hover {
+      transform: translateX(0);
+    }
+  }
   &:hover ${CloseButton} {
-    opacity: 1;
+    transform: translateX(0);
+    z-index: 1000 !important;
   }
 
   .plantSelector {
@@ -246,6 +265,18 @@ const PanelWrapper = styled.div`
       width: 0;
       height: 0;
     }
+    pointer-events: auto;
+    position: absolute;
+    top: ${TOP_MENU_HEIGHT}px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
   }
 
   &:hover .plantSelector {

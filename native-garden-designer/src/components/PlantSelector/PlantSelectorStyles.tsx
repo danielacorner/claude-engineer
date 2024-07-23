@@ -8,33 +8,6 @@ export const PlantSelectorStyles = styled.div<{ $open: boolean }>`
   .tooltip-wrapper {
     pointer-events: auto;
   }
-  .plantSelectorWrapper {
-    position: relative;
-    transition: transform 0.2s ease-in-out;
-    width: 450px;
-    transform: translateX(calc(-100%));
-    ${({ $open }) =>
-      $open &&
-      `
-    transform: translateX(0);
-  `}
-  }
-  .plantSelector {
-    pointer-events: auto;
-    position: absolute;
-    top: 0px;
-    bottom: 0;
-    left: 0px;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 0 10px 10px;
-    padding: 20px;
-    overflow-y: auto;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-  }
 
   .filters {
     display: flex;
