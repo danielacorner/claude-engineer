@@ -6,8 +6,9 @@ import { PlantSelectorItem } from "./PlantSelectorItem";
 import { HtmlTooltip } from "./HtmlTooltip";
 import { PlantSelectorStyles } from "./PlantSelectorStyles";
 import { IconButton } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { ArrowBackIos } from "@mui/icons-material";
 import { PlantSelectionPreview } from "./PlantSelectionPreview";
+import styled from "styled-components";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -26,7 +27,7 @@ const PlantSelector: React.FC = () => {
     if (currentTool !== "add") {
       setShowPlantSelector(false);
     }
-  }, [currentTool]);
+  }, [currentTool, setShowPlantSelector]);
   const [[searchTerm, isFirstLetterOnly], setSearchTerm] = useState<
     [string, boolean]
   >(["", false]);
@@ -87,11 +88,6 @@ const PlantSelector: React.FC = () => {
     }
   };
 
-  // const handleImageError = (
-  //   event: React.SyntheticEvent<HTMLImageElement, Event>
-  // ) => {
-  //   event.currentTarget.src = "/plant_thumbnails/default.jpg";
-  // };
   return (
     <PlantSelectorStyles
       $open={showPlantSelector}
@@ -101,24 +97,16 @@ const PlantSelector: React.FC = () => {
       <div className="tooltip-wrapper" onClick={(e) => e.stopPropagation()}>
         <HtmlTooltip />
       </div>
-      <div className={"plantSelectorWrapper"}>
+      <PanelWrapper>
+        <CloseButton
+          onClick={() => {
+            setShowPlantSelector(false);
+            setCurrentTool("select");
+          }}
+        >
+          <ArrowBackIos />
+        </CloseButton>
         <div className={"plantSelector"}>
-          <IconButton
-            onClick={() => {
-              setShowPlantSelector(false);
-              setCurrentTool("select");
-            }}
-            style={{
-              position: "absolute",
-              top: "1rem",
-              right: "0.5rem",
-              zIndex: 1000,
-              // transform: `rotate(${open ? 0 : 180}deg)`,
-              // transition: "all 0.3s ease-in-out",
-            }}
-          >
-            <Close />
-          </IconButton>
           <h3>Plant Selector</h3>
           <div className={"filters"}>
             <input
@@ -216,9 +204,62 @@ const PlantSelector: React.FC = () => {
             </div>
           )}
         </div>
-      </div>
+      </PanelWrapper>
     </PlantSelectorStyles>
   );
 };
 
 export default PlantSelector;
+
+const CloseButton = styled(IconButton)`
+  position: absolute;
+  top: 50%;
+  right: -24px;
+  transform: translateY(-50%);
+  background-color: #f0f0f0;
+  border-radius: 4px 0 0 4px;
+  padding: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+`;
+
+const PanelWrapper = styled.div`
+  position: relative;
+  height: 100%;
+  width: 342px;
+
+  &:hover ${CloseButton} {
+    opacity: 1;
+  }
+
+  .plantSelector {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
+
+  &:hover .plantSelector {
+    padding-right: 9px;
+    scrollbar-width: thin;
+    -ms-overflow-style: auto;
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+  }
+`;

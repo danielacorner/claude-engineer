@@ -249,7 +249,6 @@ const PlantInstance = ({
         const snappedPosition = gridMode
           ? snapToGrid(intersection)
           : [intersection.x, intersection.y, intersection.z];
-        console.log("⭐� ~ snappedPosition:", snappedPosition);
         const groundHeight = getGroundHeight(
           snappedPosition[0],
           snappedPosition[2]
@@ -259,11 +258,9 @@ const PlantInstance = ({
           groundHeight + plantHeight,
           snappedPosition[2],
         ] as [number, number, number];
-        console.log("⭐� ~ newPosition:", newPosition);
         const offset = new Vector3(...position).sub(
           new Vector3(...newPosition)
         );
-        console.log("⭐� ~ offset:", offset);
 
         // const [x, y, z] = [
         //   isDraggingPreview.x,
