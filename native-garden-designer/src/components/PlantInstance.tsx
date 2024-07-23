@@ -64,7 +64,7 @@ const PlantInstance = ({
   );
   const { scene } = useGLTF(plant.modelUrl);
 
-  const { camera, gl, raycaster } = useThree();
+  const { camera, raycaster } = useThree();
   const [isGrowing] = useState(true);
 
   // LOD system
@@ -291,7 +291,9 @@ const PlantInstance = ({
         }}
         onPointerOut={() => {
           setIsHovered(false);
-          setHoveredPlant(null);
+          if (currentTool !== "add") {
+            setHoveredPlant(null);
+          }
           // gl.domElement.style.cursor = "auto";
         }}
         onPointerOver={() => {

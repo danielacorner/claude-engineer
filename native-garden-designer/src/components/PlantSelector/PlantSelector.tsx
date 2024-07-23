@@ -14,15 +14,14 @@ import { TOP_MENU_HEIGHT } from "../../constants";
 const ITEMS_PER_PAGE = 12;
 
 const PlantSelector: React.FC = () => {
-  const selectedPlant = useAppStore((state) => state.selectedPlant);
-  const addPlant = useAppStore((state) => state.addPlant);
-  const setSelectedPlant = useAppStore((state) => state.setSelectedPlant);
-  const setHoveredPlant = useAppStore((state) => state.setHoveredPlant);
   const {
     showPlantSelector,
     setShowPlantSelector,
     currentTool,
     setCurrentTool,
+    setSelectedPlant,
+    addPlant,
+    selectedPlant,
   } = useAppStore();
   useEffect(() => {
     if (currentTool !== "add") {
@@ -93,7 +92,7 @@ const PlantSelector: React.FC = () => {
     <PlantSelectorStyles
       $open={showPlantSelector}
       onClick={(e) => e.stopPropagation()}
-      onMouseLeave={() => setHoveredPlant(null)}
+      // onMouseLeave={() => setHoveredPlant(null)}
     >
       <div className="tooltip-wrapper" onClick={(e) => e.stopPropagation()}>
         <HtmlTooltip />

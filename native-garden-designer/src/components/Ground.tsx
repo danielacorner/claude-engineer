@@ -107,9 +107,11 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
       [heightMap]
     );
 
-    const { plants, setShowContextMenu } = useAppStore();
+    const { plants, setShowContextMenu, setHoveredPlant } = useAppStore();
 
     const handleClick = (_e: any) => {
+      setHoveredPlant(null);
+
       const draggedBetweenMouseDownMouseUp =
         mouse.x !== mousePosition.prev.x || mouse.y !== mousePosition.prev.y;
       if (draggedBetweenMouseDownMouseUp) {
