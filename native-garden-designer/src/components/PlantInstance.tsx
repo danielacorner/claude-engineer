@@ -164,7 +164,6 @@ const PlantInstance = ({
   };
   useEvent("pointerup", () => {
     setIsDragging(false);
-    gl.domElement.style.cursor = "auto";
   });
 
   // Create outline material
@@ -211,11 +210,6 @@ const PlantInstance = ({
   });
   const isPlantHovered = hoveredPlant && hoveredPlant.id === id;
   const prevDragOffset = useRef(new Vector3(0, 0, 0));
-
-  useEffect(() => {
-    console.log("⭐🎈  useEffect  isHovered:", isHovered);
-    document.body.style.cursor = isHovered ? "pointer" : "auto";
-  }, [isHovered]);
 
   return (
     <DragControls

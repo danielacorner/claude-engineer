@@ -10,7 +10,7 @@ import React, {
 import { Plane, useTexture } from "@react-three/drei";
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { ToolType, useAppStore } from "../store";
+import { useAppStore } from "../store";
 
 interface GroundProps {
   onPlantPlace: (position: [number, number, number]) => void;
@@ -268,7 +268,6 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
           onClick={handleClick}
           onPointerMove={handlePointerMove}
           onPointerDown={(event: ThreeEvent<PointerEvent>) => {
-            handleGrabStart(currentTool);
             setMousePosition((prev) => ({
               x: event.clientX,
               y: event.clientY,
@@ -283,7 +282,6 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
             }
           }}
           onPointerUp={() => {
-            handleGrabEnd(currentTool);
             setDragStartPosition(null);
             setLastDragPosition(null);
           }}
@@ -313,25 +311,3 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
 );
 
 export default Ground;
-
-function handleGrabStart(currentTool: ToolType) {
-  const canvasEl = document.querySelector<HTMLCanvasElement>("canvas");
-  if (!canvasEl) {
-    return;
-  }
-  if (currentTool === "move") {
-    canvasEl.style.cursor = "grabbing";
-  }
-}
-
-function handleGrabEnd(currentTool: ToolType) {
-  const canvasEl = document.querySelector<HTMLCanvasElement>("canvas");
-  if (!canvasEl) {
-    return;
-  }
-  if (currentTool === "move") {
-    canvasEl.style.cursor = "grab";
-  } else {
-    canvasEl.style.cursor = "auto";
-  }
-}
