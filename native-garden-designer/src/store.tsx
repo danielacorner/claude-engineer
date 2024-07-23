@@ -1,6 +1,7 @@
 import { StateCreator, create } from "zustand";
 import { PlantData, Plant, ProjectPage } from "./types";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 
 export type ToolType =
   | "select"
@@ -108,7 +109,7 @@ interface AppState {
   removeFromSelection: (id: number) => void;
   clearSelection: () => void;
 
-  updateSelectedPlantsPosition: (newPosition: [number, number, number]) => void;
+  // updateSelectedPlantsPosition: (newPosition: [number, number, number]) => void;
   updateSelectedPlantsPositions: (offset: [number, number, number]) => void;
   removeSelectedPlants: () => void;
   customizeSelectedPlants: (customizations: Partial<Plant>) => void;
@@ -119,12 +120,18 @@ const OFFSET_NEW_PLANT = {
   x: 0.25,
   y: 0.25,
 };
+
 export const useAppStore = create<AppState>(
   persist(
-    (set, get) => ({
+    devtools((set, get) => ({
       gridMode: false,
-      toggleGridMode: () => set((state) => ({ gridMode: !state.gridMode })),
-      allPlants: [],
+      toggleGridMode: () =>
+        set(
+          (state) => ({ gridMode: !state.gridMode }),
+          false,
+          "toggleGridMode"
+        ),
+      allPlants: [] as PlantData[],
       selectedPlant: null,
       hoveredPlant: null,
       plants: [],
@@ -155,246 +162,301 @@ export const useAppStore = create<AppState>(
       },
       currentPageIdx: null,
       currentTool: "add",
-      setTooltipPlant: (plant) => set({ tooltipPlant: plant }),
-      setSelectedPlant: (plant) => set({ selectedPlant: plant }),
-      setHoveredPlant: (plant) => set({ hoveredPlant: plant }),
+      setTooltipPlant: (plant) =>
+        set({ tooltipPlant: plant }, false, "setTooltipPlant"),
+      setSelectedPlant: (plant) =>
+        set({ selectedPlant: plant }, false, "setTooltipPlant"),
+      setHoveredPlant: (plant) =>
+        set({ hoveredPlant: plant }, false, "setTooltipPlant"),
       addPlant: (plant) =>
-        set((state) => ({
-          allPlants: [...state.allPlants, plant],
-          selectedPlant: {
-            ...plant,
-            position: state.hoveredPosition || [0, 0, 0],
-          },
-        })),
-      setPlants: (plants) => set({ plants }),
-      setHoveredPosition: (position) => set({ hoveredPosition: position }),
-      setTimeOfDay: (time) => set({ timeOfDay: time }),
-      setSeason: (season) => set({ season }),
-      setShowPlantInfo: (plant) => set({ showPlantInfo: plant }),
-      setCustomizingPlant: (plant) => set({ customizingPlant: plant }),
-      setTimeSpeed: (speed) => set({ timeSpeed: speed }),
-      setRainIntensity: (intensity) => set({ rainIntensity: intensity }),
-      setWindSpeed: (speed) => set({ windSpeed: speed }),
-      setCloudCover: (cover) => set({ cloudCover: cover }),
-      setShowGrid: (show) => set({ showGrid: show }),
-      setShowTutorial: (show) => set({ showTutorial: show }),
-      setErrorMessage: (message) => set({ errorMessage: message }),
-      setShowPlantSelector: (show) => set({ showPlantSelector: show }),
-      setEditMode: (edit) => set({ editMode: edit }),
-      setcurrentPageIdx: (pageIndex) => set({ currentPageIdx: pageIndex }),
-      setCurrentTool: (tool) => set({ currentTool: tool }),
+        set(
+          (state) => ({
+            allPlants: [...state.allPlants, plant],
+            selectedPlant: {
+              ...plant,
+              position: state.hoveredPosition || [0, 0, 0],
+            },
+          }),
+          false,
+          "addPlant"
+        ),
+      setPlants: (plants) => set({ plants }, false, "setPlants"),
+      setHoveredPosition: (position) =>
+        set({ hoveredPosition: position } /* , false, "setHoveredPosition" */),
+      setTimeOfDay: (time) => set({ timeOfDay: time }, false, "setTimeOfDay"),
+      setSeason: (season) => set({ season }, false, "setSeason"),
+      setShowPlantInfo: (plant) =>
+        set({ showPlantInfo: plant }, false, "setShowPlantInfo"),
+      setCustomizingPlant: (plant) =>
+        set({ customizingPlant: plant }, false, "setCustomizingPlant"),
+      setTimeSpeed: (speed) => set({ timeSpeed: speed }, false, "setTimeSpeed"),
+      setRainIntensity: (intensity) =>
+        set({ rainIntensity: intensity }, false, "setRainIntensity"),
+      setWindSpeed: (speed) => set({ windSpeed: speed }, false, "setWindSpeed"),
+      setCloudCover: (cover) =>
+        set({ cloudCover: cover }, false, "setCloudCover"),
+      setShowGrid: (show) => set({ showGrid: show }, false, "setShowGrid"),
+      setShowTutorial: (show) =>
+        set({ showTutorial: show }, false, "setShowTutorial"),
+      setErrorMessage: (message) =>
+        set({ errorMessage: message }, false, "setErrorMessage"),
+      setShowPlantSelector: (show) =>
+        set({ showPlantSelector: show }, false, "setShowPlantSelector"),
+      setEditMode: (edit) => set({ editMode: edit }, false, "setEditMode"),
+      setcurrentPageIdx: (pageIndex) =>
+        set({ currentPageIdx: pageIndex }, false, "setcurrentPageIdx"),
+      setCurrentTool: (tool) =>
+        set({ currentTool: tool }, false, "setCurrentTool"),
       addNewPage: () =>
-        set((state) => {
-          if (state.currentProject) {
-            const newPage: ProjectPage = {
-              plants: [],
-              name: "Page " + state.currentProject.pages.length,
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: [...state.currentProject.pages, newPage],
-              },
-              currentPageIdx: state.currentProject.pages.length,
-            };
-          }
-          return state;
-        }),
+        set(
+          (state) => {
+            if (state.currentProject) {
+              const newPage: ProjectPage = {
+                plants: [],
+                name: "Page " + state.currentProject.pages.length,
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: [...state.currentProject.pages, newPage],
+                },
+                currentPageIdx: state.currentProject.pages.length,
+              };
+            }
+            return state;
+          },
+          false,
+          "addNewPage"
+        ),
 
       placePlant: (position) =>
-        set((state) => {
-          if (
-            state.selectedPlant &&
-            state.currentProject &&
-            state.currentPageIdx !== null &&
-            state.currentTool === "add"
-          ) {
-            const newPlant: Plant = {
-              ...state.selectedPlant,
-              id: state.plants.length + 1,
-              position,
-              rotation: [0, Math.random() * 360, 0],
-              scale: state.selectedPlant.scale.map(
-                (s) => s * (0.8 + Math.random() * 0.4)
-              ) as [number, number, number],
-              selected: false,
-            };
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: [...updatedPages[state.currentPageIdx].plants, newPlant],
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: [...state.plants, newPlant],
-            };
-          }
-          return state;
-        }),
-      duplicateSelectedPlants: () =>
-        set((state) => {
-          if (
-            state.selectedPlantIds &&
-            state.currentProject &&
-            state.currentPageIdx !== null
-          ) {
-            const currentPage =
-              state.currentProject.pages[state.currentPageIdx];
-            const selectedPlants = currentPage.plants.filter((plant) =>
-              state.selectedPlantIds.includes(plant.id)
-            );
-
-            const duplicatePlants: Plant[] = selectedPlants.map(
-              (plant, idx) => ({
-                ...plant,
-                id: state.plants.length + 1 + idx,
-                position: [
-                  plant.position[0] + OFFSET_NEW_PLANT.x,
-                  plant.position[1],
-                  plant.position[2] + OFFSET_NEW_PLANT.y,
-                ],
+        set(
+          (state) => {
+            if (
+              state.selectedPlant &&
+              state.currentProject &&
+              state.currentPageIdx !== null &&
+              state.currentTool === "add"
+            ) {
+              const newPlant: Plant = {
+                ...state.selectedPlant,
+                id: state.plants.length + 1,
+                position,
                 rotation: [0, Math.random() * 360, 0],
-                scale: plant.scale.map(
+                scale: state.selectedPlant.scale.map(
                   (s) => s * (0.8 + Math.random() * 0.4)
                 ) as [number, number, number],
-                selected: true,
-              })
-            );
-            console.log(
-              "⭐🎈  constduplicatePlants:Plant[]=selectedPlants.map  duplicatePlants:",
-              duplicatePlants
-            );
+                selected: false,
+              };
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: [
+                  ...updatedPages[state.currentPageIdx].plants,
+                  newPlant,
+                ],
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: [...state.plants, newPlant],
+              };
+            }
+            return state;
+          },
+          false,
+          "placePlant"
+        ),
+      duplicateSelectedPlants: () =>
+        set(
+          (state) => {
+            if (
+              state.selectedPlantIds &&
+              state.currentProject &&
+              state.currentPageIdx !== null
+            ) {
+              const currentPage =
+                state.currentProject.pages[state.currentPageIdx];
+              const selectedPlants = currentPage.plants.filter((plant) =>
+                state.selectedPlantIds.includes(plant.id)
+              );
 
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: [
-                ...updatedPages[state.currentPageIdx].plants.map((p) => ({
-                  ...p,
-                  selected: false,
-                })),
-                ...duplicatePlants,
-              ],
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: [...state.plants, ...duplicatePlants],
-              selectedPlantIds: duplicatePlants.map((p) => p.id),
-            };
-          }
-          return state;
-        }),
+              const duplicatePlants: Plant[] = selectedPlants.map(
+                (plant, idx) => ({
+                  ...plant,
+                  id: state.plants.length + 1 + idx,
+                  position: [
+                    plant.position[0] + OFFSET_NEW_PLANT.x,
+                    plant.position[1],
+                    plant.position[2] + OFFSET_NEW_PLANT.y,
+                  ],
+                  rotation: [0, Math.random() * 360, 0],
+                  scale: plant.scale.map(
+                    (s) => s * (0.8 + Math.random() * 0.4)
+                  ) as [number, number, number],
+                  selected: true,
+                })
+              );
+
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: [
+                  ...updatedPages[state.currentPageIdx].plants.map((p) => ({
+                    ...p,
+                    selected: false,
+                  })),
+                  ...duplicatePlants,
+                ],
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: [...state.plants, ...duplicatePlants],
+                selectedPlantIds: duplicatePlants.map((p) => p.id),
+              };
+            }
+            return state;
+          },
+          false,
+          "duplicateSelectedPlants"
+        ),
 
       updatePlantPosition: (id, newPosition) =>
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
-                plant.id === id ? { ...plant, position: newPosition } : plant
-              ),
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: state.plants.map((plant) =>
-                plant.id === id ? { ...plant, position: newPosition } : plant
-              ),
-            };
-          }
-          return state;
-        }),
+        set(
+          (state) => {
+            if (state.currentProject && state.currentPageIdx !== null) {
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
+                  plant.id === id ? { ...plant, position: newPosition } : plant
+                ),
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: state.plants.map((plant) =>
+                  plant.id === id ? { ...plant, position: newPosition } : plant
+                ),
+              };
+            }
+            return state;
+          },
+          false,
+          "updatePlantPosition"
+        ),
 
       removePlant: (id) =>
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: updatedPages[state.currentPageIdx].plants.filter(
-                (plant) => plant.id !== id
-              ),
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: state.plants.filter((plant) => plant.id !== id),
-            };
-          }
-          return state;
-        }),
+        set(
+          (state) => {
+            if (state.currentProject && state.currentPageIdx !== null) {
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: updatedPages[state.currentPageIdx].plants.filter(
+                  (plant) => plant.id !== id
+                ),
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: state.plants.filter((plant) => plant.id !== id),
+              };
+            }
+            return state;
+          },
+          false,
+          "removePlant"
+        ),
 
       customizePlant: (id, customizations) =>
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
-                plant.id === id ? { ...plant, ...customizations } : plant
-              ),
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: state.plants.map((plant) =>
-                plant.id === id ? { ...plant, ...customizations } : plant
-              ),
-            };
-          }
-          return state;
-        }),
+        set(
+          (state) => {
+            if (state.currentProject && state.currentPageIdx !== null) {
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
+                  plant.id === id ? { ...plant, ...customizations } : plant
+                ),
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: state.plants.map((plant) =>
+                  plant.id === id ? { ...plant, ...customizations } : plant
+                ),
+              };
+            }
+            return state;
+          },
+          false,
+          "customizePlant"
+        ),
 
       openPlantInfo: (plant) =>
-        set(() => ({
-          showPlantInfo: plant,
-          customizingPlant: null,
-        })),
+        set(
+          () => ({
+            showPlantInfo: plant,
+            customizingPlant: null,
+          }),
+          false,
+          "openPlantInfo"
+        ),
       deleteSelectedPlants: () => {
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: updatedPages[state.currentPageIdx].plants.filter(
-                (plant) => !state.selectedPlantIds.includes(plant.id)
-              ),
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: state.plants.filter(
-                (plant) => !state.selectedPlantIds.includes(plant.id)
-              ),
-            };
-          }
-          return state;
-        });
+        set(
+          (state) => {
+            if (state.currentProject && state.currentPageIdx !== null) {
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: updatedPages[state.currentPageIdx].plants.filter(
+                  (plant) => !state.selectedPlantIds.includes(plant.id)
+                ),
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: state.plants.filter(
+                  (plant) => !state.selectedPlantIds.includes(plant.id)
+                ),
+              };
+            }
+            return state;
+          },
+          false,
+          "deleteSelectedPlants"
+        );
       },
       showEnvironmentControls: false,
       setShowEnvironmentControls: (show) =>
-        set({ showEnvironmentControls: show }),
+        set(
+          { showEnvironmentControls: show },
+          false,
+          "setShowEnvironmentControls"
+        ),
       isDragging: false,
-      setIsDragging: (dragging) => set({ isDragging: dragging }),
+      setIsDragging: (dragging) =>
+        set({ isDragging: dragging }, false, "setIsDragging"),
       isHovered: false,
-      setIsHovered: (hovered) => set({ isHovered: hovered }),
+      setIsHovered: (hovered) =>
+        set({ isHovered: hovered }, false, "setIsHovered"),
       showContextMenu: false,
-      setShowContextMenu: (show) => set({ showContextMenu: show }),
+      setShowContextMenu: (show) =>
+        set({ showContextMenu: show }, false, "setShowContextMenu"),
 
       undo: () => {
         console.log("Undo functionality to be implemented");
@@ -412,46 +474,54 @@ export const useAppStore = create<AppState>(
         console.log("Paste functionality to be implemented");
       },
       deletePlant: (id: number) => {
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: updatedPages[state.currentPageIdx].plants.filter(
-                (plant) => plant.id !== id
-              ),
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: state.plants.filter((plant) => plant.id !== id),
-            };
-          }
-          return state;
-        });
+        set(
+          (state) => {
+            if (state.currentProject && state.currentPageIdx !== null) {
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: updatedPages[state.currentPageIdx].plants.filter(
+                  (plant) => plant.id !== id
+                ),
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: state.plants.filter((plant) => plant.id !== id),
+              };
+            }
+            return state;
+          },
+          false,
+          "deletePlant"
+        );
       },
       deletePlants: (ids: number[]) => {
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: updatedPages[state.currentPageIdx].plants.filter(
-                (plant) => !ids.includes(plant.id)
-              ),
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: state.plants.filter((plant) => !ids.includes(plant.id)),
-            };
-          }
-          return state;
-        });
+        set(
+          (state) => {
+            if (state.currentProject && state.currentPageIdx !== null) {
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: updatedPages[state.currentPageIdx].plants.filter(
+                  (plant) => !ids.includes(plant.id)
+                ),
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: state.plants.filter((plant) => !ids.includes(plant.id)),
+              };
+            }
+            return state;
+          },
+          false,
+          "deletePlants"
+        );
       },
       zoomIn: () => {
         console.log("Zoom In functionality to be implemented");
@@ -501,170 +571,195 @@ export const useAppStore = create<AppState>(
       openFile: (fileContent: string) => {
         try {
           const parsedState = JSON.parse(fileContent);
-          set(parsedState);
+          set(parsedState, false, "openFile");
         } catch (error) {
           console.error("Error parsing file:", error);
         }
       },
       createNewProject: () => {
-        set(() => ({
-          currentProject: {
-            name: `Untitled Project`,
-            pages: [{ plants: [] as Plant[], name: "Page 1" }],
-          },
-          currentPageIdx: 0,
-          plants: [],
-          showPlantSelector: false,
-          editMode: false,
-          showPlantInfo: null,
-          customizingPlant: null,
-          showEnvironmentControls: false,
-          isDragging: false,
-          isHovered: false,
-          showContextMenu: false,
-        }));
+        set(
+          () => ({
+            currentProject: {
+              name: `Untitled Project`,
+              pages: [{ plants: [] as Plant[], name: "Page 1" }],
+            },
+            currentPageIdx: 0,
+            plants: [],
+            showPlantSelector: false,
+            editMode: false,
+            showPlantInfo: null,
+            customizingPlant: null,
+            showEnvironmentControls: false,
+            isDragging: false,
+            isHovered: false,
+            showContextMenu: false,
+          }),
+          false,
+          "createNewProject"
+        );
       },
       shareProject: () => {
         console.log("Share Project functionality to be implemented");
       },
       selectedPlantIds: [],
-      setSelectedPlantIds: (ids) => set({ selectedPlantIds: ids }),
+      setSelectedPlantIds: (ids) =>
+        set({ selectedPlantIds: ids }, false, "setSelectedPlantIds"),
       addToSelection: (id) =>
-        set((state) => ({ selectedPlantIds: [...state.selectedPlantIds, id] })),
+        set(
+          (state) => ({ selectedPlantIds: [...state.selectedPlantIds, id] }),
+          false,
+          "addToSelection"
+        ),
       removeFromSelection: (id) =>
-        set((state) => ({
-          selectedPlantIds: state.selectedPlantIds.filter(
-            (plantId) => plantId !== id
-          ),
-        })),
-      clearSelection: () => set({ selectedPlantIds: [] }),
+        set(
+          (state) => ({
+            selectedPlantIds: state.selectedPlantIds.filter(
+              (plantId) => plantId !== id
+            ),
+          }),
+          false,
+          "removeFromSelection"
+        ),
+      clearSelection: () =>
+        set({ selectedPlantIds: [] }, false, "clearSelection"),
 
-      updateSelectedPlantsPosition: (newPosition) =>
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
-                state.selectedPlantIds.includes(plant.id)
-                  ? { ...plant, position: newPosition }
-                  : plant
-              ),
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: state.plants.map((plant) =>
-                state.selectedPlantIds.includes(plant.id)
-                  ? { ...plant, position: newPosition }
-                  : plant
-              ),
-            };
-          }
-          return state;
-        }),
-      updateSelectedPlantsPositions: (offset) =>
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            const currentPagePlants = updatedPages[state.currentPageIdx].plants;
-            const { currentPageSelectedPlants, currentPageUnselectedPlants } =
-              currentPagePlants.reduce(
-                (acc, plant) => {
-                  if (state.selectedPlantIds.includes(plant.id)) {
-                    acc.currentPageSelectedPlants.push(plant);
-                  } else {
-                    acc.currentPageUnselectedPlants.push(plant);
-                  }
-                  return acc;
-                },
-                {
-                  currentPageSelectedPlants: [] as Plant[],
-                  currentPageUnselectedPlants: [] as Plant[],
-                }
+      // updateSelectedPlantsPosition: (newPosition) =>
+      //   set((state) => {
+      //     if (state.currentProject && state.currentPageIdx !== null) {
+      //       const updatedPages = [...state.currentProject.pages];
+      //       updatedPages[state.currentPageIdx] = {
+      //         ...updatedPages[state.currentPageIdx],
+      //         plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
+      //           state.selectedPlantIds.includes(plant.id)
+      //             ? { ...plant, position: newPosition }
+      //             : plant
+      //         ),
+      //       };
+      //       return {
+      //         currentProject: {
+      //           ...state.currentProject,
+      //           pages: updatedPages,
+      //         },
+      //         plants: state.plants.map((plant) =>
+      //           state.selectedPlantIds.includes(plant.id)
+      //             ? { ...plant, position: newPosition }
+      //             : plant
+      //         ),
+      //       };
+      //     }
+      //     return state;
+      //   }),
+      updateSelectedPlantsPositions: (newPosition: [number, number, number]) =>
+        set(
+          (state) => {
+            if (state.currentProject && state.currentPageIdx !== null) {
+              const updatedPages = [...state.currentProject.pages];
+              const currentPagePlants =
+                updatedPages[state.currentPageIdx].plants;
+
+              // Find the plant being directly dragged
+              const draggedPlant = currentPagePlants.find(
+                (plant) => plant.id === state.isDragging
               );
-            const updatedSelectedPlants = currentPageSelectedPlants.map(
-              (plant) => {
-                const newPosition = [
-                  plant.position[0] + offset[0],
-                  plant.position[1] + offset[1],
-                  plant.position[2] + offset[2],
-                ] as [number, number, number];
-                return newPosition
-                  ? { ...plant, position: newPosition }
-                  : plant;
-              }
-            );
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: [
-                ...updatedSelectedPlants,
-                ...currentPageUnselectedPlants,
-              ],
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-            };
-          }
-          return state;
-        }),
+
+              if (!draggedPlant) return state; // If no plant is being dragged, return the current state
+
+              // Calculate the offset based on the dragged plant's movement
+              const offsetX = newPosition[0] - draggedPlant.position[0];
+              const offsetZ = newPosition[2] - draggedPlant.position[2];
+
+              const updatedPlants: Plant[] = currentPagePlants.map((plant) => {
+                if (state.selectedPlantIds.includes(plant.id)) {
+                  return {
+                    ...plant,
+                    position: [
+                      plant.position[0] + offsetX,
+                      plant.position[1], // Keep vertical position unchanged
+                      plant.position[2] + offsetZ,
+                    ],
+                  };
+                }
+                return plant;
+              });
+
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: updatedPlants,
+              };
+
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: updatedPlants,
+              };
+            }
+            return state;
+          },
+          false,
+          "updateSelectedPlantsPositions"
+        ),
 
       removeSelectedPlants: () =>
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: updatedPages[state.currentPageIdx].plants.filter(
-                (plant) => !state.selectedPlantIds.includes(plant.id)
-              ),
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: state.plants.filter(
-                (plant) => !state.selectedPlantIds.includes(plant.id)
-              ),
-              selectedPlantIds: [],
-            };
-          }
-          return state;
-        }),
+        set(
+          (state) => {
+            if (state.currentProject && state.currentPageIdx !== null) {
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: updatedPages[state.currentPageIdx].plants.filter(
+                  (plant) => !state.selectedPlantIds.includes(plant.id)
+                ),
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: state.plants.filter(
+                  (plant) => !state.selectedPlantIds.includes(plant.id)
+                ),
+                selectedPlantIds: [],
+              };
+            }
+            return state;
+          },
+          false,
+          "removeSelectedPlants"
+        ),
 
       customizeSelectedPlants: (customizations) =>
-        set((state) => {
-          if (state.currentProject && state.currentPageIdx !== null) {
-            const updatedPages = [...state.currentProject.pages];
-            updatedPages[state.currentPageIdx] = {
-              ...updatedPages[state.currentPageIdx],
-              plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
-                state.selectedPlantIds.includes(plant.id)
-                  ? { ...plant, ...customizations }
-                  : plant
-              ),
-            };
-            return {
-              currentProject: {
-                ...state.currentProject,
-                pages: updatedPages,
-              },
-              plants: state.plants.map((plant) =>
-                state.selectedPlantIds.includes(plant.id)
-                  ? { ...plant, ...customizations }
-                  : plant
-              ),
-            };
-          }
-          return state;
-        }),
-    }),
+        set(
+          (state) => {
+            if (state.currentProject && state.currentPageIdx !== null) {
+              const updatedPages = [...state.currentProject.pages];
+              updatedPages[state.currentPageIdx] = {
+                ...updatedPages[state.currentPageIdx],
+                plants: updatedPages[state.currentPageIdx].plants.map((plant) =>
+                  state.selectedPlantIds.includes(plant.id)
+                    ? { ...plant, ...customizations }
+                    : plant
+                ),
+              };
+              return {
+                currentProject: {
+                  ...state.currentProject,
+                  pages: updatedPages,
+                },
+                plants: state.plants.map((plant) =>
+                  state.selectedPlantIds.includes(plant.id)
+                    ? { ...plant, ...customizations }
+                    : plant
+                ),
+              };
+            }
+            return state;
+          },
+          false,
+          "customizeSelectedPlants"
+        ),
+    })),
     {
       name: "app",
       storage: createJSONStorage(() => localStorage),

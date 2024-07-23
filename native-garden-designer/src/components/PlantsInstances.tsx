@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useCallback, useMemo } from "react";
 import PlantInstance from "./PlantInstance";
 import PlantPreview from "./PlantSelector/PlantPreview";
 import { useAppStore } from "../store";
@@ -22,7 +22,10 @@ export function PlantsInstances({
     hoveredPlant,
     selectedPlantIds,
   } = useAppStore();
-  const selectionEnabled = currentTool === "select";
+  const selectionEnabled = useMemo(
+    () => currentTool === "select",
+    [currentTool]
+  );
   const currentPagePlants =
     currentPageIdx !== null
       ? currentProject?.pages[currentPageIdx].plants ?? []
@@ -35,22 +38,26 @@ export function PlantsInstances({
     selectedPlant &&
     selectedPlantIds.includes(hoveredPlant.id);
 
+  const onChange = useCallback(
+    (selectedMeshes: any) => {
+      if (!selectionEnabled) {
+        return;
+      }
+      const selectedIds = selectedMeshes.map(
+        (mesh: any) => mesh.parent?.userData.id
+      );
+      const uniqIds = uniq(selectedIds);
+      setSelectedPlantIds(uniqIds as any);
+    },
+    [selectionEnabled, setSelectedPlantIds]
+  );
   return (
     <AlwaysShiftSelect
       enabled={!isHoveredOverSelectedPlant}
       requireShift={!selectionEnabled}
       multiple={true}
       box={selectionEnabled}
-      onChange={(selectedMeshes: any) => {
-        if (!selectionEnabled) {
-          return;
-        }
-        const selectedIds = selectedMeshes.map(
-          (mesh: any) => mesh.parent?.userData.id
-        );
-        const uniqIds = uniq(selectedIds);
-        setSelectedPlantIds(uniqIds as any);
-      }}
+      onChange={onChange}
     >
       <Suspense fallback={null}>
         {uniqPlants.map((plant) => (

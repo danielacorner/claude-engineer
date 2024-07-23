@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
 import { DragControls, useGLTF } from "@react-three/drei";
@@ -42,12 +43,7 @@ const PlantInstance = ({
     gridMode,
     currentTool,
     selectedPlantIds,
-    updateSelectedPlantsPositions,
   } = useAppStore();
-
-  const [isDraggingPreview, setIsDraggingPreview] = useState<false | Vector3>(
-    false
-  );
 
   const groupRef = useRef<Group>(null);
   const plantHeight = (plant.height ?? 0) * HEIGHT_SCALE;
@@ -215,9 +211,16 @@ const PlantInstance = ({
   });
   const isPlantHovered = hoveredPlant && hoveredPlant.id === id;
   const prevDragOffset = useRef(new Vector3(0, 0, 0));
+
+  useEffect(() => {
+    console.log("⭐🎈  useEffect  isHovered:", isHovered);
+    document.body.style.cursor = isHovered ? "pointer" : "auto";
+  }, [isHovered]);
+
   return (
     <DragControls
       axisLock="y"
+      autoTransform={false}
       onDragStart={(_e) => {
         setIsDragging(plant.id);
 
@@ -227,14 +230,11 @@ const PlantInstance = ({
           new THREE.Plane(new THREE.Vector3(0, 1, 0), 0),
           intersection
         );
-        const totalDragOffset = intersection.sub(
-          new THREE.Vector3(...position)
-        );
-        console.log("⭐� ~ totalDragOffset:", totalDragOffset);
-        setIsDraggingPreview(totalDragOffset);
+        // const totalDragOffset = intersection.sub(
+        //   new THREE.Vector3(...position)
+        // );
       }}
       onDrag={(_e) => {
-        if (!isDraggingPreview) return;
         // The actual drag logic is now handled in the DraggablePreview component
       }}
       onDragEnd={() => {
@@ -271,18 +271,14 @@ const PlantInstance = ({
         );
         console.log("⭐� ~ offset:", offset);
 
-        if (!isDraggingPreview) {
-          return;
-        }
-        const [x, y, z] = [
-          isDraggingPreview.x,
-          isDraggingPreview.y,
-          isDraggingPreview.z,
-        ];
-        const [dx, dy, dz] = [x - offset.x, y - offset.y, z - offset.z];
-        updateSelectedPlantsPositions([dx, dy, dz]);
+        // const [x, y, z] = [
+        //   isDraggingPreview.x,
+        //   isDraggingPreview.y,
+        //   isDraggingPreview.z,
+        // ];
+        // const [dx, dy, dz] = [x - offset.x, y - offset.y, z - offset.z];
+        // updateSelectedPlantsPositions([dx, dy, dz]);
         prevDragOffset.current = offset;
-        setIsDraggingPreview(false);
       }}
     >
       <a.group
@@ -300,17 +296,17 @@ const PlantInstance = ({
           if (currentTool === "select") {
             return;
           }
-          gl.domElement.style.cursor = "auto";
+          // gl.domElement.style.cursor = "auto";
         }}
         onPointerOut={() => {
           setIsHovered(false);
           setHoveredPlant(null);
-          gl.domElement.style.cursor = "auto";
+          // gl.domElement.style.cursor = "auto";
         }}
         onPointerOver={() => {
           setIsHovered(plant.id);
           setHoveredPlant(plant);
-          gl.domElement.style.cursor = "grab";
+          // gl.domElement.style.cursor = "grab";
         }}
         onContextMenu={isDragging ? () => {} : handleContextMenu}
         {...spring}
@@ -336,7 +332,7 @@ const PlantInstance = ({
 };
 function SelectedIndicator({ hovered }: { hovered: boolean }) {
   return (
-    <mesh>
+    <mesh raycast={() => null}>
       <boxGeometry args={[1, 1, 1]} />
       <meshBasicMaterial
         color="yellow"

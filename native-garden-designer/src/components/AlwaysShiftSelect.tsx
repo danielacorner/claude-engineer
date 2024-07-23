@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-var */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import _extends from "@babel/runtime/helpers/esm/extends";
 import * as React from "react";
@@ -34,6 +37,7 @@ export function AlwaysShiftSelect({
   React.useEffect(() => {
     if (downed) onChange == null || onChange(active);
     else onChangePointerUp == null || onChangePointerUp(active);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, downed]);
   const onClick = React.useCallback(
     (e) => {
@@ -44,6 +48,7 @@ export function AlwaysShiftSelect({
         shift: requireShift ? multiple && e.shiftKey : true,
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [requireShift, enabled]
   );
   const onPointerMissed = React.useCallback(

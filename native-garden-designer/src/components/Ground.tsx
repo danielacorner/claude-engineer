@@ -8,7 +8,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { Plane, useTexture } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
+import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { ToolType, useAppStore } from "../store";
 
@@ -26,7 +26,8 @@ const HEIGHTMAP_RESOLUTION = 128; // Resolution of the heightmap
 
 const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
   ({ onPlantPlace, onHover, heightMap, setHeightmap }, ref) => {
-    const { gridMode, currentTool } = useAppStore();
+    const { gridMode, currentTool, isDragging, updateSelectedPlantsPositions } =
+      useAppStore();
     const meshRef = useRef<THREE.Mesh>(null);
     const [mousePosition, setMousePosition] = useState({
       x: 0,
@@ -141,7 +142,12 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
       }
     };
 
-    const handlePointerMove = (_e: any) => {
+    const [dragStartPosition, setDragStartPosition] =
+      useState<THREE.Vector3 | null>(null);
+    const [_lastDragPosition, setLastDragPosition] =
+      useState<THREE.Vector3 | null>(null);
+
+    const handlePointerMove = (_e: ThreeEvent<PointerEvent>) => {
       if (meshRef.current) {
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObject(meshRef.current);
@@ -165,6 +171,16 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
             height,
             snappedPosition.z
           );
+
+          // If dragging, update positions of selected plants
+          if (isDragging && dragStartPosition) {
+            const newPosition: [number, number, number] = [
+              hoverPointWithHeight.x,
+              height,
+              hoverPointWithHeight.z,
+            ];
+            updateSelectedPlantsPositions(newPosition);
+          }
           setHoverPoint(hoverPointWithHeight);
           onHover([
             hoverPointWithHeight.x,
@@ -251,7 +267,7 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
           ]}
           onClick={handleClick}
           onPointerMove={handlePointerMove}
-          onPointerDown={(event: any) => {
+          onPointerDown={(event: ThreeEvent<PointerEvent>) => {
             handleGrabStart(currentTool);
             setMousePosition((prev) => ({
               x: event.clientX,
@@ -261,9 +277,15 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
                 y: prev.y,
               },
             }));
+            if (hoverPoint) {
+              setDragStartPosition(hoverPoint);
+              setLastDragPosition(hoverPoint);
+            }
           }}
           onPointerUp={() => {
             handleGrabEnd(currentTool);
+            setDragStartPosition(null);
+            setLastDragPosition(null);
           }}
         >
           <primitive object={groundMaterial} attach="material" />
@@ -277,9 +299,8 @@ const Ground = React.forwardRef<THREE.Mesh, GroundProps>(
         {hoverPoint && (
           <>
             <mesh position={hoverPoint}>
-              {currentTool === "move" ? null : currentTool === "select" ? (
-                <sphereGeometry args={[0.05, 16, 16]} />
-              ) : (
+              {currentTool === "move" ? null : currentTool ===
+                "select" ? null : (
                 <boxGeometry args={[GRID_SIZE, 0.1, GRID_SIZE]} />
               )}
               <meshBasicMaterial color="yellow" opacity={0.5} transparent />

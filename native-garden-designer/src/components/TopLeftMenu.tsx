@@ -283,7 +283,6 @@ const TopLeftMenu: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const modKey = isMac ? event.metaKey : event.ctrlKey;
-      console.log("⭐🎈  handleKeyDown  modKey:", modKey, event.key);
       if (modKey && event.key === "d") {
         duplicateSelectedPlants();
         event.preventDefault();

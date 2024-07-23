@@ -1,7 +1,7 @@
 import { GardenScene } from "./components/GardenScene";
 import BottomToolbar from "./components/BottomToolbar";
 import TopLeftMenu from "./components/TopLeftMenu";
-import PlantSelector from "./components/PlantSelector/PlantSelector";
+// import PlantSelector from "./components/PlantSelector/PlantSelector";
 import styled from "styled-components";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <GardenScene />
       <BottomToolbar />
       <TopLeftMenu />
-      <PlantSelector />
+      {/* <PlantSelector /> */}
       {/* <SelectionRectangle /> */}
     </AppStylesProvider>
   );
